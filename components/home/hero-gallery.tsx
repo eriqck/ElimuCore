@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 const galleryImages = [
@@ -54,11 +55,14 @@ export function HeroGallery() {
   return (
     <div className="overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-[var(--shadow-soft)]">
       <div className="relative aspect-[16/10] overflow-hidden bg-stone-900">
-        <img
+        <Image
           key={activeImage.src}
           src={activeImage.src}
           alt={activeImage.alt}
-          className="h-full w-full object-cover"
+          fill
+          priority
+          sizes="(min-width: 1024px) 55vw, 100vw"
+          className="object-cover"
         />
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/80 via-stone-950/35 to-transparent p-6 text-white">
           <p className="font-display text-3xl font-black tracking-tight">
@@ -116,10 +120,13 @@ export function HeroGallery() {
                 : "border-transparent hover:border-rose-800"
             }`}
           >
-            <img
+            <Image
               src={image.src}
               alt=""
+              width={240}
+              height={120}
               className="h-20 w-full object-cover sm:h-24"
+              sizes="(min-width: 640px) 20vw, 18vw"
               loading="lazy"
             />
           </button>

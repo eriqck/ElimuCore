@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getCurrentMemberContext } from "@/lib/membership";
 import { getResourceBySlug } from "@/lib/resources";
+import type { ResourceFile } from "@/lib/types";
 
 type ResourceDetailPageProps = {
   params: Promise<{
@@ -32,12 +34,42 @@ export default async function ResourceDetailPage({
 }: ResourceDetailPageProps) {
   const { slug } = await params;
   const resource = await getResourceBySlug(slug);
+  const memberContext = await getCurrentMemberContext();
   const accessLabel =
     resource?.access === "Premium" ? "Member Access" : "Free Preview";
 
   if (!resource) {
     notFound();
   }
+
+  const isPremiumResource = resource.access === "Premium";
+  const canAccessDownloads =
+    !isPremiumResource || Boolean(memberContext.activeMembership);
+  const loginHref = `/login?next=${encodeURIComponent(`/resources/${resource.slug}`)}`;
+
+  const formatFileKind = (file: ResourceFile) => {
+    if (file.fileKind === "marking-scheme") {
+      return "Marking Scheme";
+    }
+
+    if (file.fileKind === "paper") {
+      return "Past Paper";
+    }
+
+    if (file.fileKind === "notes") {
+      return "Notes";
+    }
+
+    if (file.fileKind === "zip") {
+      return "ZIP Bundle";
+    }
+
+    if (file.fileKind === "link") {
+      return "External Link";
+    }
+
+    return "Download";
+  };
 
   return (
     <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
@@ -84,18 +116,132 @@ export default async function ResourceDetailPage({
           </div>
         </div>
 
-        <div className="mt-8 rounded-[2rem] border border-dashed border-stone-300 bg-stone-50 p-6">
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">
-            Downloads and delivery
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-slate-600">
-            Attach the actual PDF, ZIP, or note file in Supabase Storage and
-            save the storage path into the <code>resource_files</code> table so
-            teachers and parents always reach the latest version from one clean
-            page. Active members can download the resources they need without
-            extra charges while their membership is valid.
-          </p>
-        </div>
+        <section className="mt-8 rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold tracking-tight text-slate-900">
+                Available downloads
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                Files are delivered through a secure ELimuCore link so the
+                latest published version stays attached to this page.
+              </p>
+            </div>
+            <p className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
+              {resource.files.length} file
+              {resource.files.length === 1 ? "" : "s"} attached
+            </p>
+          </div>
+
+          {resource.files.length > 0 && canAccessDownloads ? (
+            <div className="mt-6 grid gap-4">
+              {resource.files.map((file) => (
+                <article
+                  key={file.id}
+                  className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5 transition hover:border-rose-700 hover:bg-rose-900 hover:text-white"
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-rose-900">
+                          {formatFileKind(file)}
+                        </span>
+                        {file.fileSizeLabel ? (
+                          <span className="rounded-full bg-slate-200 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-700">
+                            {file.fileSizeLabel}
+                          </span>
+                        ) : null}
+                      </div>
+                      <h3 className="mt-3 text-lg font-bold tracking-tight text-slate-900">
+                        {file.label}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">
+                        Download this file directly from the ELimuCore library.
+                      </p>
+                    </div>
+
+                    <a
+                      href={`/api/resources/${resource.slug}/download?file=${encodeURIComponent(file.id)}`}
+                      className="brand-button-primary inline-flex rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                    >
+                      Download file
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : resource.files.length > 0 && !memberContext.user ? (
+            <div className="mt-6 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
+              <h3 className="text-lg font-bold tracking-tight text-slate-900">
+                Sign in to reach premium downloads
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-700">
+                This resource is reserved for active members. Sign in first,
+                then your membership status will control download access
+                automatically.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  href={loginHref}
+                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                >
+                  Sign in to continue
+                </Link>
+                <Link
+                  href="/signup"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                >
+                  Create account
+                </Link>
+              </div>
+            </div>
+          ) : resource.files.length > 0 ? (
+            <div className="mt-6 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5">
+              <h3 className="text-lg font-bold tracking-tight text-slate-900">
+                Membership activation required
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-700">
+                Your account is signed in, but this premium resource needs an
+                active membership before downloads can open.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link
+                  href="/account"
+                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                >
+                  Go to my account
+                </Link>
+                <Link
+                  href="/#membership"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                >
+                  View membership plans
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 p-5">
+              <p className="text-sm leading-7 text-slate-600">
+                This resource has been published, but its file attachments have
+                not been connected yet. Once the file rows are added in
+                Supabase, download buttons will appear here automatically.
+              </p>
+            </div>
+          )}
+
+          {resource.sourceUrl ? (
+            <div className="mt-5">
+              <a
+                href={resource.sourceUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-full px-3 py-2 text-sm font-semibold text-rose-900 transition hover:bg-rose-900 hover:text-white"
+              >
+                View source reference
+              </a>
+            </div>
+          ) : null}
+        </section>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Link

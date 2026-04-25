@@ -172,7 +172,7 @@ const headerNavItems = [
   },
   {
     label: "Membership",
-    href: "#membership",
+    href: "/account",
     columns: [
       {
         title: "Plans",
@@ -294,12 +294,12 @@ export function ElimuCoreHome({
           </nav>
 
           <div className="flex items-center gap-3">
-            <a
-              href="#membership"
+            <Link
+              href="/signup"
               className="rounded-3xl bg-orange-500 px-5 py-3 text-xs font-black uppercase tracking-wide text-white shadow-lg shadow-orange-500/25 transition hover:-translate-y-0.5 hover:bg-orange-600"
             >
               Join Us Today!
-            </a>
+            </Link>
             <Link
               href="/resources"
               className="rounded-2xl border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-900 transition hover:border-orange-500 hover:bg-orange-500 hover:text-white lg:hidden"
@@ -348,17 +348,17 @@ export function ElimuCoreHome({
               <div className="mt-6 flex flex-wrap gap-3">
                 {categories.map((item) => {
                   const colorClasses =
-                    categoryPillStyles[item] ??
+                    categoryPillStyles[item.name] ??
                     "border-slate-200 bg-white text-slate-600";
 
                   return (
                     <Link
-                      key={item}
-                      href={`/resources?q=${encodeURIComponent(item)}`}
+                      key={item.slug}
+                      href={`/resources?category=${encodeURIComponent(item.slug)}`}
                       style={{ color: "#ffffff" }}
                       className={`rounded-full border px-4 py-2 text-sm font-medium shadow-sm transition hover:border-rose-700 hover:bg-rose-900 hover:text-white ${colorClasses}`}
                     >
-                      {item}
+                      {item.name}
                     </Link>
                   );
                 })}
@@ -572,7 +572,7 @@ export function ElimuCoreHome({
 
                 <div className="mt-6 flex justify-center">
                   <Link
-                    href="/resources"
+                    href="/signup"
                     className={`inline-flex ${secondaryButtonClass}`}
                   >
                     Start with this plan
@@ -709,7 +709,7 @@ export function ElimuCoreHome({
                 Resource Library
               </Link>
               <Link
-                href="/resources"
+                href="/login"
                 className="rounded-full px-3 py-2 text-sm font-semibold text-rose-100 transition hover:bg-amber-500 hover:text-white"
               >
                 Member Login

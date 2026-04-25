@@ -2,11 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ResourceCard } from "@/components/resources/resource-card";
 import {
-  fallbackCategoryFilters,
-  fallbackSchoolLevels,
   fallbackStats
 } from "@/lib/mock-data";
-import { listResources } from "@/lib/resources";
+import { getLibraryFilters, listResources } from "@/lib/resources";
 
 type ResourcesPageProps = {
   searchParams?: Promise<{
@@ -31,7 +29,10 @@ export default async function ResourcesPage({
     typeof params.category === "string" ? params.category.trim() : "";
   const level = typeof params.level === "string" ? params.level.trim() : "";
 
-  const resources = await listResources(query, category, level);
+  const [resources, filters] = await Promise.all([
+    listResources(query, category, level),
+    getLibraryFilters()
+  ]);
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
@@ -46,9 +47,9 @@ export default async function ResourcesPage({
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               Teachers can plan faster, and parents can find trusted materials
-              for home support without digging through cluttered pages. Once
-              Supabase is connected, this library can power your real content
-              catalog.
+              for home support without digging through cluttered pages. This
+              library reads published ELimuCore resources directly from your
+              Supabase catalog.
             </p>
             <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200 bg-white/85 px-4 py-3 text-sm font-medium text-stone-700 shadow-sm">
               Membership includes full unlimited access. Active members can
@@ -105,7 +106,7 @@ export default async function ResourcesPage({
                     className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-700"
                   >
                     <option value="">All categories</option>
-                    {fallbackCategoryFilters.map((item) => (
+                    {filters.categories.map((item) => (
                       <option key={item.slug} value={item.slug}>
                         {item.name}
                       </option>
@@ -127,7 +128,7 @@ export default async function ResourcesPage({
                     className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-700"
                   >
                     <option value="">All levels</option>
-                    {fallbackSchoolLevels.map((item) => (
+                    {filters.levels.map((item) => (
                       <option key={item.slug} value={item.slug}>
                         {item.title}
                       </option>
@@ -186,8 +187,8 @@ export default async function ResourcesPage({
             </h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
               Try a broader grade, subject, or category search. Once Supabase
-              is connected, newly published resources for teachers and parents
-              will appear here automatically.
+              content is published, it becomes searchable here automatically
+              for teachers and parents.
             </p>
           </div>
         )}

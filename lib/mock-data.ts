@@ -2,9 +2,12 @@ import type {
   CategoryFilter,
   FeaturedResource,
   HomePageData,
+  LibraryFilters,
+  MembershipPlan,
   QuickLink,
   Resource,
   SchoolLevel,
+  SchoolLevelFilter,
   Stat
 } from "@/lib/types";
 
@@ -100,6 +103,13 @@ export const fallbackCategoryFilters: CategoryFilter[] = [
   { slug: "exams", name: "Exams" },
   { slug: "marking-schemes", name: "Marking Schemes" }
 ];
+
+export const fallbackSchoolLevelFilters: SchoolLevelFilter[] =
+  fallbackSchoolLevels.map(({ slug, title, subtitle }) => ({
+    slug,
+    title,
+    subtitle
+  }));
 
 export const fallbackResources: Resource[] = [
   {
@@ -271,6 +281,36 @@ export const fallbackStats: Stat[] = [
   { value: "0", label: "Extra download charges" }
 ];
 
+export const fallbackMembershipPlans: MembershipPlan[] = [
+  {
+    slug: "1-month",
+    name: "1 Month",
+    durationMonths: 1,
+    priceKes: 300,
+    description: "Full unlimited access for one month.",
+    active: true,
+    sortOrder: 1
+  },
+  {
+    slug: "6-months",
+    name: "6 Months",
+    durationMonths: 6,
+    priceKes: 500,
+    description: "Extended unlimited access for active teachers and families.",
+    active: true,
+    sortOrder: 2
+  },
+  {
+    slug: "1-year",
+    name: "1 Year",
+    durationMonths: 12,
+    priceKes: 1000,
+    description: "Best-value full unlimited access for the school year.",
+    active: true,
+    sortOrder: 3
+  }
+];
+
 export const fallbackFeaturedResources: FeaturedResource[] = fallbackResources
   .filter((resource) => resource.featured)
   .slice(0, 4)
@@ -284,7 +324,12 @@ export const fallbackFeaturedResources: FeaturedResource[] = fallbackResources
 export const fallbackHomePageData: HomePageData = {
   quickLinks: fallbackQuickLinks,
   schoolLevels: fallbackSchoolLevels,
-  categories: fallbackCategoryFilters.slice(0, 8).map((item) => item.name),
+  categories: fallbackCategoryFilters.slice(0, 8),
   featuredResources: fallbackFeaturedResources,
   stats: fallbackStats
+};
+
+export const fallbackLibraryFilters: LibraryFilters = {
+  categories: fallbackCategoryFilters,
+  levels: fallbackSchoolLevelFilters
 };
