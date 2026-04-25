@@ -118,7 +118,7 @@ export const fallbackResources: Resource[] = [
     summary:
       "A curated prediction pack for Form 4 candidates preparing for KCSE.",
     description:
-      "Use this pack as a premium revision collection for Form 4 candidates. It works well as a featured resource and can later point to a Supabase Storage download bundle.",
+      "A premium revision collection for Form 4 candidates preparing for KCSE exams with focused practice support.",
     level: "Secondary School",
     levelSlug: "secondary-school",
     category: "Past Papers",
@@ -158,7 +158,7 @@ export const fallbackResources: Resource[] = [
     summary:
       "Holiday assignments for multiple subjects with a clean structure for digital downloads.",
     description:
-      "This record demonstrates how to manage recurring term-based materials inside Supabase with searchable metadata.",
+      "A practical holiday assignment pack for Form 3 learners across multiple subjects, organized for easy access.",
     level: "Secondary School",
     levelSlug: "secondary-school",
     category: "Assignments",
@@ -178,7 +178,7 @@ export const fallbackResources: Resource[] = [
     summary:
       "Downloadable pre-primary assessments with teacher-friendly answer guides.",
     description:
-      "A pre-primary starter record that shows how to separate level, category, and file storage for early years materials.",
+      "A pre-primary assessment pack with simple answer support for teachers, caregivers, and parents.",
     level: "Pre-Primary",
     levelSlug: "pre-primary",
     category: "Exams",
@@ -238,7 +238,7 @@ export const fallbackResources: Resource[] = [
     summary:
       "Teacher-ready lesson plans for CBE classrooms with simple publishing metadata.",
     description:
-      "This example demonstrates how teacher materials can sit alongside student revision content inside one shared catalog.",
+      "Teacher-ready lesson plans that fit neatly into a shared library of classroom and learner support materials.",
     level: "Primary School",
     levelSlug: "primary-school",
     category: "Lesson Plans",
@@ -287,7 +287,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     name: "1 Month",
     durationMonths: 1,
     priceKes: 300,
-    description: "Full unlimited access for one month.",
+    description: "Unlimited access for one month.",
     active: true,
     sortOrder: 1
   },
@@ -296,7 +296,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     name: "6 Months",
     durationMonths: 6,
     priceKes: 500,
-    description: "Extended unlimited access for active teachers and families.",
+    description: "A flexible plan for steady classroom and home-learning support.",
     active: true,
     sortOrder: 2
   },
@@ -305,7 +305,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     name: "1 Year",
     durationMonths: 12,
     priceKes: 1000,
-    description: "Best-value full unlimited access for the school year.",
+    description: "The best-value plan for year-round access to the full library.",
     active: true,
     sortOrder: 3
   }

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | ELimuCore"
   },
   description:
-    "ELimuCore helps teachers and parents access trusted CBE and KCSE learning materials with a Supabase-backed backend and Vercel-ready frontend.",
+    "ELimuCore helps teachers and parents access trusted CBE and KCSE learning materials, lesson plans, exams, and revision support in one place.",
   applicationName: "ELimuCore",
   keywords: [
     "KCSE",
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     "learning materials",
     "past papers",
     "lesson plans",
-    "Supabase",
-    "Vercel"
+    "revision resources",
+    "exams"
   ]
 };
 

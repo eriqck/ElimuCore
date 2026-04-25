@@ -11,8 +11,8 @@ export default function NotFound() {
           That resource does not exist yet.
         </h1>
         <p className="mt-4 text-sm leading-7 text-slate-600">
-          The link may be outdated, or the record has not been published in
-          Supabase yet.
+          The link may be outdated, or this item is no longer available in the
+          library.
         </p>
         <div className="mt-8 flex justify-center">
           <Link

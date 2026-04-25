@@ -47,9 +47,9 @@ export default async function ResourcesPage({
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               Teachers can plan faster, and parents can find trusted materials
-              for home support without digging through cluttered pages. This
-              library reads published ELimuCore resources directly from your
-              Supabase catalog.
+              for home support without digging through cluttered pages. The
+              library keeps lesson packs, assessments, notes, and revision
+              resources organized in one easy place.
             </p>
             <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200 bg-white/85 px-4 py-3 text-sm font-medium text-stone-700 shadow-sm">
               Membership includes full unlimited access. Active members can
@@ -186,9 +186,8 @@ export default async function ResourcesPage({
               No resources matched those filters
             </h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Try a broader grade, subject, or category search. Once Supabase
-              content is published, it becomes searchable here automatically
-              for teachers and parents.
+              Try a broader grade, subject, or category search. New library
+              materials will appear here as they are added.
             </p>
           </div>
         )}

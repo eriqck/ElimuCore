@@ -123,8 +123,8 @@ export default async function ResourceDetailPage({
                 Available downloads
               </h2>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                Files are delivered through a secure ELimuCore link so the
-                latest published version stays attached to this page.
+                Download files from this page whenever they are available for
+                your membership.
               </p>
             </div>
             <p className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
@@ -222,9 +222,9 @@ export default async function ResourceDetailPage({
           ) : (
             <div className="mt-6 rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 p-5">
               <p className="text-sm leading-7 text-slate-600">
-                This resource has been published, but its file attachments have
-                not been connected yet. Once the file rows are added in
-                Supabase, download buttons will appear here automatically.
+                This resource page is live, but the downloadable files are
+                still being prepared. Please check back shortly for the
+                attached materials.
               </p>
             </div>
           )}

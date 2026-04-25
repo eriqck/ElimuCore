@@ -30,14 +30,14 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
   return (
     <AuthShell
       kicker="Create account"
-      title="Start your ELimuCore member account"
-      description="Create your account now so premium downloads, manual membership activation, and future Paystack payments all connect to one member profile."
-      sideTitle="Set up once, use it across the whole library"
-      sideCopy="Teachers and parents can create an account now, then have membership activated manually until payments are connected."
+      title="Create your ELimuCore account"
+      description="Join ELimuCore to manage your membership and access premium teaching, planning, and revision resources."
+      sideTitle="Set up your account once and use it across the whole library"
+      sideCopy="Your account gives you one place to manage membership access and open the resources you need for classwork or home support."
       sideItems={[
-        "Supabase Auth handles secure member sign-in.",
-        "Memberships can be activated manually before payment automation is added.",
-        "Your account becomes the base for future checkout, renewals, and download history."
+        "Teachers can keep lesson plans, exams, and classroom files within easy reach.",
+        "Parents can access revision materials and home-learning support more easily.",
+        "Your membership and downloads stay connected to one account."
       ]}
       footerPrompt="Already have an account?"
       footerHref={`/login?next=${encodeURIComponent(next)}`}

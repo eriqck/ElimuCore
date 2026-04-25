@@ -98,8 +98,7 @@ export async function GET(
   } catch {
     return NextResponse.json(
       {
-        error:
-          "Downloads are not configured yet. Add the Supabase service role key to enable signed file links."
+        error: "Downloads are not available right now. Please try again shortly."
       },
       { status: 503 }
     );

@@ -44,13 +44,11 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
             My account
           </p>
           <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-            ELimuCore membership dashboard
+            Your ELimuCore account
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-            Manage your member access, see your current plan status, and get
-            ready for payment automation later. For now, memberships can be
-            activated manually in Supabase while the library experience stays
-            fully connected.
+            Check your membership, review your plan, and keep your teaching or
+            home-learning resources within easy reach from one place.
           </p>
 
           {notice ? (
@@ -65,7 +63,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Member profile
+                      Your profile
                     </p>
                     <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
                       {memberContext.profile?.fullName}
@@ -87,7 +85,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
                 <div className="mt-6 rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5">
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
-                    Current access
+                    Membership status
                   </p>
 
                   {memberContext.activeMembership ? (
@@ -97,18 +95,21 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                           "Active membership"}
                       </p>
                       <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Full unlimited access is active until{" "}
+                        Your plan is active until{" "}
                         {formatDate(memberContext.activeMembership.expiresAt)}.
+                        Premium resources and member downloads are available
+                        during this period.
                       </p>
                     </>
                   ) : (
                     <>
                       <p className="mt-3 text-2xl font-black tracking-tight text-slate-900">
-                        No active membership yet
+                        Choose a plan to unlock premium resources
                       </p>
                       <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Your account is ready. Once a plan is activated, premium
-                        downloads will open automatically.
+                        Your account is ready. Once your membership is active,
+                        premium downloads and member-only resources will open
+                        automatically.
                       </p>
                     </>
                   )}
@@ -151,14 +152,14 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Available plans
+                      Membership plans
                     </p>
                     <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                      Choose the membership you want to activate
+                      Pick the plan that works for you
                     </h2>
                   </div>
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
-                    Manual activation for now
+                    Unlimited downloads
                   </span>
                 </div>
 
@@ -193,10 +194,9 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
                 <div className="mt-6 rounded-[1.5rem] border border-dashed border-stone-300 bg-white p-5">
                   <p className="text-sm leading-7 text-slate-600">
-                    Before Paystack is connected, we can activate a membership
-                    manually from Supabase after payment confirmation. Once
-                    activation is done, premium download buttons start working
-                    on your account immediately.
+                    Every plan gives unlimited downloads while your membership
+                    is active. Once your plan is active, premium resources
+                    become available in your account automatically.
                   </p>
                 </div>
               </section>
@@ -205,11 +205,12 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
             <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
               <section className="brand-band rounded-[2rem] p-6 shadow-[var(--shadow-soft)]">
                 <h2 className="font-display text-3xl font-black tracking-tight text-white">
-                  Sign in to unlock premium downloads
+                  Sign in to view your account
                 </h2>
                 <p className="mt-4 max-w-xl text-base leading-7 text-slate-100">
-                  Your account is the first step. After sign-in, membership can
-                  be activated manually now and through Paystack later.
+                  Create an account or sign in to manage your membership and
+                  reach premium teaching, planning, and revision resources in
+                  one place.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3">

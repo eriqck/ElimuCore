@@ -31,13 +31,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     <AuthShell
       kicker="Member access"
       title="Sign in to your ELimuCore account"
-      description="Access premium downloads, check your membership status, and keep your teaching or family support resources in one place."
-      sideTitle="One login, one library, full member access"
-      sideCopy="Use your ELimuCore account to reach premium downloads and manage your current membership from one clean dashboard."
+      description="Access your membership, premium downloads, and saved learning support from one simple account."
+      sideTitle="One account for classroom and home learning support"
+      sideCopy="Sign in to reach lesson plans, assessments, revision materials, and other member resources without extra steps."
       sideItems={[
-        "Premium resources stay protected behind your member account.",
-        "Active members can download classroom and home-support files with no extra charge.",
-        "Paystack can be added later without rebuilding the library experience."
+        "Teachers can reach planning and classroom resources faster.",
+        "Parents can open revision and home-learning support in one place.",
+        "Active members can download the resources they need without extra charges."
       ]}
       footerPrompt="Need an account?"
       footerHref={`/signup?next=${encodeURIComponent(next)}`}
