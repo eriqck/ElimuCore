@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodeNotice, getSafeRedirectPath } from "@/lib/auth";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
@@ -18,30 +19,41 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const adminSupabase = createAdminClient();
+  const { error: createUserError } = await adminSupabase.auth.admin.createUser({
     email,
     password,
-    options: {
-      data: {
-        full_name: fullName
-      }
+    email_confirm: true,
+    user_metadata: {
+      full_name: fullName
     }
   });
 
-  if (error) {
+  if (createUserError) {
     return NextResponse.redirect(
       new URL(
-        `/signup?error=${encodeNotice(error.message)}&next=${encodeURIComponent(next)}`,
+        `/signup?error=${encodeNotice(createUserError.message)}&next=${encodeURIComponent(next)}`,
+        request.url
+      )
+    );
+  }
+
+  const supabase = await createClient();
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (signInError) {
+    return NextResponse.redirect(
+      new URL(
+        `/login?message=${encodeNotice("Account created. Sign in using your email and password.")}&next=${encodeURIComponent(next)}`,
         request.url
       )
     );
   }
 
   return NextResponse.redirect(
-    new URL(
-      `/login?message=${encodeNotice("Account created. If email confirmation is enabled, confirm your email first, then sign in.")}&next=${encodeURIComponent(next)}`,
-      request.url
-    )
+    new URL(next, request.url)
   );
 }
