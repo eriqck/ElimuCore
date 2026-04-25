@@ -1,0 +1,38 @@
+{
+  "resources": [
+    {
+      "slug": "2025-kcse-prediction-papers",
+      "title": "2025 KCSE Prediction Papers",
+      "summary": "A curated prediction pack for Form 4 candidates preparing for KCSE.",
+      "description": "Starter record showing how to load licensed or self-owned materials into Supabase.",
+      "school_level_slug": "secondary-school",
+      "category_slug": "past-papers",
+      "subject": "All Subjects",
+      "access": "premium",
+      "format": "PDF bundle",
+      "resource_year": 2025,
+      "term": "Term 3",
+      "featured": true,
+      "published": true,
+      "storage_path": null,
+      "source_url": null
+    },
+    {
+      "slug": "grade-8-cbc-assessment-pack",
+      "title": "Grade 8 CBC Assessment Pack",
+      "summary": "Assessment-ready resources for Grade 8 teachers and learners.",
+      "description": "Example starter record for junior school content imports.",
+      "school_level_slug": "junior-school",
+      "category_slug": "exams",
+      "subject": "Mixed Subjects",
+      "access": "free",
+      "format": "ZIP archive",
+      "resource_year": 2025,
+      "term": "Term 2",
+      "featured": true,
+      "published": true,
+      "storage_path": null,
+      "source_url": null
+    }
+  ]
+}

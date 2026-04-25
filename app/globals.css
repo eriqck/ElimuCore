@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  --surface: #faf4ec;
+  --surface-elevated: rgba(255, 255, 255, 0.92);
+  --ink: #23181a;
+  --brand-burgundy: #a90f36;
+  --brand-burgundy-deep: #7d0828;
+  --brand-gold: #f59e0b;
+  --brand-gold-deep: #d97706;
+  --brand-cream: #fff8f2;
+  --brand-cream-soft: #f7ede2;
+  --shadow-soft: 0 24px 60px rgba(83, 36, 28, 0.16);
+  --shadow-card: 0 18px 45px rgba(83, 36, 28, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(143, 21, 56, 0.12), transparent 30%),
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.14), transparent 26%),
+    linear-gradient(180deg, #fffaf5 0%, #f7eee4 100%);
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:not([class]),
+a[class=""],
+a[class]:not([class*="text-"]) {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(143, 21, 56, 0.18);
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+}
+
+.surface-card {
+  background: var(--surface-elevated);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-card);
+}
+
+.mesh-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(247, 237, 226, 0.94)),
+    radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.18), transparent 45%);
+}
+
+.brand-kicker {
+  color: var(--brand-burgundy);
+}
+
+.brand-button-primary {
+  background: linear-gradient(
+    90deg,
+    var(--brand-burgundy),
+    var(--brand-gold)
+  );
+  color: #fff;
+  box-shadow: 0 14px 30px rgba(143, 21, 56, 0.18);
+}
+
+.brand-button-primary:hover {
+  background: linear-gradient(
+    90deg,
+    var(--brand-burgundy-deep),
+    var(--brand-gold-deep)
+  );
+}
+
+.brand-button-secondary {
+  border: 1px solid rgba(143, 21, 56, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--brand-burgundy);
+}
+
+.brand-button-secondary:hover {
+  border-color: var(--brand-burgundy);
+  background: var(--brand-burgundy);
+  color: #fff;
+}
+
+.brand-band {
+  background: linear-gradient(90deg, #2b2023 0%, #8f1538 55%, #c45a12 100%);
+  color: #fff;
+}
+
+.cuea-crimson-band {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 28%),
+    linear-gradient(180deg, #b50d3b 0%, #9d0f35 48%, #8d0f32 100%);
+  color: #fff;
+}
