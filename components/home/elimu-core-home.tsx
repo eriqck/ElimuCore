@@ -214,12 +214,8 @@ export function ElimuCoreHome() {
 
         <section
           id="package"
-          className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8"
+          className="px-4 py-16 sm:px-6 lg:px-8"
         >
-          <div className="absolute left-0 top-10 h-14 w-14 rounded-full bg-[#dbb8ea]" />
-          <div className="absolute left-6 top-28 h-3 w-3 rounded-full bg-[#bde7e0]" />
-          <div className="absolute left-14 top-4 h-3 w-3 rounded-full bg-[#f8ebb6]" />
-
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm text-slate-400">
               ELimuCore for schools and families
@@ -259,14 +255,13 @@ export function ElimuCoreHome() {
             </div>
 
             <div className="relative mt-10 flex justify-center lg:mt-0">
-              <div className="absolute h-60 w-60 rounded-full bg-[#31b8a7]/10 sm:h-72 sm:w-72" />
               <div className="relative h-[260px] w-full max-w-[420px] sm:h-[320px]">
                 <Image
                   src="https://images.pexels.com/photos/5905964/pexels-photo-5905964.jpeg?auto=compress&cs=tinysrgb&w=1200"
                   alt="African teacher using digital resources on a laptop"
                   fill
                   sizes="(min-width: 1024px) 32vw, 100vw"
-                  className="object-contain"
+                  className="object-contain object-center"
                 />
               </div>
             </div>
