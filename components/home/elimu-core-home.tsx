@@ -230,7 +230,7 @@ export function ElimuCoreHome() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 max-w-4xl border border-[#efefef] bg-white px-8 py-10 shadow-[0_16px_40px_rgba(0,0,0,0.08)] sm:px-12 lg:grid lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-10">
+          <div className="mx-auto mt-10 max-w-5xl px-2 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
             <div>
               <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
                 ELimuCore Complete Resource Library
@@ -256,13 +256,13 @@ export function ElimuCoreHome() {
             </div>
 
             <div className="relative mt-10 flex justify-center lg:mt-0">
-              <div className="relative h-[280px] w-full max-w-[520px] overflow-hidden sm:h-[340px]">
+              <div className="relative h-[320px] w-full max-w-[620px] sm:h-[380px] lg:h-[440px]">
                 <Image
                   src={zoomArtwork}
                   alt="Teacher supporting learners through an online lesson"
                   fill
-                  sizes="(min-width: 1024px) 32vw, 100vw"
-                  className="object-contain object-center scale-[1.08]"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-contain object-center scale-[1.12]"
                 />
               </div>
             </div>
