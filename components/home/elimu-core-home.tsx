@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/weblogo.png";
+import zoomArtwork from "@/assets/zoom.png";
 import { HeroGallery } from "@/components/home/hero-gallery";
 
 const navItems = [
@@ -255,13 +256,13 @@ export function ElimuCoreHome() {
             </div>
 
             <div className="relative mt-10 flex justify-center lg:mt-0">
-              <div className="relative h-[260px] w-full max-w-[420px] sm:h-[320px]">
+              <div className="relative h-[280px] w-full max-w-[520px] overflow-hidden sm:h-[340px]">
                 <Image
-                  src="https://images.pexels.com/photos/5905964/pexels-photo-5905964.jpeg?auto=compress&cs=tinysrgb&w=1200"
-                  alt="African teacher using digital resources on a laptop"
+                  src={zoomArtwork}
+                  alt="Teacher supporting learners through an online lesson"
                   fill
                   sizes="(min-width: 1024px) 32vw, 100vw"
-                  className="object-contain object-center"
+                  className="object-contain object-center scale-[1.08]"
                 />
               </div>
             </div>

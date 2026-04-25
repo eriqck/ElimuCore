@@ -24,6 +24,7 @@ type HeroSlide = {
   noteClass: string;
   dotActiveClass: string;
   dotInactiveClass: string;
+  imageClassName?: string;
 };
 
 const slides: HeroSlide[] = [
@@ -43,7 +44,8 @@ const slides: HeroSlide[] = [
     ribbonClass: "bg-[#ffd33d] text-[#17437f]",
     noteClass: "text-[#3147d1]",
     dotActiveClass: "bg-[#33b9a8]",
-    dotInactiveClass: "bg-[#9ce3d8] hover:bg-[#6ed3c5]"
+    dotInactiveClass: "bg-[#9ce3d8] hover:bg-[#6ed3c5]",
+    imageClassName: "object-contain object-center"
   },
   {
     image: dashboardArtwork,
@@ -61,7 +63,8 @@ const slides: HeroSlide[] = [
     ribbonClass: "bg-white text-[#2f80ed]",
     noteClass: "text-white",
     dotActiveClass: "bg-white",
-    dotInactiveClass: "bg-[#69c7ff] hover:bg-[#9fdfff]"
+    dotInactiveClass: "bg-[#69c7ff] hover:bg-[#9fdfff]",
+    imageClassName: "object-contain object-center scale-[1.06]"
   },
   {
     image: familyArtwork,
@@ -79,7 +82,8 @@ const slides: HeroSlide[] = [
     ribbonClass: "bg-white text-[#0d7c58]",
     noteClass: "text-white",
     dotActiveClass: "bg-white",
-    dotInactiveClass: "bg-[#53d8b4] hover:bg-[#7be3c7]"
+    dotInactiveClass: "bg-[#53d8b4] hover:bg-[#7be3c7]",
+    imageClassName: "object-contain object-center scale-[1.08]"
   },
   {
     image: zoomArtwork,
@@ -97,7 +101,8 @@ const slides: HeroSlide[] = [
     ribbonClass: "bg-white text-[#8b1028]",
     noteClass: "text-white",
     dotActiveClass: "bg-white",
-    dotInactiveClass: "bg-[#d86b86] hover:bg-[#e38aa0]"
+    dotInactiveClass: "bg-[#d86b86] hover:bg-[#e38aa0]",
+    imageClassName: "object-contain object-center scale-[1.08]"
   },
   {
     image: dashboardArtwork,
@@ -115,7 +120,8 @@ const slides: HeroSlide[] = [
     ribbonClass: "bg-[#7b79f0] text-white",
     noteClass: "text-[#3047d1]",
     dotActiveClass: "bg-[#31b8a7]",
-    dotInactiveClass: "bg-[#8fcde8] hover:bg-[#67b7df]"
+    dotInactiveClass: "bg-[#8fcde8] hover:bg-[#67b7df]",
+    imageClassName: "object-contain object-center scale-[1.06]"
   }
 ];
 
@@ -180,7 +186,9 @@ export function HeroGallery() {
                 fill
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-contain object-center"
+                className={
+                  activeSlide.imageClassName ?? "object-contain object-center"
+                }
               />
             </div>
           </div>
