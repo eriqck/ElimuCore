@@ -215,15 +215,15 @@ export function ElimuCoreHome() {
 
         <section
           id="package"
-          className="px-4 py-16 sm:px-6 lg:px-8"
+          className="bg-[#8a515d] px-4 py-16 text-white sm:px-6 lg:px-8"
         >
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-white/70">
               ELimuCore for schools and families
             </p>
-            <h2 className="mt-4 text-3xl font-medium tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-medium tracking-tight sm:text-4xl">
               One membership.
-              <span className="text-[#31b8a7]">
+              <span className="text-[#a9f5db]">
                 {" "}
                 Complete resource access for teaching and home study.
               </span>
@@ -232,19 +232,19 @@ export function ElimuCoreHome() {
 
           <div className="mx-auto mt-10 max-w-5xl px-2 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
             <div>
-              <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
+              <h3 className="text-2xl font-semibold tracking-tight">
                 ELimuCore Complete Resource Library
               </h3>
-              <p className="mt-5 text-base leading-8 text-slate-600">
+              <p className="mt-5 text-base leading-8 text-white/85">
                 Teachers and parents can access lesson plans, schemes of work,
                 past papers, marking schemes, exams, notes, assignments, and
                 home-learning materials from one clean member library.
               </p>
-              <p className="mt-4 text-base leading-8 text-slate-600">
+              <p className="mt-4 text-base leading-8 text-white/85">
                 Subscription options are KSh 300 for 1 month, KSh 500 for 6
                 months, and KSh 1000 for 1 year.
               </p>
-              <p className="mt-4 text-base font-semibold text-slate-700">
+              <p className="mt-4 text-base font-semibold text-white">
                 Your subscription has no limitations, so you download all the
                 resources you need without extra charges during the active
                 period.

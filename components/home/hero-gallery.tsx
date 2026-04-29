@@ -57,7 +57,7 @@ const slides: HeroSlide[] = [
     description:
       "Use ELimuCore to keep teaching, revision, and learner performance resources easier to follow across the school term.",
     note: "Built for schools, teachers, and parents.",
-    backgroundClass: "bg-[#2f80ed]",
+    backgroundClass: "bg-[#2e7eec]",
     titleClass: "text-white",
     bodyClass: "text-white/85",
     ribbonClass: "bg-white text-[#2f80ed]",
@@ -76,7 +76,7 @@ const slides: HeroSlide[] = [
     description:
       "Give parents one organized place for guided study support, online learning, and classroom follow-up resources at home.",
     note: "Fast search. Clear access. Helpful support.",
-    backgroundClass: "bg-[#13c48a]",
+    backgroundClass: "bg-[#15b987]",
     titleClass: "text-white",
     bodyClass: "text-white/85",
     ribbonClass: "bg-white text-[#0d7c58]",
@@ -95,7 +95,7 @@ const slides: HeroSlide[] = [
     description:
       "Choose 1 month, 6 months, or 1 year and download as many resources as you need with no extra charge during the subscription period.",
     note: "KSh 300, KSh 500, or KSh 1000.",
-    backgroundClass: "bg-[#8b1028]",
+    backgroundClass: "bg-[#8a515d]",
     titleClass: "text-white",
     bodyClass: "text-white/85",
     ribbonClass: "bg-white text-[#8b1028]",
@@ -114,13 +114,13 @@ const slides: HeroSlide[] = [
     description:
       "Search notes, exams, topical questions, and classroom planning resources faster for everyday teaching and revision needs.",
     note: "Unlimited downloads during your active membership.",
-    backgroundClass: "bg-white",
-    titleClass: "text-[#2f3640]",
-    bodyClass: "text-slate-700",
-    ribbonClass: "bg-[#7b79f0] text-white",
-    noteClass: "text-[#3047d1]",
-    dotActiveClass: "bg-[#31b8a7]",
-    dotInactiveClass: "bg-[#8fcde8] hover:bg-[#67b7df]",
+    backgroundClass: "bg-[#2e7eec]",
+    titleClass: "text-white",
+    bodyClass: "text-white/85",
+    ribbonClass: "bg-white text-[#2e7eec]",
+    noteClass: "text-white",
+    dotActiveClass: "bg-white",
+    dotInactiveClass: "bg-[#69c7ff] hover:bg-[#9fdfff]",
     imageClassName: "object-contain object-center scale-[1.06]"
   }
 ];
