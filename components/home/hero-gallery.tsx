@@ -95,7 +95,7 @@ const slides: HeroSlide[] = [
     description:
       "Choose 1 month, 6 months, or 1 year and download as many resources as you need with no extra charge during the subscription period.",
     note: "KSh 300, KSh 500, or KSh 1000.",
-    backgroundClass: "bg-[#8a515d]",
+    backgroundClass: "bg-[#88132a]",
     titleClass: "text-white",
     bodyClass: "text-white/85",
     ribbonClass: "bg-white text-[#8b1028]",

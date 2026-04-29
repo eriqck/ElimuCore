@@ -1,19 +1,35 @@
 import path from "node:path";
 import sharp from "sharp";
 
-const assets = ["dash.png", "family.png", "zoom.png"];
+const assets = [
+  {
+    file: "dash.png",
+    matcher: (r, g, b) => isBlueDashboardBackground(r, g, b)
+  },
+  {
+    file: "family.png",
+    matcher: (r, g, b) => isGreenFamilyBackground(r, g, b)
+  },
+  {
+    file: "zoom.png",
+    matcher: (r, g, b) => isMaroonZoomBackground(r, g, b)
+  }
+];
 
-function isLightNeutral(r, g, b) {
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const spread = max - min;
-  const brightness = (r + g + b) / 3;
-
-  return brightness >= 226 && spread <= 34;
+function isBlueDashboardBackground(r, g, b) {
+  return b > 180 && g > 90 && r < 120;
 }
 
-for (const file of assets) {
-  const filePath = path.join(process.cwd(), "assets", file);
+function isGreenFamilyBackground(r, g, b) {
+  return g > 135 && b > 70 && b < 170 && r < 90;
+}
+
+function isMaroonZoomBackground(r, g, b) {
+  return r > 90 && r < 180 && g < 80 && b < 100 && r - g > 45 && r - b > 20;
+}
+
+for (const asset of assets) {
+  const filePath = path.join(process.cwd(), "assets", asset.file);
   const { data, info } = await sharp(filePath)
     .ensureAlpha()
     .raw()
@@ -35,7 +51,7 @@ for (const file of assets) {
     const g = data[pixelIndex + 1];
     const b = data[pixelIndex + 2];
 
-    if (!isLightNeutral(r, g, b)) {
+    if (!asset.matcher(r, g, b)) {
       return;
     }
 
@@ -92,5 +108,5 @@ for (const file of assets) {
     .png()
     .toFile(filePath);
 
-  console.log(`Cleaned ${file}`);
+  console.log(`Cleaned ${asset.file}`);
 }

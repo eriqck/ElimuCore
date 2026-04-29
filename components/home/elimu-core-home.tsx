@@ -215,7 +215,7 @@ export function ElimuCoreHome() {
 
         <section
           id="package"
-          className="bg-[#8a515d] px-4 py-16 text-white sm:px-6 lg:px-8"
+          className="bg-[#88132a] px-4 py-16 text-white sm:px-6 lg:px-8"
         >
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm text-white/70">
