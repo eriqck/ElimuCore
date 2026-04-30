@@ -179,6 +179,19 @@ a[class]:not([class*="text-"]) {
   animation: learning-band-sway 11s ease-in-out infinite;
 }
 
+.learning-band-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+}
+
+.learning-band-note {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  color: #1f2937;
+  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+}
+
 .learning-lift-card {
   position: relative;
   transition:

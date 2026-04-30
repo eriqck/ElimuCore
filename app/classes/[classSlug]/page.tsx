@@ -164,12 +164,12 @@ export default async function LearningClassPage({
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="learning-lift-card rounded-3xl border border-white/20 bg-white/15 p-5 shadow-sm backdrop-blur"
+                  className="learning-band-card learning-lift-card rounded-3xl p-5"
                 >
-                  <p className="text-3xl font-black tracking-tight text-white">
+                  <p className="text-3xl font-black tracking-tight text-slate-900">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm font-medium text-white">{stat.label}</p>
+                  <p className="mt-2 text-sm font-semibold text-slate-700">{stat.label}</p>
                 </div>
               ))}
             </div>
