@@ -12,9 +12,8 @@ type LoginPageProps = {
 };
 
 export const metadata: Metadata = {
-  title: "Member Login",
-  description:
-    "Sign in to ELimuCore to access premium teaching and parent support resources."
+  title: "Login",
+  description: "Login to ELimuCore."
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
@@ -29,81 +28,65 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <AuthShell
-      kicker="Member access"
-      title="Sign in to your ELimuCore account"
-      description="Access your membership, premium downloads, and saved learning support from one simple account."
-      sideTitle="One account for classroom and home learning support"
-      sideCopy="Sign in to reach lesson plans, assessments, revision materials, and other member resources without extra steps."
-      sideItems={[
-        "Teachers can reach planning and classroom resources faster.",
-        "Parents can open revision and home-learning support in one place.",
-        "Active members can download the resources they need without extra charges."
-      ]}
-      footerPrompt="Need an account?"
-      footerHref={`/signup?next=${encodeURIComponent(next)}`}
-      footerLinkLabel="Create one here"
+      title="LOGIN"
     >
       <div className="grid gap-4">
         {error ? (
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
             {error}
           </div>
         ) : null}
 
         {message ? (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
             {message}
           </div>
         ) : null}
 
-        <form action="/auth/login" method="post" className="grid gap-4">
+        <form action="/auth/login" method="post" className="grid gap-5">
           <input type="hidden" name="next" value={next} />
 
-          <div>
-            <label
-              htmlFor="email"
-              className="mb-2 block text-sm font-semibold text-slate-700"
-            >
+          <div className="border-b border-stone-300">
+            <label htmlFor="email" className="sr-only">
               Email address
             </label>
             <input
               id="email"
               name="email"
               type="email"
+              placeholder="Email address"
               required
-              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-700"
+              className="w-full border-0 bg-transparent px-1 py-3 text-base text-slate-900 outline-none placeholder:text-slate-400"
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="mb-2 block text-sm font-semibold text-slate-700"
-            >
+          <div className="border-b border-stone-300">
+            <label htmlFor="password" className="sr-only">
               Password
             </label>
             <input
               id="password"
               name="password"
               type="password"
+              placeholder="Password"
               required
-              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-700"
+              className="w-full border-0 bg-transparent px-1 py-3 text-base text-slate-900 outline-none placeholder:text-slate-400"
             />
           </div>
 
           <button
             type="submit"
-            className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+            className="mt-2 rounded-md bg-[#18b6cf] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1099af]"
           >
-            Sign in
+            CONTINUE
           </button>
         </form>
 
         <Link
-          href="/"
-          className="inline-flex w-fit rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-rose-900 hover:text-white"
+          href={`/signup?next=${encodeURIComponent(next)}`}
+          className="inline-flex items-center justify-center rounded-md bg-[#2ab249] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#23953d]"
         >
-          Back to homepage
+          REGISTER AN ACCOUNT
         </Link>
       </div>
     </AuthShell>

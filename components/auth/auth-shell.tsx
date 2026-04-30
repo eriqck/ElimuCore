@@ -1,78 +1,61 @@
+import Image from "next/image";
 import Link from "next/link";
+import codingArtwork from "@/assets/coding.png";
+import familyArtwork from "@/assets/family.png";
+import logo from "@/assets/weblogo.png";
 
 type AuthShellProps = {
-  kicker: string;
   title: string;
-  description: string;
-  sideTitle: string;
-  sideCopy: string;
-  sideItems: string[];
   children: React.ReactNode;
-  footerPrompt: string;
-  footerHref: string;
-  footerLinkLabel: string;
 };
 
-export function AuthShell({
-  kicker,
-  title,
-  description,
-  sideTitle,
-  sideCopy,
-  sideItems,
-  children,
-  footerPrompt,
-  footerHref,
-  footerLinkLabel
-}: AuthShellProps) {
+export function AuthShell({ title, children }: AuthShellProps) {
   return (
-    <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <section className="brand-band rounded-[2rem] p-8 shadow-[var(--shadow-soft)]">
-          <p className="text-sm font-bold uppercase tracking-[0.22em] text-amber-300">
-            {kicker}
-          </p>
-          <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-white sm:text-5xl">
-            {sideTitle}
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-100">
-            {sideCopy}
-          </p>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#6f1023] px-4 py-10">
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(87,12,30,0.94),rgba(122,16,41,0.9))]" />
+      <div className="absolute inset-0 bg-black/10" />
 
-          <div className="mt-8 grid gap-3">
-            {sideItems.map((item) => (
-              <div
-                key={item}
-                className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-medium text-white"
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        </section>
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-y-0 -left-24 w-[40rem] opacity-[0.16] blur-[8px]">
+          <Image
+            src={codingArtwork}
+            alt=""
+            fill
+            priority
+            className="object-contain object-left"
+          />
+        </div>
 
-        <section className="surface-card rounded-[2rem] border border-white/60 p-8 sm:p-10">
-          <p className="brand-kicker text-sm font-bold uppercase tracking-[0.22em]">
-            {kicker}
-          </p>
-          <h2 className="font-display mt-4 text-3xl font-black tracking-tight text-slate-900">
+        <div className="absolute inset-y-0 -right-16 w-[44rem] opacity-[0.2] blur-[8px]">
+          <Image
+            src={familyArtwork}
+            alt=""
+            fill
+            priority
+            className="object-contain object-right"
+          />
+        </div>
+      </div>
+
+      <div className="relative w-full max-w-[24rem]">
+        <Link
+          href="/"
+          className="mx-auto mb-5 flex w-fit items-center justify-center rounded-full bg-white/95 p-3 shadow-[0_14px_28px_rgba(0,0,0,0.18)] transition hover:scale-[1.02]"
+        >
+          <Image
+            src={logo}
+            alt="ELimuCore"
+            priority
+            className="h-14 w-auto sm:h-16"
+          />
+        </Link>
+
+        <section className="overflow-hidden rounded-2xl bg-white shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
+          <div className="mx-4 mt-4 rounded-lg bg-[#e7286f] px-4 py-4 text-center text-lg font-semibold tracking-[0.14em] text-white sm:text-xl">
             {title}
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            {description}
-          </p>
-
-          <div className="mt-8">{children}</div>
-
-          <div className="mt-8 border-t border-stone-200 pt-6 text-sm text-slate-600">
-            {footerPrompt}{" "}
-            <Link
-              href={footerHref}
-              className="font-semibold text-rose-900 transition hover:text-orange-600"
-            >
-              {footerLinkLabel}
-            </Link>
           </div>
+
+          <div className="px-5 pb-5 pt-5 sm:px-6 sm:pb-6">{children}</div>
         </section>
       </div>
     </main>
