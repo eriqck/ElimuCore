@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { AudioButton } from "@/components/learning/audio-button";
 import type {
   LearningLesson,
   LearningLessonProgress
@@ -174,8 +175,8 @@ export function LessonPlayer({
     const score = finalScore ?? 0;
 
     return (
-      <section className="rounded-[2rem] border border-emerald-100 bg-emerald-50/70 p-6 sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+      <section className="rounded-[2rem] border border-[#daf5ef] bg-[linear-gradient(180deg,#eefbf8,#ffffff)] p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#13806f]">
           Lesson complete
         </p>
         <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900">
@@ -189,21 +190,21 @@ export function LessonPlayer({
           {nextLessonHref ? (
             <Link
               href={nextLessonHref}
-              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-[#31b8a7] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(49,184,167,0.24)] transition hover:-translate-y-0.5 hover:bg-[#249888]"
             >
               Continue to next lesson
             </Link>
           ) : (
             <Link
               href={topicHref}
-              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-[#31b8a7] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(49,184,167,0.24)] transition hover:-translate-y-0.5 hover:bg-[#249888]"
             >
               Back to topic
             </Link>
           )}
           <Link
             href={topicHref}
-            className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+            className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
           >
             Topic overview
           </Link>
@@ -244,9 +245,14 @@ export function LessonPlayer({
     totalQuestions > 0
       ? Math.round((currentIndex / totalQuestions) * 100)
       : 0;
+  const spokenQuestion = [
+    currentQuestion.prompt,
+    currentQuestion.visual ?? "",
+    currentQuestion.choices.join(". ")
+  ].join(". ");
 
   return (
-    <section className="rounded-[2rem] border border-white/60 surface-card p-6 sm:p-8">
+    <section className="learning-panel rounded-[2rem] p-6 sm:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
@@ -256,25 +262,28 @@ export function LessonPlayer({
             {lesson.title}
           </h2>
         </div>
-        <div className="rounded-full bg-stone-100 px-4 py-2 text-sm font-semibold text-slate-700">
-          Question {currentIndex + 1} of {totalQuestions}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="rounded-full bg-[#fff8ea] px-4 py-2 text-sm font-semibold text-[#8a5e09]">
+            Question {currentIndex + 1} of {totalQuestions}
+          </div>
+          <AudioButton text={spokenQuestion} label="Read question" />
         </div>
       </div>
 
       <div className="mt-5 h-3 rounded-full bg-stone-200">
         <div
-          className="h-full rounded-full bg-[#31b8a7] transition-all"
+          className="h-full rounded-full bg-[linear-gradient(90deg,#31b8a7,#8d4db2,#f3a61a)] transition-all"
           style={{ width: `${Math.max(progressPercent, 6)}%` }}
         />
       </div>
 
-      <div className="mt-8 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
+      <div className="mt-8 rounded-[2rem] border border-[#eddce2] bg-white p-6 shadow-sm">
         <p className="text-lg font-semibold leading-8 text-slate-900 sm:text-2xl">
           {currentQuestion.prompt}
         </p>
 
         {currentQuestion.visual ? (
-          <div className="mt-6 rounded-3xl bg-stone-50 px-5 py-6 text-center text-3xl leading-relaxed text-slate-900 sm:text-4xl">
+          <div className="learning-float mt-6 rounded-3xl bg-[linear-gradient(135deg,#fff8ea,#ffffff)] px-5 py-6 text-center text-3xl leading-relaxed text-slate-900 shadow-sm sm:text-4xl">
             {currentQuestion.visual}
           </div>
         ) : null}
@@ -288,9 +297,9 @@ export function LessonPlayer({
                 key={choice}
                 type="button"
                 onClick={() => handleChoice(choiceIndex)}
-                className={`rounded-2xl border px-4 py-4 text-left text-base font-semibold transition ${
+                className={`learning-answer-choice rounded-2xl border px-4 py-4 text-left text-base font-semibold ${
                   isSelected
-                    ? "border-[#8b1028] bg-[#8b1028] text-white"
+                    ? "border-[#8b1028] bg-[#8b1028] text-white shadow-[0_18px_35px_rgba(139,16,40,0.22)]"
                     : "border-stone-200 bg-white text-slate-800 hover:border-[#31b8a7] hover:bg-[#f3fcfa]"
                 }`}
               >
@@ -304,8 +313,8 @@ export function LessonPlayer({
           <div
             className={`mt-6 rounded-2xl px-4 py-4 text-sm font-medium ${
               feedback.kind === "correct"
-                ? "border border-emerald-200 bg-emerald-50 text-emerald-800"
-                : "border border-amber-200 bg-amber-50 text-amber-800"
+                ? "border border-[#ccefe8] bg-[#eefbf8] text-[#126d61]"
+                : "border border-[#f6e1b6] bg-[#fff8ea] text-[#8a5e09]"
             }`}
           >
             {feedback.kind === "correct" ? "Correct. " : "Try again. "}
@@ -318,13 +327,13 @@ export function LessonPlayer({
             <button
               type="button"
               onClick={handleContinue}
-              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
             >
               {currentIndex === totalQuestions - 1 ? "Finish lesson" : "Next question"}
             </button>
             <Link
               href={topicHref}
-              className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+              className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
             >
               Leave lesson
             </Link>

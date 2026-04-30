@@ -18,10 +18,13 @@ export default async function ClassesPage() {
   const availableClasses = classes.filter((item) => item.available);
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
-      <section className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 surface-card">
+    <main className="learning-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <section className="learning-panel mx-auto max-w-7xl overflow-hidden rounded-[2rem]">
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
-          <div>
+          <div className="relative">
+            <div className="learning-float absolute -left-5 top-0 h-16 w-16 rounded-full bg-[#31b8a7]/15 blur-sm" />
+            <div className="learning-float-delay absolute right-10 top-14 h-24 w-24 rounded-full bg-[#8d4db2]/10 blur-md" />
+
             <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
               Learning classes
             </p>
@@ -33,7 +36,7 @@ export default async function ClassesPage() {
               progress into one guided path. Start with Grade 1 Mathematics and
               grow into more classes over time without changing the platform.
             </p>
-            <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200 bg-white/85 px-4 py-3 text-sm font-medium text-stone-700 shadow-sm">
+            <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200 bg-white/90 px-4 py-3 text-sm font-medium text-stone-700 shadow-sm">
               Free users can open selected preview lessons. Active members
               unlock the full class, guided practice, mixed quizzes, and saved
               progress.
@@ -43,22 +46,25 @@ export default async function ClassesPage() {
               {[
                 {
                   value: `${availableClasses.length}`,
-                  label: "Classes available now"
+                  label: "Classes available now",
+                  tone: "bg-[#f7f3ff]"
                 },
                 {
                   value: `${classes.length}`,
-                  label: "Classes planned in roadmap"
+                  label: "Classes planned in roadmap",
+                  tone: "bg-[#eefbf8]"
                 },
                 {
                   value: memberContext.activeMembership ? "On" : "Off",
-                  label: "Member access status"
+                  label: "Member access status",
+                  tone: "bg-[#fff8ea]"
                 }
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-3xl border border-stone-200/80 bg-white/80 p-5 shadow-sm"
+                  className={`learning-lift-card rounded-3xl border border-white/70 p-5 shadow-sm ${stat.tone}`}
                 >
-                  <p className="text-3xl font-black tracking-tight text-slate-900">
+                  <p className="text-3xl font-black tracking-tight text-[#8b1028]">
                     {stat.value}
                   </p>
                   <p className="mt-2 text-sm text-slate-500">{stat.label}</p>
@@ -67,8 +73,11 @@ export default async function ClassesPage() {
             </div>
           </div>
 
-          <div className="mesh-panel rounded-[2rem] border border-rose-100 p-6 shadow-[var(--shadow-soft)] sm:p-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <div className="learning-band relative overflow-hidden rounded-[2rem] p-6 shadow-[var(--shadow-soft)] sm:p-8">
+            <div className="learning-pulse-ring absolute right-6 top-6 h-16 w-16 rounded-full border border-white/20" />
+            <div className="absolute bottom-0 right-0 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
+
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-100">
               What each class includes
             </p>
             <div className="mt-6 grid gap-4">
@@ -80,7 +89,7 @@ export default async function ClassesPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-white/70 bg-white/90 px-4 py-4 text-sm font-medium text-slate-700 shadow-sm"
+                  className="learning-lift-card rounded-2xl border border-white/15 bg-white/10 px-4 py-4 text-sm font-medium text-white shadow-sm backdrop-blur"
                 >
                   {item}
                 </div>
@@ -90,13 +99,13 @@ export default async function ClassesPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/classes/grade-1-math"
-                className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
               >
                 Open Grade 1 Mathematics
               </Link>
               <Link
                 href={memberContext.user ? "/account" : "/signup"}
-                className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                className="rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-[#8b1028]"
               >
                 {memberContext.user ? "View account" : "Create account"}
               </Link>
@@ -111,7 +120,7 @@ export default async function ClassesPage() {
             Browse classes
           </p>
           <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-            Start with one polished class, then keep growing the product.
+            Start with one strong class, then keep growing the product.
           </h2>
         </div>
 
@@ -126,7 +135,11 @@ export default async function ClassesPage() {
             return (
               <article
                 key={learningClass.slug}
-                className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-[var(--shadow-card)]"
+                className={`learning-lift-card rounded-[2rem] border p-6 shadow-[var(--shadow-card)] ${
+                  learningClass.available
+                    ? "border-[#eddce2] bg-[linear-gradient(180deg,#fffaf8,#ffffff)]"
+                    : "border-stone-200 bg-white"
+                }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -156,11 +169,11 @@ export default async function ClassesPage() {
                 </p>
 
                 <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
-                  <div className="rounded-2xl bg-stone-50 px-4 py-3">
+                  <div className="rounded-2xl bg-[#f7f3ff] px-4 py-3">
                     <p className="font-black text-slate-900">{topicCount}</p>
                     <p className="mt-1 text-slate-500">Topics</p>
                   </div>
-                  <div className="rounded-2xl bg-stone-50 px-4 py-3">
+                  <div className="rounded-2xl bg-[#eefbf8] px-4 py-3">
                     <p className="font-black text-slate-900">{lessonCount}</p>
                     <p className="mt-1 text-slate-500">Lessons</p>
                   </div>

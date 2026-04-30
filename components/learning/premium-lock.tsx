@@ -12,7 +12,7 @@ export function PremiumLock({
   signupHref
 }: PremiumLockProps) {
   return (
-    <section className="rounded-[2rem] border border-rose-100 bg-white p-8 shadow-[var(--shadow-card)] sm:p-10">
+    <section className="learning-panel rounded-[2rem] p-8 shadow-[var(--shadow-card)] sm:p-10">
       <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
         Premium lesson
       </p>
@@ -45,7 +45,7 @@ export function PremiumLock({
         ].map((plan) => (
           <div
             key={plan.name}
-            className="rounded-3xl border border-stone-200 bg-stone-50 p-5"
+            className="learning-lift-card rounded-3xl border border-white/70 bg-white/90 p-5"
           >
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
               {plan.name}
@@ -63,13 +63,13 @@ export function PremiumLock({
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
           href={loginHref}
-          className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+          className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
         >
           Login to continue
         </Link>
         <Link
           href={signupHref}
-          className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+          className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
         >
           Create account
         </Link>
