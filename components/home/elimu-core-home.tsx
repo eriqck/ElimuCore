@@ -7,7 +7,7 @@ import { HeroGallery } from "@/components/home/hero-gallery";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "#package" },
-  { label: "Product", href: "#package" },
+  { label: "Classes", href: "/classes" },
   { label: "Pricing", href: "#plans" },
   { label: "Support", href: "#how-to-use" },
   { label: "Blog", href: "/resources" }
@@ -365,6 +365,12 @@ export function ElimuCoreHome() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/classes"
+              className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#8b1028] hover:text-white"
+            >
+              Classes
+            </Link>
             <Link
               href="/resources"
               className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#8b1028] hover:text-white"

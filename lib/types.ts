@@ -128,6 +128,84 @@ export type Stat = {
   label: string;
 };
 
+export type LearningAccess = "free" | "premium";
+
+export type LearningLessonType = "guided" | "practice" | "quiz";
+
+export type LearningCard = {
+  id: string;
+  title: string;
+  body: string;
+  visual?: string;
+};
+
+export type LearningQuestion = {
+  id: string;
+  prompt: string;
+  visual?: string;
+  choices: string[];
+  correctIndex: number;
+  hint: string;
+  explanation: string;
+};
+
+export type LearningLesson = {
+  slug: string;
+  topicSlug: string;
+  classSlug: string;
+  title: string;
+  summary: string;
+  description: string;
+  lessonType: LearningLessonType;
+  access: LearningAccess;
+  estimatedMinutes: number;
+  sortOrder: number;
+  objectives: string[];
+  learningCards: LearningCard[];
+  questions: LearningQuestion[];
+  passingScore: number;
+};
+
+export type LearningTopic = {
+  slug: string;
+  classSlug: string;
+  title: string;
+  summary: string;
+  description: string;
+  access: LearningAccess;
+  sortOrder: number;
+  lessons: LearningLesson[];
+};
+
+export type LearningClass = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  audience: string;
+  statusLabel: string;
+  available: boolean;
+  sortOrder: number;
+  topics: LearningTopic[];
+};
+
+export type LearningLessonProgress = {
+  lessonSlug: string;
+  classSlug: string;
+  topicSlug: string;
+  completed: boolean;
+  score: number | null;
+  questionCount: number;
+  completedAt: string | null;
+  lastActivityAt: string | null;
+};
+
+export type LearningTopicProgressSummary = {
+  completedLessons: number;
+  totalLessons: number;
+  percent: number;
+};
+
 export type HomePageData = {
   quickLinks: QuickLink[];
   schoolLevels: SchoolLevel[];
