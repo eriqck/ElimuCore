@@ -80,28 +80,32 @@ export function LessonPlayer({
 
     const context = new AudioContextClass();
     const now = context.currentTime;
-    const notes = [660, 880, 1046];
+    const partials = [
+      { frequency: 1318.5, gain: 0.13, decay: 0.9, type: "sine" as const },
+      { frequency: 2637, gain: 0.075, decay: 0.68, type: "triangle" as const },
+      { frequency: 3951, gain: 0.045, decay: 0.52, type: "sine" as const }
+    ];
 
-    notes.forEach((frequency, index) => {
+    partials.forEach(({ frequency, gain: level, decay, type }, index) => {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
-      oscillator.type = "sine";
+      oscillator.type = type;
       oscillator.frequency.setValueAtTime(frequency, now);
+      oscillator.detune.setValueAtTime(index * 3, now);
+
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02 + index * 0.08);
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        now + 0.2 + index * 0.08
-      );
+      gain.gain.exponentialRampToValueAtTime(level, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + decay);
+
       oscillator.connect(gain);
       gain.connect(context.destination);
-      oscillator.start(now + index * 0.08);
-      oscillator.stop(now + 0.24 + index * 0.08);
+      oscillator.start(now);
+      oscillator.stop(now + decay + 0.05);
     });
 
     window.setTimeout(() => {
       void context.close();
-    }, 600);
+    }, 1200);
   }
 
   function triggerSuccessMoment() {
