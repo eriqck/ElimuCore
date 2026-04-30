@@ -247,7 +247,7 @@ export function LessonPlayer({
     const score = finalScore ?? 0;
 
     return (
-      <section className="rounded-[2rem] border border-[#daf5ef] bg-[linear-gradient(180deg,#eefbf8,#ffffff)] p-6 shadow-[var(--shadow-card)] sm:p-8">
+      <section className="learning-lift-card rounded-[2rem] border border-[#daf5ef] bg-[linear-gradient(180deg,#eefbf8,#ffffff)] p-6 shadow-[var(--shadow-card)] sm:p-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#13806f]">
           Lesson complete
         </p>
@@ -262,21 +262,21 @@ export function LessonPlayer({
           {nextLessonHref ? (
             <Link
               href={nextLessonHref}
-              className="rounded-2xl bg-[#31b8a7] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(49,184,167,0.24)] transition hover:-translate-y-0.5 hover:bg-[#249888]"
+              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
             >
               Continue to next lesson
             </Link>
           ) : (
             <Link
               href={topicHref}
-              className="rounded-2xl bg-[#31b8a7] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(49,184,167,0.24)] transition hover:-translate-y-0.5 hover:bg-[#249888]"
+              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
             >
               Back to topic
             </Link>
           )}
           <Link
             href={topicHref}
-            className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
+            className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
           >
             Topic overview
           </Link>
@@ -294,11 +294,11 @@ export function LessonPlayer({
           ) : (
             <p>
               Sign in to save progress across devices.{" "}
-              <Link href={loginHref} className="font-semibold text-[#8b1028]">
+              <Link href={loginHref} className="font-semibold text-[#1b973c]">
                 Login
               </Link>{" "}
               or{" "}
-              <Link href={signupHref} className="font-semibold text-[#8b1028]">
+              <Link href={signupHref} className="font-semibold text-[#1b973c]">
                 create an account
               </Link>
               .
@@ -323,7 +323,7 @@ export function LessonPlayer({
     <section className="learning-panel rounded-[2rem] p-6 sm:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1b973c]">
             {isQuiz ? "Topic quiz" : "Interactive practice"}
           </p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900">
@@ -340,12 +340,12 @@ export function LessonPlayer({
 
       <div className="mt-5 h-3 rounded-full bg-stone-200">
         <div
-          className="h-full rounded-full bg-[linear-gradient(90deg,#31b8a7,#8d4db2,#f3a61a)] transition-all"
+          className="h-full rounded-full bg-[linear-gradient(90deg,#25b24a,#31b8a7,#f3a61a)] transition-all"
           style={{ width: `${Math.max(progressPercent, 6)}%` }}
         />
       </div>
 
-      <div className="relative mt-8 rounded-[2rem] border border-[#eddce2] bg-white p-6 shadow-sm">
+      <div className="learning-lift-card relative mt-8 rounded-[2rem] border border-[#dcf3e2] bg-white p-6 shadow-sm">
         {successMoment > 0 ? (
           <div
             key={successMoment}
@@ -392,7 +392,7 @@ export function LessonPlayer({
                 onClick={() => handleChoice(choiceIndex)}
                 className={`learning-answer-choice rounded-2xl border px-4 py-4 text-left text-base font-semibold ${
                   isSelected
-                    ? "border-[#8b1028] bg-[#8b1028] text-white shadow-[0_18px_35px_rgba(139,16,40,0.22)]"
+                    ? "border-[#25b24a] bg-[#25b24a] text-white shadow-[0_18px_35px_rgba(37,178,74,0.24)]"
                     : "border-stone-200 bg-white text-slate-800 hover:border-[#31b8a7] hover:bg-[#f3fcfa]"
                 }`}
               >
@@ -420,13 +420,13 @@ export function LessonPlayer({
             <button
               type="button"
               onClick={handleContinue}
-              className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
+              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
             >
               {currentIndex === totalQuestions - 1 ? "Finish lesson" : "Next question"}
             </button>
             <Link
               href={topicHref}
-              className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
+              className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
             >
               Leave lesson
             </Link>

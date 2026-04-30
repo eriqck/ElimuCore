@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { HighlightHeading } from "@/components/learning/highlight-heading";
 import {
   getLearningClassBySlug,
   getLearningProgressForCurrentUser,
@@ -62,9 +63,15 @@ export default async function LearningClassPage({
           <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
             {learningClass.statusLabel}
           </p>
-          <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-slate-900">
-            {learningClass.title}
-          </h1>
+          <div className="mt-4">
+            <HighlightHeading
+              before="Get ready for"
+              highlight={learningClass.title}
+              after="soon"
+              as="h1"
+              className="text-4xl font-black"
+            />
+          </div>
           <p className="mt-5 text-base leading-7 text-slate-600">
             {learningClass.description}
           </p>
@@ -90,17 +97,23 @@ export default async function LearningClassPage({
   return (
     <main className="learning-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
       <section className="learning-panel relative mx-auto max-w-7xl overflow-hidden rounded-[2rem]">
-        <div className="absolute -left-12 top-10 h-40 w-40 rounded-full bg-[#31b8a7]/12 blur-2xl" />
-        <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-[#8d4db2]/10 blur-3xl" />
+        <div className="learning-orb absolute -left-12 top-10 h-32 w-32 sm:h-40 sm:w-40" />
+        <div className="learning-orb-secondary absolute right-0 top-0 h-40 w-40 sm:h-52 sm:w-52" />
 
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div className="relative">
-            <span className="inline-flex rounded-full bg-[#8b1028] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-white shadow-[0_14px_30px_rgba(139,16,40,0.22)]">
+            <span className="learning-hero-chip text-sm font-semibold uppercase tracking-[0.18em]">
               Learning class
             </span>
-            <h1 className="font-display mt-5 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-              {learningClass.title}
-            </h1>
+            <div className="mt-5">
+              <HighlightHeading
+                before="Start"
+                highlight={learningClass.title}
+                after="today"
+                as="h1"
+                className="text-4xl font-black sm:text-5xl"
+              />
+            </div>
             <p className="mt-4 text-xl font-semibold text-[#31b8a7]">
               {learningClass.subtitle}
             </p>
@@ -114,13 +127,13 @@ export default async function LearningClassPage({
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={`/classes/${learningClass.slug}/${learningClass.topics[0]?.slug ?? ""}`}
-                className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
+                className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
               >
                 Start class
               </Link>
               <Link
                 href="/classes"
-                className="rounded-2xl border border-[#8b1028]/15 bg-white px-5 py-3 text-sm font-semibold text-[#8b1028] transition hover:bg-[#8b1028] hover:text-white"
+                className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
               >
                 All classes
               </Link>
@@ -129,7 +142,7 @@ export default async function LearningClassPage({
 
           <div className="learning-band relative overflow-hidden rounded-[2rem] p-6 shadow-[var(--shadow-soft)] sm:p-8">
             <div className="learning-pulse-ring absolute right-6 top-6 h-16 w-16 rounded-full border border-white/20" />
-            <div className="absolute bottom-8 left-6 h-24 w-24 rounded-full bg-[#31b8a7]/20 blur-2xl" />
+            <div className="learning-orb-gold absolute bottom-8 left-6 h-20 w-20" />
             <div className="grid gap-4 sm:grid-cols-2">
               {[
                 {
@@ -156,7 +169,7 @@ export default async function LearningClassPage({
                   <p className="text-3xl font-black tracking-tight text-white">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm text-rose-50/85">{stat.label}</p>
+                  <p className="mt-2 text-sm text-white/85">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -170,13 +183,18 @@ export default async function LearningClassPage({
             <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
               Topics
             </p>
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-              Build confidence one topic at a time
-            </h2>
+            <div className="mt-2">
+              <HighlightHeading
+                before="Build confidence"
+                highlight="one topic"
+                after="at a time"
+                className="text-2xl font-bold"
+              />
+            </div>
           </div>
           <Link
             href="/account"
-            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-[#8b1028] hover:text-white"
+            className="learning-outline-button rounded-full px-4 py-2 text-sm font-semibold transition"
           >
             View membership
           </Link>
@@ -192,16 +210,16 @@ export default async function LearningClassPage({
             return (
               <article
                 key={topic.slug}
-                className="learning-lift-card relative overflow-hidden rounded-[2rem] border border-[#eddce2] bg-white p-6 shadow-[var(--shadow-card)]"
+                className="learning-lift-card relative overflow-hidden rounded-[2rem] border border-[#daf5ef] bg-white p-6 shadow-[var(--shadow-card)]"
               >
-                <div className="absolute -right-12 top-0 h-28 w-28 rounded-full bg-[#8d4db2]/10 blur-2xl" />
+                <div className="learning-orb-secondary absolute -right-6 top-3 h-20 w-20 opacity-75" />
 
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="rounded-full bg-[#e9fbf8] px-3 py-1 text-xs font-semibold text-[#13806f]">
                     {topic.lessons.filter((lesson) => lesson.access === "free").length}{" "}
                     free lesson
                   </span>
-                  <span className="rounded-full bg-[#fff0f4] px-3 py-1 text-xs font-semibold text-[#8b1028]">
+                  <span className="rounded-full bg-[#fff8ea] px-3 py-1 text-xs font-semibold text-[#b37207]">
                     {premiumLessons} premium lessons
                   </span>
                 </div>

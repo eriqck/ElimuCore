@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { HighlightHeading } from "@/components/learning/highlight-heading";
 import { LessonPlayer } from "@/components/learning/lesson-player";
 import { PremiumLock } from "@/components/learning/premium-lock";
 import {
@@ -63,22 +64,22 @@ export default async function LessonPage({ params }: LessonPageProps) {
   return (
     <main className="learning-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
       <section className="learning-panel relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
-        <div className="absolute -left-10 top-10 h-24 w-24 rounded-full bg-[#31b8a7]/10 blur-2xl" />
-        <div className="absolute right-0 top-0 h-44 w-44 rounded-full bg-[#8d4db2]/10 blur-3xl" />
+        <div className="learning-orb absolute -left-10 top-10 h-24 w-24" />
+        <div className="learning-orb-secondary absolute right-0 top-0 h-36 w-36 sm:h-44 sm:w-44" />
 
         <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500">
-          <Link href="/classes" className="transition hover:text-[#8b1028]">
+          <Link href="/classes" className="transition hover:text-[#1b973c]">
             Classes
           </Link>
           <span>/</span>
           <Link
             href={`/classes/${learningClass.slug}`}
-            className="transition hover:text-[#8b1028]"
+            className="transition hover:text-[#1b973c]"
           >
             {learningClass.title}
           </Link>
           <span>/</span>
-          <Link href={topicHref} className="transition hover:text-[#8b1028]">
+          <Link href={topicHref} className="transition hover:text-[#1b973c]">
             {topic.title}
           </Link>
         </div>
@@ -88,7 +89,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
             className={`rounded-full px-3 py-1 text-xs font-semibold ${
               lesson.access === "free"
                 ? "bg-[#e9fbf8] text-[#13806f]"
-                : "bg-[#fff0f4] text-[#8b1028]"
+                : "bg-[#fff8ea] text-[#b37207]"
             }`}
           >
             {lesson.access === "free" ? "Free lesson" : "Premium lesson"}
@@ -101,9 +102,15 @@ export default async function LessonPage({ params }: LessonPageProps) {
           </span>
         </div>
 
-        <h1 className="font-display mt-5 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-          {lesson.title}
-        </h1>
+        <div className="mt-5">
+          <HighlightHeading
+            before="Let's explore"
+            highlight={lesson.title}
+            after="together"
+            as="h1"
+            className="text-4xl font-black sm:text-5xl"
+          />
+        </div>
         <p className="mt-5 max-w-3xl text-base leading-7 text-slate-600">
           {lesson.description}
         </p>
@@ -143,7 +150,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
+                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1b973c]">
                         Learn
                       </p>
                     </div>

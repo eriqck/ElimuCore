@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { HighlightHeading } from "@/components/learning/highlight-heading";
 import { getLearningClasses } from "@/lib/learning";
 import { getCurrentMemberContext } from "@/lib/membership";
 
@@ -22,15 +23,21 @@ export default async function ClassesPage() {
       <section className="learning-panel mx-auto max-w-7xl overflow-hidden rounded-[2rem]">
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div className="relative">
-            <div className="learning-float absolute -left-5 top-0 h-16 w-16 rounded-full bg-[#31b8a7]/15 blur-sm" />
-            <div className="learning-float-delay absolute right-10 top-14 h-24 w-24 rounded-full bg-[#8d4db2]/10 blur-md" />
+            <div className="learning-orb learning-float absolute -left-5 top-0 h-16 w-16" />
+            <div className="learning-orb-secondary learning-float-delay absolute right-10 top-14 h-24 w-24" />
 
             <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
               Learning classes
             </p>
-            <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-              Structured digital classes for children, teachers, and families.
-            </h1>
+            <div className="mt-4">
+              <HighlightHeading
+                before="Structured digital"
+                highlight="classes"
+                after="for children, teachers, and families."
+                as="h1"
+                className="text-4xl font-black sm:text-5xl"
+              />
+            </div>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
               ELimuCore classes bring lessons, practice, quizzes, and learning
               progress into one guided path. Start with Grade 1 Mathematics and
@@ -64,7 +71,7 @@ export default async function ClassesPage() {
                   key={stat.label}
                   className={`learning-lift-card rounded-3xl border border-white/70 p-5 shadow-sm ${stat.tone}`}
                 >
-                  <p className="text-3xl font-black tracking-tight text-[#8b1028]">
+                  <p className="text-3xl font-black tracking-tight text-[#1b973c]">
                     {stat.value}
                   </p>
                   <p className="mt-2 text-sm text-slate-500">{stat.label}</p>
@@ -75,7 +82,7 @@ export default async function ClassesPage() {
 
           <div className="learning-band relative overflow-hidden rounded-[2rem] p-6 shadow-[var(--shadow-soft)] sm:p-8">
             <div className="learning-pulse-ring absolute right-6 top-6 h-16 w-16 rounded-full border border-white/20" />
-            <div className="absolute bottom-0 right-0 h-36 w-36 rounded-full bg-white/10 blur-2xl" />
+            <div className="learning-orb-gold absolute bottom-2 right-2 h-24 w-24 opacity-80" />
 
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-100">
               What each class includes
@@ -99,13 +106,13 @@ export default async function ClassesPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/classes/grade-1-math"
-                className="rounded-2xl bg-[#f3a61a] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_32px_rgba(243,166,26,0.28)] transition hover:-translate-y-0.5 hover:bg-[#de9516]"
+                className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
               >
                 Open Grade 1 Mathematics
               </Link>
               <Link
                 href={memberContext.user ? "/account" : "/signup"}
-                className="rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-[#8b1028]"
+                className="brand-button-secondary rounded-2xl border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white hover:text-[#1b973c]"
               >
                 {memberContext.user ? "View account" : "Create account"}
               </Link>
@@ -119,9 +126,14 @@ export default async function ClassesPage() {
           <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
             Browse classes
           </p>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-            Start with one strong class, then keep growing the product.
-          </h2>
+          <div className="mt-2">
+            <HighlightHeading
+              before="Start with one strong"
+              highlight="class"
+              after="then keep growing the product."
+              className="text-2xl font-bold"
+            />
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -137,13 +149,13 @@ export default async function ClassesPage() {
                 key={learningClass.slug}
                 className={`learning-lift-card rounded-[2rem] border p-6 shadow-[var(--shadow-card)] ${
                   learningClass.available
-                    ? "border-[#eddce2] bg-[linear-gradient(180deg,#fffaf8,#ffffff)]"
+                    ? "border-[#daf5ef] bg-[linear-gradient(180deg,#f3fcf6,#ffffff)]"
                     : "border-stone-200 bg-white"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1b973c]">
                       {learningClass.statusLabel}
                     </p>
                     <h3 className="mt-3 text-2xl font-black tracking-tight text-slate-900">
