@@ -202,6 +202,38 @@ a[class]:not([class*="text-"]) {
   box-shadow: 0 16px 28px rgba(49, 184, 167, 0.12);
 }
 
+.learning-success-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  animation: learning-success-pop 1200ms ease-out forwards;
+}
+
+.learning-success-glow {
+  position: absolute;
+  inset: -0.45rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(49, 184, 167, 0.32), transparent 68%);
+  filter: blur(10px);
+}
+
+.learning-success-check {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.25rem;
+  width: 3.25rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #31b8a7, #58d4c2);
+  color: #ffffff;
+  box-shadow: 0 20px 40px rgba(49, 184, 167, 0.28);
+}
+
 @keyframes learning-float {
   0%,
   100% {
@@ -238,5 +270,27 @@ a[class]:not([class*="text-"]) {
 
   50% {
     transform: scaleY(1.5);
+  }
+}
+
+@keyframes learning-success-pop {
+  0% {
+    transform: scale(0.55);
+    opacity: 0;
+  }
+
+  25% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  70% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.92);
+    opacity: 0;
   }
 }

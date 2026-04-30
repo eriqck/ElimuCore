@@ -14,18 +14,73 @@ export function AudioButton({
   className = ""
 }: AudioButtonProps) {
   const [speaking, setSpeaking] = useState(false);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>(() => {
+    if (
+      typeof window === "undefined" ||
+      !("speechSynthesis" in window)
+    ) {
+      return [];
+    }
+
+    return window.speechSynthesis.getVoices();
+  });
   const supported =
     typeof window !== "undefined" &&
     "speechSynthesis" in window &&
     typeof SpeechSynthesisUtterance !== "undefined";
 
   useEffect(() => {
+    if (!supported) {
+      return;
+    }
+
+    const syncVoices = () => {
+      setVoices(window.speechSynthesis.getVoices());
+    };
+
+    window.speechSynthesis.addEventListener("voiceschanged", syncVoices);
+
     return () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", syncVoices);
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
     };
-  }, []);
+  }, [supported]);
+
+  function pickPreferredVoice() {
+    const femaleHints = [
+      "female",
+      "woman",
+      "girl",
+      "samantha",
+      "zira",
+      "serena",
+      "karen",
+      "moira",
+      "fiona",
+      "tessa",
+      "veena",
+      "google uk english female"
+    ];
+    const englishVoices = voices.filter((voice) =>
+      voice.lang.toLowerCase().startsWith("en")
+    );
+    const preferredPool = englishVoices.length > 0 ? englishVoices : voices;
+
+    return (
+      preferredPool.find((voice) =>
+        femaleHints.some((hint) =>
+          `${voice.name} ${voice.voiceURI}`.toLowerCase().includes(hint)
+        )
+      ) ??
+      preferredPool.find((voice) =>
+        voice.lang.toLowerCase().startsWith("en-ke")
+      ) ??
+      preferredPool[0] ??
+      null
+    );
+  }
 
   function handleSpeak() {
     if (!supported || !text.trim()) {
@@ -41,9 +96,13 @@ export function AudioButton({
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-KE";
+    const voice = pickPreferredVoice();
+    utterance.lang = voice?.lang ?? "en-KE";
+    if (voice) {
+      utterance.voice = voice;
+    }
     utterance.rate = 0.92;
-    utterance.pitch = 1;
+    utterance.pitch = 1.15;
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
 

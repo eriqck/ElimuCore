@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { AudioButton } from "@/components/learning/audio-button";
 import { LessonPlayer } from "@/components/learning/lesson-player";
 import { PremiumLock } from "@/components/learning/premium-lock";
 import {
@@ -60,11 +59,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const nextLessonHref = nextLesson
     ? `/lessons/${topic.slug}/${nextLesson.slug}`
     : null;
-  const lessonAudio = [
-    lesson.title,
-    lesson.summary,
-    lesson.objectives.join(". ")
-  ].join(". ");
 
   return (
     <main className="learning-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
@@ -105,11 +99,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <span className="rounded-full bg-[#f7f3ff] px-3 py-1 text-xs font-semibold text-[#724795]">
             {lesson.estimatedMinutes} min
           </span>
-          <AudioButton
-            text={lessonAudio}
-            label="Read lesson"
-            className="ml-auto"
-          />
         </div>
 
         <h1 className="font-display mt-5 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
@@ -142,42 +131,35 @@ export default async function LessonPage({ params }: LessonPageProps) {
           {lesson.learningCards.length > 0 ? (
             <section className="mx-auto mt-8 max-w-6xl">
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {lesson.learningCards.map((card, index) => {
-                  const cardAudio = [card.title, card.body, card.visual ?? ""].join(
-                    ". "
-                  );
-
-                  return (
-                    <article
-                      key={card.id}
-                      className={`learning-lift-card rounded-[2rem] border p-6 shadow-[var(--shadow-card)] ${
-                        index % 3 === 0
-                          ? "border-[#daf5ef] bg-[linear-gradient(180deg,#eefbf8,#ffffff)]"
-                          : index % 3 === 1
-                            ? "border-[#e6d8f6] bg-[linear-gradient(180deg,#f7f3ff,#ffffff)]"
-                            : "border-[#f6e1b6] bg-[linear-gradient(180deg,#fff8ea,#ffffff)]"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
-                          Learn
-                        </p>
-                        <AudioButton text={cardAudio} label="Read card" />
-                      </div>
-                      <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900">
-                        {card.title}
-                      </h2>
-                      <p className="mt-4 text-base leading-7 text-slate-600">
-                        {card.body}
+                {lesson.learningCards.map((card, index) => (
+                  <article
+                    key={card.id}
+                    className={`learning-lift-card rounded-[2rem] border p-6 shadow-[var(--shadow-card)] ${
+                      index % 3 === 0
+                        ? "border-[#daf5ef] bg-[linear-gradient(180deg,#eefbf8,#ffffff)]"
+                        : index % 3 === 1
+                          ? "border-[#e6d8f6] bg-[linear-gradient(180deg,#f7f3ff,#ffffff)]"
+                          : "border-[#f6e1b6] bg-[linear-gradient(180deg,#fff8ea,#ffffff)]"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#8b1028]">
+                        Learn
                       </p>
-                      {card.visual ? (
-                        <div className="learning-float mt-6 rounded-3xl bg-white/80 px-4 py-6 text-center text-3xl font-semibold text-slate-900 shadow-sm">
-                          {card.visual}
-                        </div>
-                      ) : null}
-                    </article>
-                  );
-                })}
+                    </div>
+                    <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900">
+                      {card.title}
+                    </h2>
+                    <p className="mt-4 text-base leading-7 text-slate-600">
+                      {card.body}
+                    </p>
+                    {card.visual ? (
+                      <div className="learning-float mt-6 rounded-3xl bg-white/80 px-4 py-6 text-center text-3xl font-semibold text-slate-900 shadow-sm">
+                        {card.visual}
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
               </div>
             </section>
           ) : null}

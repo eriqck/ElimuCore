@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AudioButton } from "@/components/learning/audio-button";
 import type {
   LearningLesson,
@@ -47,9 +47,75 @@ export function LessonPlayer({
   const [finalScore, setFinalScore] = useState<number | null>(
     initialProgress?.score ?? null
   );
+  const [successMoment, setSuccessMoment] = useState(0);
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const currentQuestion = lesson.questions[currentIndex];
   const answeredCurrent = answers[currentIndex] !== null;
+
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) {
+        clearTimeout(successTimerRef.current);
+      }
+    };
+  }, []);
+
+  function playSuccessChime() {
+    if (
+      typeof window === "undefined" ||
+      !("AudioContext" in window || "webkitAudioContext" in window)
+    ) {
+      return;
+    }
+
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext;
+
+    if (!AudioContextClass) {
+      return;
+    }
+
+    const context = new AudioContextClass();
+    const now = context.currentTime;
+    const notes = [660, 880, 1046];
+
+    notes.forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.02 + index * 0.08);
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.2 + index * 0.08
+      );
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(now + index * 0.08);
+      oscillator.stop(now + 0.24 + index * 0.08);
+    });
+
+    window.setTimeout(() => {
+      void context.close();
+    }, 600);
+  }
+
+  function triggerSuccessMoment() {
+    setSuccessMoment((value) => value + 1);
+    playSuccessChime();
+
+    if (successTimerRef.current) {
+      clearTimeout(successTimerRef.current);
+    }
+
+    successTimerRef.current = setTimeout(() => {
+      setSuccessMoment(0);
+    }, 1400);
+  }
 
   async function persistProgress(score: number) {
     if (!canSaveProgress) {
@@ -114,6 +180,7 @@ export function LessonPlayer({
       const isCorrect = choiceIndex === currentQuestion.correctIndex;
       if (isCorrect) {
         setCorrectCount((value) => value + 1);
+        triggerSuccessMoment();
       }
 
       setFeedback({
@@ -140,6 +207,7 @@ export function LessonPlayer({
       nextAnswers[currentIndex] = choiceIndex;
       setAnswers(nextAnswers);
       setCorrectCount((value) => value + 1);
+      triggerSuccessMoment();
     }
 
     setFeedback({
@@ -245,11 +313,7 @@ export function LessonPlayer({
     totalQuestions > 0
       ? Math.round((currentIndex / totalQuestions) * 100)
       : 0;
-  const spokenQuestion = [
-    currentQuestion.prompt,
-    currentQuestion.visual ?? "",
-    currentQuestion.choices.join(". ")
-  ].join(". ");
+  const spokenQuestion = currentQuestion.prompt;
 
   return (
     <section className="learning-panel rounded-[2rem] p-6 sm:p-8">
@@ -277,7 +341,32 @@ export function LessonPlayer({
         />
       </div>
 
-      <div className="mt-8 rounded-[2rem] border border-[#eddce2] bg-white p-6 shadow-sm">
+      <div className="relative mt-8 rounded-[2rem] border border-[#eddce2] bg-white p-6 shadow-sm">
+        {successMoment > 0 ? (
+          <div
+            key={successMoment}
+            className="learning-success-badge"
+            aria-hidden="true"
+          >
+            <span className="learning-success-glow" />
+            <span className="learning-success-check">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                className="h-8 w-8"
+                aria-hidden="true"
+              >
+                <path
+                  d="m5 12 4.2 4.2L19 6.5"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </div>
+        ) : null}
         <p className="text-lg font-semibold leading-8 text-slate-900 sm:text-2xl">
           {currentQuestion.prompt}
         </p>
