@@ -15,14 +15,15 @@ export function AuthShell({ title, children }: AuthShellProps) {
           href="/"
           className="mx-auto mb-5 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_14px_28px_rgba(0,0,0,0.18)] transition hover:scale-[1.02]"
         >
-          <Image
-            src={logo}
-            alt="ELimuCore"
-            priority
-            width={140}
-            height={140}
-            className="-mt-9 h-auto w-[7.25rem] max-w-none"
-          />
+          <div className="relative h-[5.35rem] w-[5.35rem]">
+            <Image
+              src={logo}
+              alt="ELimuCore"
+              priority
+              fill
+              className="object-contain object-center"
+            />
+          </div>
         </Link>
 
         <section className="overflow-hidden rounded-2xl bg-white shadow-[0_28px_70px_rgba(0,0,0,0.28)]">
