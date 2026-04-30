@@ -103,7 +103,7 @@ export default async function LearningClassPage({
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div className="relative">
             <span className="learning-hero-chip text-sm font-semibold uppercase tracking-[0.18em]">
-              Learning class
+              Junior class
             </span>
             <div className="mt-5">
               <HighlightHeading

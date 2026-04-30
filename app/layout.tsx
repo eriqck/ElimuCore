@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import { SiteHeader } from "@/components/site/site-header";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -34,14 +35,17 @@ export const metadata: Metadata = {
   ]
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className={`${manrope.variable} ${fraunces.variable}`}>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }

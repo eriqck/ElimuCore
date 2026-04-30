@@ -5,9 +5,9 @@ import { getLearningClasses } from "@/lib/learning";
 import { getCurrentMemberContext } from "@/lib/membership";
 
 export const metadata: Metadata = {
-  title: "Classes",
+  title: "Junior Classes",
   description:
-    "Explore ELimuCore learning classes with guided lessons, child-friendly practice, quizzes, and simple progress support for families and teachers."
+    "Explore ELimuCore junior classes with guided lessons, child-friendly practice, quizzes, and simple progress support for families and teachers."
 };
 
 export default async function ClassesPage() {
@@ -27,12 +27,12 @@ export default async function ClassesPage() {
             <div className="learning-orb-secondary learning-float-delay absolute right-10 top-14 h-24 w-24" />
 
             <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
-              Learning classes
+              Junior classes
             </p>
             <div className="mt-4">
               <HighlightHeading
                 before="Structured digital"
-                highlight="classes"
+                highlight="junior classes"
                 after="for children, teachers, and families."
                 as="h1"
                 className="text-4xl font-black sm:text-5xl"
@@ -54,12 +54,12 @@ export default async function ClassesPage() {
               {[
                 {
                   value: `${availableClasses.length}`,
-                  label: "Classes available now",
+                  label: "Junior classes available now",
                   tone: "bg-[#f7f3ff]"
                 },
                 {
                   value: `${classes.length}`,
-                  label: "Classes available and coming soon",
+                  label: "Junior classes live and coming soon",
                   tone: "bg-[#eefbf8]"
                 },
                 {
@@ -86,7 +86,7 @@ export default async function ClassesPage() {
             <div className="learning-orb-gold absolute bottom-2 right-2 h-24 w-24 opacity-80" />
 
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-100">
-              What each class includes
+              What each junior class includes
             </p>
             <div className="mt-6 grid gap-4">
               {[
@@ -125,12 +125,12 @@ export default async function ClassesPage() {
       <section className="mx-auto mt-10 max-w-7xl">
         <div className="mb-6">
           <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
-            Browse classes
+            Browse junior classes
           </p>
           <div className="mt-2">
             <HighlightHeading
               before="Choose a"
-              highlight="class"
+              highlight="junior class"
               after="and keep learning with confidence."
               className="text-2xl font-bold"
             />

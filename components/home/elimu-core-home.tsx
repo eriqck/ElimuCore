@@ -4,15 +4,6 @@ import logo from "@/assets/weblogo.png";
 import numbersArtwork from "@/assets/numbers.png";
 import { HeroGallery } from "@/components/home/hero-gallery";
 
-const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "#package" },
-  { label: "Classes", href: "/classes" },
-  { label: "Pricing", href: "#plans" },
-  { label: "Support", href: "#how-to-use" },
-  { label: "Blog", href: "/resources" }
-] as const;
-
 const howToSteps = [
   {
     step: "1",
@@ -168,48 +159,6 @@ function PlanProIcon() {
 export function ElimuCoreHome() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <header className="border-b border-[#ececec] bg-white">
-        <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-5 px-4 py-3 sm:px-6 lg:px-8">
-          <Link href="/" className="shrink-0">
-            <Image
-              src={logo}
-              alt="ELimuCore"
-              width={248}
-              height={74}
-              priority
-              className="h-12 w-auto sm:h-14"
-            />
-          </Link>
-
-          <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="rounded-md px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-[#8b1028] hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="rounded-md bg-[#24bba7] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#179785]"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-md bg-[#8d4db2] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#7a3f9e]"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <main className="bg-white">
         <HeroGallery />
 
@@ -369,7 +318,7 @@ export function ElimuCoreHome() {
               href="/classes"
               className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#8b1028] hover:text-white"
             >
-              Classes
+              Junior Classes
             </Link>
             <Link
               href="/resources"
