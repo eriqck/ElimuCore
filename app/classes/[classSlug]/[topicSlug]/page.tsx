@@ -114,7 +114,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                 },
                 {
                   value: hasMembership ? "Unlocked" : "Preview only",
-                  label: "Member access"
+                  label: "Access today"
                 },
                 {
                   value: `${topic.lessons.filter((lesson) => lesson.access === "free").length}`,
@@ -123,20 +123,21 @@ export default async function TopicPage({ params }: TopicPageProps) {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="learning-lift-card rounded-3xl border border-white/15 bg-white/10 p-5 shadow-sm backdrop-blur"
+                  className="learning-lift-card rounded-3xl border border-white/20 bg-white/15 p-5 shadow-sm backdrop-blur"
                 >
                   <p className="text-3xl font-black tracking-tight text-white">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm text-white/85">{stat.label}</p>
+                  <p className="mt-2 text-sm font-medium text-white">{stat.label}</p>
                 </div>
               ))}
             </div>
 
             {!hasMembership ? (
-              <div className="mt-6 rounded-3xl border border-white/15 bg-white/10 px-5 py-5 text-sm leading-6 text-white/90 backdrop-blur">
-                Open the free lesson now, then sign in with an active
-                membership to unlock the rest of the topic and save progress.
+              <div className="mt-6 rounded-3xl border border-white/20 bg-white/15 px-5 py-5 text-sm font-medium leading-6 text-white backdrop-blur">
+                Start with the free lesson now, then sign in with an active
+                membership to continue through the rest of the topic and keep
+                progress saved.
               </div>
             ) : null}
           </div>
@@ -220,7 +221,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                     <h3 className="mt-4 text-2xl font-black tracking-tight text-slate-900">
                       {lesson.title}
                     </h3>
-                    <p className="mt-3 text-base leading-7 text-slate-600">
+                    <p className="mt-3 text-base leading-7 text-slate-700">
                       {lesson.summary}
                     </p>
 
@@ -248,7 +249,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                       </Link>
                       {!canAccess ? (
                         <span className="rounded-2xl border border-[#f3d9ab] bg-[#fff8ea] px-5 py-3 text-sm font-semibold text-stone-700">
-                          Membership required
+                          Full access needed
                         </span>
                       ) : null}
                     </div>

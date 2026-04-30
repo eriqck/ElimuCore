@@ -72,9 +72,9 @@ export default async function LearningClassPage({
               className="text-4xl font-black"
             />
           </div>
-          <p className="mt-5 text-base leading-7 text-slate-600">
-            {learningClass.description}
-          </p>
+            <p className="mt-5 text-base leading-7 text-slate-600">
+              {learningClass.description}
+            </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/classes"
@@ -159,17 +159,17 @@ export default async function LearningClassPage({
                 },
                 {
                   value: memberContext.activeMembership ? "Active" : "Locked",
-                  label: "Premium lesson status"
+                  label: "Full lesson access"
                 }
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="learning-lift-card rounded-3xl border border-white/15 bg-white/10 p-5 shadow-sm backdrop-blur"
+                  className="learning-lift-card rounded-3xl border border-white/20 bg-white/15 p-5 shadow-sm backdrop-blur"
                 >
                   <p className="text-3xl font-black tracking-tight text-white">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm text-white/85">{stat.label}</p>
+                  <p className="mt-2 text-sm font-medium text-white">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -227,16 +227,16 @@ export default async function LearningClassPage({
                 <h3 className="mt-5 text-3xl font-black tracking-tight text-slate-900">
                   {topic.title}
                 </h3>
-                <p className="mt-4 text-base leading-7 text-slate-600">
+                <p className="mt-4 text-base leading-7 text-slate-700">
                   {topic.summary}
                 </p>
-                <p className="mt-4 text-sm leading-6 text-slate-500">
+                <p className="mt-4 text-sm leading-6 text-slate-700">
                   {topic.description}
                 </p>
 
                 <div className="mt-6 rounded-3xl border border-stone-200 bg-[linear-gradient(135deg,#fff7ea,#ffffff)] p-5">
                   <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+                    <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-700">
                       Progress
                     </p>
                     <p className="text-sm font-semibold text-slate-700">

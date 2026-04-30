@@ -157,7 +157,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
                     <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900">
                       {card.title}
                     </h2>
-                    <p className="mt-4 text-base leading-7 text-slate-600">
+                    <p className="mt-4 text-base leading-7 text-slate-700">
                       {card.body}
                     </p>
                     {card.visual ? (
@@ -186,7 +186,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
       ) : (
         <section className="mx-auto mt-8 max-w-6xl">
           <PremiumLock
-            title="Unlock this lesson with ELimuCore membership"
             loginHref={loginHref}
             signupHref={signupHref}
           />

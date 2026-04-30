@@ -7,7 +7,7 @@ import { getCurrentMemberContext } from "@/lib/membership";
 export const metadata: Metadata = {
   title: "Classes",
   description:
-    "Explore ELimuCore learning classes with guided lessons, interactive practice, quizzes, and member-only progress tracking."
+    "Explore ELimuCore learning classes with guided lessons, child-friendly practice, quizzes, and simple progress support for families and teachers."
 };
 
 export default async function ClassesPage() {
@@ -39,14 +39,15 @@ export default async function ClassesPage() {
               />
             </div>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600">
-              ELimuCore classes bring lessons, practice, quizzes, and learning
-              progress into one guided path. Start with Grade 1 Mathematics and
-              grow into more classes over time without changing the platform.
+              ELimuCore brings lessons, practice, quizzes, and simple progress
+              tracking into one clear learning path. Families and teachers can
+              begin with Grade 1 Mathematics and move from one class to the next
+              with confidence.
             </p>
             <p className="mt-4 max-w-2xl rounded-2xl border border-amber-200 bg-white/90 px-4 py-3 text-sm font-medium text-stone-700 shadow-sm">
-              Free users can open selected preview lessons. Active members
-              unlock the full class, guided practice, mixed quizzes, and saved
-              progress.
+              Free users can explore selected preview lessons. Active members
+              open the full class, guided practice, quizzes, and saved progress
+              for continued learning.
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
@@ -58,7 +59,7 @@ export default async function ClassesPage() {
                 },
                 {
                   value: `${classes.length}`,
-                  label: "Classes planned in roadmap",
+                  label: "Classes available and coming soon",
                   tone: "bg-[#eefbf8]"
                 },
                 {
@@ -74,7 +75,7 @@ export default async function ClassesPage() {
                   <p className="text-3xl font-black tracking-tight text-[#1b973c]">
                     {stat.value}
                   </p>
-                  <p className="mt-2 text-sm text-slate-500">{stat.label}</p>
+                  <p className="mt-2 text-sm font-medium text-slate-700">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -89,14 +90,14 @@ export default async function ClassesPage() {
             </p>
             <div className="mt-6 grid gap-4">
               {[
-                "Guided topic pages that show the lesson path clearly.",
-                "Interactive practice that gives instant feedback to the learner.",
-                "Topic quizzes with score summaries at the end.",
-                "Member-only progress saving for logged-in users."
+                "Clear topic paths that help children know what to learn next.",
+                "Interactive practice with quick feedback after every answer.",
+                "Short quizzes that show how well the lesson was understood.",
+                "Saved progress for members so learning can continue later."
               ].map((item) => (
                 <div
                   key={item}
-                  className="learning-lift-card rounded-2xl border border-white/15 bg-white/10 px-4 py-4 text-sm font-medium text-white shadow-sm backdrop-blur"
+                  className="learning-lift-card rounded-2xl border border-white/20 bg-white/15 px-4 py-4 text-sm font-semibold text-white shadow-sm backdrop-blur"
                 >
                   {item}
                 </div>
@@ -128,9 +129,9 @@ export default async function ClassesPage() {
           </p>
           <div className="mt-2">
             <HighlightHeading
-              before="Start with one strong"
+              before="Choose a"
               highlight="class"
-              after="then keep growing the product."
+              after="and keep learning with confidence."
               className="text-2xl font-bold"
             />
           </div>
@@ -173,21 +174,21 @@ export default async function ClassesPage() {
                   </span>
                 </div>
 
-                <p className="mt-4 text-sm leading-6 text-slate-500">
+                <p className="mt-4 text-sm leading-6 text-slate-700">
                   {learningClass.subtitle}
                 </p>
-                <p className="mt-4 text-sm leading-6 text-slate-600">
+                <p className="mt-4 text-sm leading-6 text-slate-700">
                   {learningClass.description}
                 </p>
 
                 <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
                   <div className="rounded-2xl bg-[#f7f3ff] px-4 py-3">
                     <p className="font-black text-slate-900">{topicCount}</p>
-                    <p className="mt-1 text-slate-500">Topics</p>
+                    <p className="mt-1 font-medium text-slate-700">Topics</p>
                   </div>
                   <div className="rounded-2xl bg-[#eefbf8] px-4 py-3">
                     <p className="font-black text-slate-900">{lessonCount}</p>
-                    <p className="mt-1 text-slate-500">Lessons</p>
+                    <p className="mt-1 font-medium text-slate-700">Lessons</p>
                   </div>
                 </div>
 
@@ -200,7 +201,7 @@ export default async function ClassesPage() {
                       Open class
                     </Link>
                   ) : (
-                    <span className="inline-flex rounded-2xl border border-stone-200 px-5 py-3 text-sm font-semibold text-slate-500">
+                    <span className="inline-flex rounded-2xl border border-stone-200 px-5 py-3 text-sm font-semibold text-slate-700">
                       Coming soon
                     </span>
                   )}

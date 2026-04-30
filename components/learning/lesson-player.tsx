@@ -435,7 +435,7 @@ export function LessonPlayer({
       </div>
 
       {initialProgress?.completed ? (
-        <p className="mt-5 text-sm font-medium text-slate-500">
+        <p className="mt-5 text-sm font-medium text-slate-700">
           Completed earlier with a saved score of {initialProgress.score ?? 0}%.
         </p>
       ) : null}

@@ -181,30 +181,15 @@ a[class]:not([class*="text-"]) {
 
 .learning-lift-card {
   position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
   transition:
     transform 220ms ease,
     box-shadow 220ms ease,
     border-color 220ms ease;
 }
 
-.learning-lift-card::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 10px;
-  height: 14px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(21, 95, 132, 0.14), transparent 70%);
-  filter: blur(10px);
-  pointer-events: none;
-}
-
 .learning-lift-card:hover {
-  transform: perspective(1200px) rotateX(8deg) rotateY(-9deg) translateY(-10px) scale(1.01);
-  box-shadow: 0 34px 70px rgba(21, 95, 132, 0.14);
+  transform: translateY(-4px);
+  box-shadow: 0 22px 44px rgba(21, 95, 132, 0.12);
   border-color: rgba(37, 178, 74, 0.28);
 }
 
@@ -265,7 +250,6 @@ a[class]:not([class*="text-"]) {
 }
 
 .learning-answer-choice {
-  transform-style: preserve-3d;
   transition:
     transform 180ms ease,
     border-color 180ms ease,
@@ -274,8 +258,8 @@ a[class]:not([class*="text-"]) {
 }
 
 .learning-answer-choice:hover {
-  transform: perspective(900px) rotateX(5deg) translateY(-4px);
-  box-shadow: 0 16px 28px rgba(49, 184, 167, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(49, 184, 167, 0.12);
 }
 
 .learning-highlight-shell {

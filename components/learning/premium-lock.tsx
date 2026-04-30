@@ -2,16 +2,11 @@ import Link from "next/link";
 import { HighlightHeading } from "@/components/learning/highlight-heading";
 
 type PremiumLockProps = {
-  title: string;
   loginHref: string;
   signupHref: string;
 };
 
-export function PremiumLock({
-  title,
-  loginHref,
-  signupHref
-}: PremiumLockProps) {
+export function PremiumLock({ loginHref, signupHref }: PremiumLockProps) {
   return (
     <section className="learning-panel relative overflow-hidden rounded-[2rem] p-8 shadow-[var(--shadow-card)] sm:p-10">
       <div className="learning-orb absolute -left-8 top-8 h-20 w-20" />
@@ -28,8 +23,9 @@ export function PremiumLock({
         />
       </div>
       <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-        {title}. Sign in to continue or start a membership to unlock the full
-        learning path, quizzes, and saved progress.
+        This lesson opens with an active ELimuCore membership. Sign in to keep
+        learning now, or start a membership to unlock the full lesson path,
+        quizzes, and saved progress.
       </p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -52,15 +48,15 @@ export function PremiumLock({
         ].map((plan) => (
           <div
             key={plan.name}
-            className="learning-lift-card rounded-3xl border border-white/70 bg-white/90 p-5"
+            className="learning-lift-card rounded-3xl border border-white/80 bg-white p-5"
           >
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-700">
               {plan.name}
             </p>
             <p className="mt-3 text-3xl font-black tracking-tight text-[#1b973c]">
               {plan.price}
             </p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+            <p className="mt-2 text-sm leading-6 text-slate-700">
               {plan.detail}
             </p>
           </div>
