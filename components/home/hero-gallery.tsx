@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import codingArtwork from "@/assets/coding.png";
 import dashboardArtwork from "@/assets/dash.png";
 import familyArtwork from "@/assets/family.png";
-import zoomArtwork from "@/assets/zoom.png";
+import numbersArtwork from "@/assets/numbers1.png";
 
 type HeroSlide = {
   image: StaticImageData;
@@ -86,8 +86,8 @@ const slides: HeroSlide[] = [
     imageClassName: "object-contain object-center scale-[1.08]"
   },
   {
-    image: zoomArtwork,
-    alt: "Teacher supporting learners through an online lesson",
+    image: numbersArtwork,
+    alt: "ELimuCore numbers learning experience on a tablet",
     href: "/#plans",
     ctaLabel: "Sign Up Now",
     title: "Membership for\nteachers and parents",
@@ -95,14 +95,14 @@ const slides: HeroSlide[] = [
     description:
       "Choose 1 month, 6 months, or 1 year and download as many resources as you need with no extra charge during the subscription period.",
     note: "KSh 300, KSh 500, or KSh 1000.",
-    backgroundClass: "bg-[#88132a]",
-    titleClass: "text-white",
-    bodyClass: "text-white/85",
-    ribbonClass: "bg-white text-[#8b1028]",
-    noteClass: "text-white",
-    dotActiveClass: "bg-white",
-    dotInactiveClass: "bg-[#d86b86] hover:bg-[#e38aa0]",
-    imageClassName: "object-contain object-center scale-[1.08]"
+    backgroundClass: "bg-[#faf7f2]",
+    titleClass: "text-[#2f3640]",
+    bodyClass: "text-slate-700",
+    ribbonClass: "bg-[#8b1028] text-white",
+    noteClass: "text-[#8b1028]",
+    dotActiveClass: "bg-[#8b1028]",
+    dotInactiveClass: "bg-[#dba8b3] hover:bg-[#c97889]",
+    imageClassName: "object-contain object-center scale-[1.02]"
   },
   {
     image: dashboardArtwork,

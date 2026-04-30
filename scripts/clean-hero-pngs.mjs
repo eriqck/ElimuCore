@@ -11,8 +11,12 @@ const assets = [
     matcher: (r, g, b) => isGreenFamilyBackground(r, g, b)
   },
   {
-    file: "zoom.png",
-    matcher: (r, g, b) => isMaroonZoomBackground(r, g, b)
+    file: "numbers.png",
+    matcher: (r, g, b) => isLightNumbersBackground(r, g, b)
+  },
+  {
+    file: "numbers1.png",
+    matcher: (r, g, b) => isLightNumbersBackground(r, g, b)
   }
 ];
 
@@ -24,8 +28,13 @@ function isGreenFamilyBackground(r, g, b) {
   return g > 135 && b > 70 && b < 170 && r < 90;
 }
 
-function isMaroonZoomBackground(r, g, b) {
-  return r > 90 && r < 180 && g < 80 && b < 100 && r - g > 45 && r - b > 20;
+function isLightNumbersBackground(r, g, b) {
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const spread = max - min;
+  const brightness = (r + g + b) / 3;
+
+  return brightness >= 220 && spread <= 42;
 }
 
 for (const asset of assets) {

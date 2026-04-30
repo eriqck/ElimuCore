@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/weblogo.png";
-import zoomArtwork from "@/assets/zoom.png";
+import numbersArtwork from "@/assets/numbers.png";
 import { HeroGallery } from "@/components/home/hero-gallery";
 
 const navItems = [
@@ -215,15 +215,15 @@ export function ElimuCoreHome() {
 
         <section
           id="package"
-          className="bg-[#88132a] px-4 py-16 text-white sm:px-6 lg:px-8"
+          className="bg-[#f7fbff] px-4 py-16 text-slate-900 sm:px-6 lg:px-8"
         >
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm text-white/70">
+            <p className="text-sm text-slate-400">
               ELimuCore for schools and families
             </p>
             <h2 className="mt-4 text-3xl font-medium tracking-tight sm:text-4xl">
               One membership.
-              <span className="text-[#a9f5db]">
+              <span className="text-[#31b8a7]">
                 {" "}
                 Complete resource access for teaching and home study.
               </span>
@@ -232,19 +232,19 @@ export function ElimuCoreHome() {
 
           <div className="mx-auto mt-10 max-w-5xl px-2 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
             <div>
-              <h3 className="text-2xl font-semibold tracking-tight">
+              <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
                 ELimuCore Complete Resource Library
               </h3>
-              <p className="mt-5 text-base leading-8 text-white/85">
+              <p className="mt-5 text-base leading-8 text-slate-600">
                 Teachers and parents can access lesson plans, schemes of work,
                 past papers, marking schemes, exams, notes, assignments, and
                 home-learning materials from one clean member library.
               </p>
-              <p className="mt-4 text-base leading-8 text-white/85">
+              <p className="mt-4 text-base leading-8 text-slate-600">
                 Subscription options are KSh 300 for 1 month, KSh 500 for 6
                 months, and KSh 1000 for 1 year.
               </p>
-              <p className="mt-4 text-base font-semibold text-white">
+              <p className="mt-4 text-base font-semibold text-slate-800">
                 Your subscription has no limitations, so you download all the
                 resources you need without extra charges during the active
                 period.
@@ -258,11 +258,11 @@ export function ElimuCoreHome() {
             <div className="relative mt-10 flex justify-center lg:mt-0">
               <div className="relative h-[320px] w-full max-w-[620px] sm:h-[380px] lg:h-[440px]">
                 <Image
-                  src={zoomArtwork}
-                  alt="Teacher supporting learners through an online lesson"
+                  src={numbersArtwork}
+                  alt="Children learning numbers with ELimuCore"
                   fill
                   sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="object-contain object-center scale-[1.12]"
+                  className="object-contain object-center scale-[1.03]"
                 />
               </div>
             </div>
