@@ -8,10 +8,22 @@ type AccountPageProps = {
   }>;
 };
 
+type SectionLabelProps = {
+  children: React.ReactNode;
+};
+
+type PlanCardProps = {
+  name: string;
+  price: string;
+  duration: string;
+  description: string;
+  featured?: boolean;
+};
+
 export const metadata: Metadata = {
   title: "My Account",
   description:
-    "View your ELimuCore account details, membership status, and available plans."
+    "Manage your ELimuCore membership and premium learning access."
 };
 
 function formatPrice(priceKes: number) {
@@ -28,238 +40,230 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
+function SectionLabel({ children }: SectionLabelProps) {
+  return (
+    <p className="text-xs font-bold uppercase tracking-[0.28em] text-emerald-600">
+      {children}
+    </p>
+  );
+}
+
+function PlanCard({
+  name,
+  price,
+  duration,
+  description,
+  featured
+}: PlanCardProps) {
+  return (
+    <button
+      type="button"
+      className={`w-full rounded-[1.75rem] border p-5 text-left transition ${
+        featured
+          ? "border-emerald-300 bg-emerald-50 shadow-[0_8px_20px_rgba(34,197,94,0.10)]"
+          : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h4 className="text-xl font-bold tracking-tight text-slate-950">
+            {name}
+          </h4>
+          <p className="mt-1 text-sm text-slate-500">{description}</p>
+        </div>
+
+        {featured ? (
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-amber-700">
+            Popular
+          </span>
+        ) : null}
+      </div>
+
+      <div className="mt-5 flex items-end justify-between">
+        <div>
+          <p className="text-3xl font-extrabold tracking-tight text-slate-950">
+            {price}
+          </p>
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            {duration}
+          </p>
+        </div>
+
+        <span
+          className={`rounded-full px-4 py-2 text-sm font-semibold ${
+            featured ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-700"
+          }`}
+        >
+          Choose
+        </span>
+      </div>
+    </button>
+  );
+}
+
 export default async function AccountPage({ searchParams }: AccountPageProps) {
   const params = (await searchParams) ?? {};
   const notice =
-    typeof params.notice === "string"
-      ? decodeURIComponent(params.notice)
-      : "";
+    typeof params.notice === "string" ? decodeURIComponent(params.notice) : "";
   const memberContext = await getCurrentMemberContext();
 
+  const activeMembership = memberContext.activeMembership;
+  const progressPercent = activeMembership ? 100 : 18;
+  const membershipTitle = activeMembership
+    ? activeMembership.plan?.name ?? "Premium active"
+    : "Premium locked";
+  const membershipBody = activeMembership
+    ? `Active until ${formatDate(activeMembership.expiresAt)}.`
+    : "Pick a plan to unlock premium lessons and member resources.";
+
+  const planDescriptions: Record<string, string> = {
+    "1-month": "Unlimited access",
+    "6-months": "Best for steady learning",
+    "1-year": "Best value"
+  };
+
+  const plans = memberContext.plans.map((plan, index) => ({
+    slug: plan.slug,
+    name: plan.name,
+    price: formatPrice(plan.priceKes),
+    duration: `${plan.durationMonths} month${plan.durationMonths === 1 ? "" : "s"}`,
+    description: planDescriptions[plan.slug] ?? plan.description,
+    featured: index === 0
+  }));
+
   return (
-    <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        <section className="surface-card rounded-[2rem] border border-white/60 p-8 shadow-[var(--shadow-soft)] sm:p-10">
-          <p className="brand-kicker text-sm font-bold uppercase tracking-[0.22em]">
-            My account
-          </p>
-          <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-            Your ELimuCore account
+    <main className="min-h-screen bg-[#f8f8f6] px-5 py-10 text-slate-950 lg:px-8 lg:py-14">
+      <section className="mx-auto max-w-7xl">
+        <div className="mb-10 max-w-3xl">
+          <SectionLabel>My Account</SectionLabel>
+          <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
+            Your ElimuCore account
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
-            Check your membership, review your plan, and keep your teaching or
-            home-learning resources within easy reach from one place.
+          <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
+            Manage your membership and unlock premium learning resources.
           </p>
+        </div>
 
-          {notice ? (
-            <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-900">
-              {notice}
-            </div>
-          ) : null}
+        {notice ? (
+          <div className="mb-6 rounded-[1.5rem] border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-900">
+            {notice}
+          </div>
+        ) : null}
 
-          {memberContext.user ? (
-            <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-              <section className="rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Your profile
-                    </p>
-                    <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                      {memberContext.profile?.fullName}
-                    </h2>
-                    <p className="mt-2 text-sm text-slate-600">
-                      {memberContext.profile?.email}
-                    </p>
-                  </div>
-
-                  <form action="/auth/signout" method="post">
-                    <button
-                      type="submit"
-                      className="brand-button-secondary rounded-2xl px-4 py-2 text-sm font-semibold transition"
-                    >
-                      Sign out
-                    </button>
-                  </form>
-                </div>
-
-                <div className="mt-6 rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
-                    Membership status
-                  </p>
-
-                  {memberContext.activeMembership ? (
-                    <>
-                      <p className="mt-3 text-2xl font-black tracking-tight text-rose-900">
-                        {memberContext.activeMembership.plan?.name ??
-                          "Active membership"}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Your plan is active until{" "}
-                        {formatDate(memberContext.activeMembership.expiresAt)}.
-                        Premium resources and member downloads are available
-                        during this period.
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="mt-3 text-2xl font-black tracking-tight text-slate-900">
-                        Choose a plan to unlock premium resources
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Your account is ready. Once your membership is active,
-                        premium downloads and member-only resources will open
-                        automatically.
-                      </p>
-                    </>
-                  )}
-                </div>
-
-                {memberContext.memberships.length > 0 ? (
-                  <div className="mt-6 grid gap-3">
-                    {memberContext.memberships.slice(0, 3).map((membership) => (
-                      <div
-                        key={membership.id}
-                        className="rounded-2xl border border-stone-200 bg-white p-4"
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                          <p className="font-semibold text-slate-900">
-                            {membership.plan?.name ?? membership.planSlug}
-                          </p>
-                          <span
-                            className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] ${
-                              membership.isActive
-                                ? "bg-emerald-100 text-emerald-800"
-                                : "bg-stone-100 text-stone-700"
-                            }`}
-                          >
-                            {membership.isActive
-                              ? "Active"
-                              : membership.status}
-                          </span>
-                        </div>
-                        <p className="mt-2 text-sm text-slate-600">
-                          Starts: {formatDate(membership.startsAt)} | Expires:{" "}
-                          {formatDate(membership.expiresAt)}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-              </section>
-
-              <section id="plans" className="rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      Membership plans
-                    </p>
-                    <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-                      Pick the plan that works for you
-                    </h2>
-                  </div>
-                  <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
-                    Unlimited downloads
-                  </span>
-                </div>
-
-                <div className="mt-6 grid gap-4">
-                  {memberContext.plans.map((plan) => (
-                    <article
-                      key={plan.slug}
-                      className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5 transition hover:border-rose-700 hover:bg-rose-900 hover:text-white"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                          <h3 className="text-xl font-bold tracking-tight text-slate-900">
-                            {plan.name}
-                          </h3>
-                          <p className="mt-2 text-sm leading-6 text-slate-600">
-                            {plan.description}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-black tracking-tight text-amber-700">
-                            {formatPrice(plan.priceKes)}
-                          </p>
-                          <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
-                            {plan.durationMonths} month
-                            {plan.durationMonths === 1 ? "" : "s"}
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-
-                <div className="mt-6 rounded-[1.5rem] border border-dashed border-stone-300 bg-white p-5">
-                  <p className="text-sm leading-7 text-slate-600">
-                    Every plan gives unlimited downloads while your membership
-                    is active. Once your plan is active, premium resources
-                    become available in your account automatically.
-                  </p>
-                </div>
-              </section>
-            </div>
-          ) : (
-            <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-              <section className="brand-band rounded-[2rem] p-6 shadow-[var(--shadow-soft)]">
-                <h2 className="font-display text-3xl font-black tracking-tight text-white">
-                  Sign in to view your account
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <SectionLabel>
+                  {memberContext.user ? "Your Profile" : "Account Access"}
+                </SectionLabel>
+                <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-950">
+                  {memberContext.user
+                    ? memberContext.profile?.fullName
+                    : "Sign in to continue"}
                 </h2>
-                <p className="mt-4 max-w-xl text-base leading-7 text-slate-100">
-                  Create an account or sign in to manage your membership and
-                  reach premium teaching, planning, and revision resources in
-                  one place.
+                <p className="mt-1 text-sm text-slate-500">
+                  {memberContext.user
+                    ? memberContext.profile?.email
+                    : "Login to manage membership and premium access."}
                 </p>
+              </div>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href="/login"
-                    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-rose-900 transition hover:bg-amber-400 hover:text-white"
+              {memberContext.user ? (
+                <form action="/auth/signout" method="post">
+                  <button
+                    type="submit"
+                    className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
                   >
-                    Sign in
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-rose-900"
-                  >
-                    Create account
-                  </Link>
-                </div>
-              </section>
-
-              <section className="rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                  Membership plans
-                </h2>
-                <div className="mt-6 grid gap-4">
-                  {memberContext.plans.map((plan) => (
-                    <article
-                      key={plan.slug}
-                      className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                          <h3 className="text-lg font-bold text-slate-900">
-                            {plan.name}
-                          </h3>
-                          <p className="mt-2 text-sm leading-6 text-slate-600">
-                            {plan.description}
-                          </p>
-                        </div>
-                        <p className="text-xl font-black tracking-tight text-amber-700">
-                          {formatPrice(plan.priceKes)}
-                        </p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
+                    Sign out
+                  </button>
+                </form>
+              ) : (
+                <Link
+                  href="/login"
+                  className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                >
+                  Login
+                </Link>
+              )}
             </div>
-          )}
-        </section>
-      </div>
+
+            <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
+              <SectionLabel>Membership Status</SectionLabel>
+              <h3 className="mt-3 text-xl font-bold tracking-tight text-slate-950">
+                {membershipTitle}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                {membershipBody}
+              </p>
+
+              <div className="mt-5 flex items-center gap-3">
+                <div className="h-2.5 w-full rounded-full bg-slate-200">
+                  <div
+                    className="h-2.5 rounded-full bg-emerald-500"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-xs font-semibold text-slate-500">
+                  {progressPercent}%
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-[1.5rem] bg-slate-50 p-4">
+                <p className="text-2xl font-bold tracking-tight text-slate-950">
+                  0
+                </p>
+                <p className="mt-1 text-sm text-slate-500">Downloads</p>
+              </div>
+              <div className="rounded-[1.5rem] bg-slate-50 p-4">
+                <p className="text-2xl font-bold tracking-tight text-slate-950">
+                  0
+                </p>
+                <p className="mt-1 text-sm text-slate-500">Saved items</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <SectionLabel>Membership Plans</SectionLabel>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">
+                  Pick your plan
+                </h2>
+                <p className="mt-2 text-sm leading-7 text-slate-600">
+                  Simple pricing. Full access while active.
+                </p>
+              </div>
+
+              <div className="hidden rounded-full bg-amber-100 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-amber-700 sm:block">
+                Unlimited downloads
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {plans.map((plan) => (
+                <PlanCard
+                  key={plan.slug}
+                  name={plan.name}
+                  price={plan.price}
+                  duration={plan.duration}
+                  description={plan.description}
+                  featured={plan.featured}
+                />
+              ))}
+            </div>
+
+            <div className="mt-5 rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 p-5">
+              <p className="text-sm leading-7 text-slate-600">
+                Premium resources open automatically once your plan is active.
+              </p>
+            </div>
+          </section>
+        </div>
+      </section>
     </main>
   );
 }
