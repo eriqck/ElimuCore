@@ -17,6 +17,8 @@ type PlanCardProps = {
   price: string;
   duration: string;
   description: string;
+  cta: React.ReactNode;
+  active?: boolean;
   featured?: boolean;
 };
 
@@ -53,15 +55,18 @@ function PlanCard({
   price,
   duration,
   description,
+  cta,
+  active,
   featured
 }: PlanCardProps) {
   return (
-    <button
-      type="button"
+    <article
       className={`w-full rounded-[1.75rem] border p-5 text-left transition ${
-        featured
-          ? "border-emerald-300 bg-emerald-50 shadow-[0_8px_20px_rgba(34,197,94,0.10)]"
-          : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
+        active
+          ? "border-emerald-400 bg-emerald-50 shadow-[0_10px_24px_rgba(34,197,94,0.12)]"
+          : featured
+            ? "border-emerald-300 bg-emerald-50 shadow-[0_8px_20px_rgba(34,197,94,0.10)]"
+            : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
       }`}
     >
       <div className="flex items-start justify-between gap-4">
@@ -69,35 +74,87 @@ function PlanCard({
           <h4 className="text-xl font-bold tracking-tight text-slate-950">
             {name}
           </h4>
-          <p className="mt-1 text-sm text-slate-500">{description}</p>
+          <p className="mt-1 text-sm text-slate-600">{description}</p>
         </div>
 
-        {featured ? (
+        {active ? (
+          <span className="rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white">
+            Active
+          </span>
+        ) : featured ? (
           <span className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-amber-700">
             Popular
           </span>
         ) : null}
       </div>
 
-      <div className="mt-5 flex items-end justify-between">
+      <div className="mt-5 flex items-end justify-between gap-4">
         <div>
           <p className="text-3xl font-extrabold tracking-tight text-slate-950">
             {price}
           </p>
-          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.22em] text-slate-600">
             {duration}
           </p>
         </div>
 
-        <span
-          className={`rounded-full px-4 py-2 text-sm font-semibold ${
-            featured ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-700"
-          }`}
-        >
-          Choose
-        </span>
+        <div className="shrink-0">{cta}</div>
       </div>
-    </button>
+    </article>
+  );
+}
+
+function PlanAction({
+  planSlug,
+  memberContext,
+  activeMembership,
+  activePlanSlug,
+  featured
+}: {
+  planSlug: string;
+  memberContext: Awaited<ReturnType<typeof getCurrentMemberContext>>;
+  activeMembership: Awaited<ReturnType<typeof getCurrentMemberContext>>["activeMembership"];
+  activePlanSlug: string | null;
+  featured?: boolean;
+}) {
+  const buttonClassName = `rounded-full px-4 py-2 text-sm font-semibold transition ${
+    featured
+      ? "bg-emerald-500 text-white hover:bg-emerald-600"
+      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+  }`;
+
+  if (!memberContext.user) {
+    return (
+      <Link
+        href={`/login?next=${encodeURIComponent("/account")}`}
+        className={buttonClassName}
+      >
+        Login
+      </Link>
+    );
+  }
+
+  if (activeMembership) {
+    return (
+      <span
+        className={`rounded-full px-4 py-2 text-sm font-semibold ${
+          activePlanSlug === planSlug
+            ? "bg-emerald-600 text-white"
+            : "bg-slate-100 text-slate-500"
+        }`}
+      >
+        {activePlanSlug === planSlug ? "Current plan" : "Locked while active"}
+      </span>
+    );
+  }
+
+  return (
+    <form action="/api/paystack/initialize" method="post">
+      <input type="hidden" name="plan_slug" value={planSlug} />
+      <button type="submit" className={buttonClassName}>
+        Pay now
+      </button>
+    </form>
   );
 }
 
@@ -115,20 +172,21 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const membershipBody = activeMembership
     ? `Active until ${formatDate(activeMembership.expiresAt)}.`
     : "Pick a plan to unlock premium lessons and member resources.";
+  const activePlanSlug = activeMembership?.planSlug ?? null;
 
   const planDescriptions: Record<string, string> = {
-    "1-month": "Unlimited access",
+    "1-month": "Unlimited access for one month",
     "6-months": "Best for steady learning",
-    "1-year": "Best value"
+    "1-year": "Best value for long-term access"
   };
 
-  const plans = memberContext.plans.map((plan, index) => ({
+  const plans = memberContext.plans.map((plan) => ({
     slug: plan.slug,
     name: plan.name,
     price: formatPrice(plan.priceKes),
     duration: `${plan.durationMonths} month${plan.durationMonths === 1 ? "" : "s"}`,
     description: planDescriptions[plan.slug] ?? plan.description,
-    featured: index === 0
+    featured: plan.slug === "6-months"
   }));
 
   return (
@@ -239,7 +297,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               </div>
 
               <div className="hidden rounded-full bg-amber-100 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-amber-700 sm:block">
-                Unlimited downloads
+                Secure checkout
               </div>
             </div>
 
@@ -252,13 +310,23 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                   duration={plan.duration}
                   description={plan.description}
                   featured={plan.featured}
+                  active={activePlanSlug === plan.slug}
+                  cta={
+                    <PlanAction
+                      planSlug={plan.slug}
+                      memberContext={memberContext}
+                      activeMembership={activeMembership}
+                      activePlanSlug={activePlanSlug}
+                      featured={plan.featured}
+                    />
+                  }
                 />
               ))}
             </div>
 
             <div className="mt-5 rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 p-5">
               <p className="text-sm leading-7 text-slate-600">
-                Premium resources open automatically once your plan is active.
+                Pay with card, bank, or mobile money. Premium access opens automatically after confirmation.
               </p>
             </div>
           </section>

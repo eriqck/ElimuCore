@@ -5,6 +5,16 @@ export function hasSupabaseEnv() {
   );
 }
 
+export function getSiteUrl() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+  if (!siteUrl) {
+    throw new Error("Missing NEXT_PUBLIC_SITE_URL.");
+  }
+
+  return siteUrl.replace(/\/+$/, "");
+}
+
 export function getSupabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -29,4 +39,24 @@ export function getSupabaseServiceRoleKey() {
   }
 
   return serviceRoleKey;
+}
+
+export function getPaystackSecretKey() {
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+
+  if (!secretKey) {
+    throw new Error("Missing PAYSTACK_SECRET_KEY.");
+  }
+
+  return secretKey;
+}
+
+export function getPaystackPublicKey() {
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+  if (!publicKey) {
+    throw new Error("Missing NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY.");
+  }
+
+  return publicKey;
 }
