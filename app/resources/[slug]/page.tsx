@@ -42,9 +42,7 @@ export default async function ResourceDetailPage({
     notFound();
   }
 
-  const isPremiumResource = resource.access === "Premium";
-  const canAccessDownloads =
-    !isPremiumResource || Boolean(memberContext.activeMembership);
+  const canAccessDownloads = Boolean(memberContext.activeMembership);
   const loginHref = `/login?next=${encodeURIComponent(`/resources/${resource.slug}`)}`;
 
   const formatFileKind = (file: ResourceFile) => {
@@ -123,8 +121,7 @@ export default async function ResourceDetailPage({
                 Available downloads
               </h2>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                Download files from this page whenever they are available for
-                your membership.
+                Files ready for active members.
               </p>
             </div>
             <p className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
@@ -155,9 +152,6 @@ export default async function ResourceDetailPage({
                       <h3 className="mt-3 text-lg font-bold tracking-tight text-slate-900">
                         {file.label}
                       </h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Download this file directly from the ELimuCore library.
-                      </p>
                     </div>
 
                     <a
@@ -176,9 +170,7 @@ export default async function ResourceDetailPage({
                 Sign in to reach premium downloads
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-700">
-                This resource is reserved for active members. Sign in first,
-                then your membership status will control download access
-                automatically.
+                This page is for active members.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
@@ -201,8 +193,7 @@ export default async function ResourceDetailPage({
                 Membership activation required
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-700">
-                Your account is signed in, but this premium resource needs an
-                active membership before downloads can open.
+                Activate your membership to download this resource.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
@@ -222,25 +213,10 @@ export default async function ResourceDetailPage({
           ) : (
             <div className="mt-6 rounded-[1.5rem] border border-dashed border-stone-300 bg-stone-50 p-5">
               <p className="text-sm leading-7 text-slate-600">
-                This resource page is live, but the downloadable files are
-                still being prepared. Please check back shortly for the
-                attached materials.
+                Files will appear here soon.
               </p>
             </div>
           )}
-
-          {resource.sourceUrl ? (
-            <div className="mt-5">
-              <a
-                href={resource.sourceUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex rounded-full px-3 py-2 text-sm font-semibold text-rose-900 transition hover:bg-rose-900 hover:text-white"
-              >
-                View source reference
-              </a>
-            </div>
-          ) : null}
         </section>
 
         <div className="mt-8 flex flex-wrap gap-3">

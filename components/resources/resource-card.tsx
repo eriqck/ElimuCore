@@ -57,7 +57,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           href={`/resources/${resource.slug}`}
           className="rounded-full px-3 py-2 text-sm font-semibold text-rose-900 transition group-hover:bg-white/10 group-hover:text-white hover:bg-white hover:text-rose-900"
         >
-          View resource -&gt;
+          Open -&gt;
         </Link>
       </div>
     </article>
