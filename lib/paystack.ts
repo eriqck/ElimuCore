@@ -1,4 +1,5 @@
 import "server-only";
+import crypto from "node:crypto";
 import { getPaystackSecretKey, getSiteUrl } from "@/lib/supabase/env";
 
 type PaystackInitializeMetadata = {
@@ -33,6 +34,11 @@ type PaystackResponse<TData> = {
   data?: TData;
 };
 
+type PaystackWebhookPayload = {
+  event?: string;
+  data?: PaystackVerifyData | null;
+};
+
 export type PaystackInitializeResult = {
   authorizationUrl: string;
   accessCode: string;
@@ -50,6 +56,11 @@ export type PaystackVerifyResult = {
   customerEmail: string;
   metadata: PaystackInitializeMetadata | null;
   raw: PaystackResponse<PaystackVerifyData>;
+};
+
+export type PaystackWebhookEvent = {
+  event: string;
+  reference: string;
 };
 
 function getAuthorizationHeader() {
@@ -105,6 +116,17 @@ function parseMetadata(value: unknown): PaystackInitializeMetadata | null {
   }
 
   return null;
+}
+
+function safeEqualHexSignatures(left: string, right: string) {
+  const leftBuffer = Buffer.from(left, "hex");
+  const rightBuffer = Buffer.from(right, "hex");
+
+  if (leftBuffer.length !== rightBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(leftBuffer, rightBuffer);
 }
 
 export async function initializePaystackTransaction(args: {
@@ -189,4 +211,37 @@ export async function verifyPaystackTransaction(reference: string) {
     metadata: parseMetadata(payload.data.metadata),
     raw: payload
   } satisfies PaystackVerifyResult;
+}
+
+export function verifyPaystackWebhookSignature(
+  rawBody: string,
+  signature: string | null
+) {
+  if (!signature) {
+    return false;
+  }
+
+  const expected = crypto
+    .createHmac("sha512", getPaystackSecretKey())
+    .update(rawBody)
+    .digest("hex");
+
+  try {
+    return safeEqualHexSignatures(expected, signature);
+  } catch {
+    return false;
+  }
+}
+
+export function parsePaystackWebhookPayload(rawBody: string) {
+  const payload = JSON.parse(rawBody) as PaystackWebhookPayload;
+  const reference =
+    payload?.data?.reference && typeof payload.data.reference === "string"
+      ? payload.data.reference.trim()
+      : "";
+
+  return {
+    event: typeof payload?.event === "string" ? payload.event.trim() : "",
+    reference
+  } satisfies PaystackWebhookEvent;
 }
