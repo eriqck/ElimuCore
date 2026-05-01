@@ -6,7 +6,7 @@ import {
   getLearningProgressForCurrentUser,
   getLearningTopicProgressSummary
 } from "@/lib/learning";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 
 type LearningClassPageProps = {
   params: Promise<{
@@ -141,6 +141,7 @@ export default async function LearningClassPage({
     getCurrentMemberContext(),
     getLearningProgressForCurrentUser()
   ]);
+  const hasPremium = hasPremiumAccess(memberContext);
 
   const totalLessons = sumLessons(learningClass.topics);
   const freeLessons = learningClass.topics.flatMap((topic) =>
@@ -235,7 +236,7 @@ export default async function LearningClassPage({
               {[
                 [`${learningClass.topics.length}`, "Topics"],
                 [`${totalLessons}`, "Lessons"],
-                [memberContext.activeMembership ? "On" : "Off", "Full access"]
+                [hasPremium ? "On" : "Off", "Full access"]
               ].map(([value, label]) => (
                 <div
                   key={label}
@@ -301,7 +302,7 @@ export default async function LearningClassPage({
                         Learning access
                       </p>
                       <p className="mt-1 text-2xl font-black">
-                        {memberContext.activeMembership ? "Unlocked" : "Preview"}
+                        {hasPremium ? "Unlocked" : "Preview"}
                       </p>
                     </div>
                     <div className="flex gap-1 text-amber-400">

@@ -7,7 +7,7 @@ import {
   getLearningTopicBySlugs,
   getLearningTopicProgressSummary
 } from "@/lib/learning";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 
 type TopicPageProps = {
   params: Promise<{
@@ -134,7 +134,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
     getCurrentMemberContext(),
     getLearningProgressForCurrentUser()
   ]);
-  const hasMembership = Boolean(memberContext.activeMembership);
+  const hasPremium = hasPremiumAccess(memberContext);
   const summary = getLearningTopicProgressSummary(topic, progressMap);
   const freeLessons = topic.lessons.filter((lesson) => lesson.access === "free");
   const firstLesson = freeLessons[0] ?? topic.lessons[0] ?? null;
@@ -191,7 +191,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
               {[
                 [`${topic.lessons.length}`, "Lessons"],
                 [`${summary.percent}%`, "Progress"],
-                [hasMembership ? "On" : "Off", "Full access"]
+                [hasPremium ? "On" : "Off", "Full access"]
               ].map(([value, label]) => (
                 <div
                   key={label}
@@ -257,7 +257,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
                         Topic access
                       </p>
                       <p className="mt-1 text-2xl font-black">
-                        {hasMembership ? "Unlocked" : "Preview"}
+                        {hasPremium ? "Unlocked" : "Preview"}
                       </p>
                     </div>
                     <div className="flex gap-1 text-amber-400">
@@ -303,7 +303,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {topic.lessons.map((lesson, index) => {
               const lessonProgress = progressMap[lesson.slug] ?? null;
-              const canAccess = canAccessLearningItem(lesson.access, hasMembership);
+              const canAccess = canAccessLearningItem(lesson.access, hasPremium);
               const accent = [
                 "from-emerald-500 to-lime-400",
                 "from-sky-400 to-cyan-400",

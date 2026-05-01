@@ -12,6 +12,10 @@ const navItems = [
 
 export async function SiteHeader() {
   const memberContext = await getCurrentMemberContext();
+  const signedInNavItems = [
+    ...navItems,
+    { label: "Premium Materials", href: "/resources" }
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#ececec] bg-white/95 backdrop-blur">
@@ -29,7 +33,7 @@ export async function SiteHeader() {
           </Link>
 
           <nav className="flex flex-wrap items-center gap-2">
-            {navItems.map((item) => (
+            {(memberContext.user ? signedInNavItems : navItems).map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
@@ -55,6 +59,14 @@ export async function SiteHeader() {
                 >
                   Self-Learning Junior Classes
                 </Link>
+                <form action="/auth/signout" method="post">
+                  <button
+                    type="submit"
+                    className="rounded-md border border-emerald-200 bg-emerald-50 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                  >
+                    Logout
+                  </button>
+                </form>
               </>
             ) : (
               <>

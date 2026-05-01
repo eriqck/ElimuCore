@@ -9,7 +9,7 @@ import {
   getLearningLessonBySlugs,
   getLearningProgressForCurrentUser
 } from "@/lib/learning";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 
 type LessonPageProps = {
   params: Promise<{
@@ -49,8 +49,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
     getCurrentMemberContext(),
     getLearningProgressForCurrentUser()
   ]);
-  const hasMembership = Boolean(memberContext.activeMembership);
-  const canAccess = canAccessLearningItem(lesson.access, hasMembership);
+  const hasPremium = hasPremiumAccess(memberContext);
+  const canAccess = canAccessLearningItem(lesson.access, hasPremium);
   const topicHref = `/classes/${learningClass.slug}/${topic.slug}`;
   const currentPath = `/lessons/${topic.slug}/${lesson.slug}`;
   const loginHref = `/login?next=${encodeURIComponent(currentPath)}`;
