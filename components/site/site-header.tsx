@@ -6,10 +6,8 @@ import { getCurrentMemberContext } from "@/lib/membership";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/#package" },
-  { label: "Junior Classes", href: "/classes" },
   { label: "Pricing", href: "/#plans" },
-  { label: "Support", href: "/#how-to-use" },
-  { label: "Resources", href: "/resources" }
+  { label: "Support", href: "/#how-to-use" }
 ] as const;
 
 export async function SiteHeader() {
@@ -55,7 +53,7 @@ export async function SiteHeader() {
                   href="/classes"
                   className="brand-button-primary rounded-md px-5 py-2.5 text-sm font-semibold text-white transition"
                 >
-                  Open Junior Classes
+                  Self-Learning Junior Classes
                 </Link>
               </>
             ) : (
