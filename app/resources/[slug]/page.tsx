@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import { getResourceBySlug } from "@/lib/resources";
 import type { ResourceFile } from "@/lib/types";
 
@@ -42,7 +42,7 @@ export default async function ResourceDetailPage({
     notFound();
   }
 
-  const canAccessDownloads = Boolean(memberContext.activeMembership);
+  const canAccessDownloads = hasPremiumAccess(memberContext);
   const loginHref = `/login?next=${encodeURIComponent(`/resources/${resource.slug}`)}`;
 
   const formatFileKind = (file: ResourceFile) => {

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ResourceCard } from "@/components/resources/resource-card";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import { getLibraryFilters, listResources } from "@/lib/resources";
 
 type ResourcesPageProps = {
@@ -32,6 +32,7 @@ export default async function ResourcesPage({
     getLibraryFilters(),
     getCurrentMemberContext()
   ]);
+  const canOpenLibrary = hasPremiumAccess(memberContext);
 
   if (!memberContext.user) {
     return (
@@ -65,7 +66,7 @@ export default async function ResourcesPage({
     );
   }
 
-  if (!memberContext.activeMembership) {
+  if (!canOpenLibrary) {
     return (
       <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
         <section className="mx-auto max-w-3xl rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm sm:p-10">

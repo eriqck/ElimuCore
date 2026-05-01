@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodeNotice } from "@/lib/auth";
-import { getCurrentMemberContext } from "@/lib/membership";
+import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type PublishedResourceRow = {
@@ -33,6 +33,7 @@ export async function GET(
 
   try {
     const memberContext = await getCurrentMemberContext();
+    const canAccessPremium = hasPremiumAccess(memberContext);
     const supabase = createAdminClient();
     const { data: resourceData, error: resourceError } = await supabase
       .from("resources")
@@ -55,7 +56,7 @@ export async function GET(
       );
     }
 
-    if (resource.access === "premium" && !memberContext.activeMembership) {
+    if (resource.access === "premium" && !canAccessPremium) {
       return NextResponse.redirect(
         new URL(
           `/account?notice=${encodeNotice("An active membership is required to download premium ELimuCore resources.")}`,

@@ -87,6 +87,14 @@ function isMembershipActive(membership: {
   return true;
 }
 
+export function hasAdminAccess(profile: UserProfile | null | undefined) {
+  return profile?.role === "admin";
+}
+
+export function hasPremiumAccess(memberContext: MemberContext) {
+  return Boolean(memberContext.activeMembership || hasAdminAccess(memberContext.profile));
+}
+
 export async function getMembershipPlans(): Promise<MembershipPlan[]> {
   if (!hasSupabaseEnv()) {
     return fallbackMembershipPlans;
