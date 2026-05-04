@@ -2,7 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ResourceCard } from "@/components/resources/resource-card";
 import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
-import { getLibraryFilters, listResources } from "@/lib/resources";
+import {
+  getLibraryFilters,
+  getResourceLevelBrowseCards,
+  listResources
+} from "@/lib/resources";
 
 type ResourcesPageProps = {
   searchParams?: Promise<{
@@ -27,12 +31,48 @@ export default async function ResourcesPage({
     typeof params.category === "string" ? params.category.trim() : "";
   const level = typeof params.level === "string" ? params.level.trim() : "";
 
-  const [resources, filters, memberContext] = await Promise.all([
-    listResources(query, category, level),
+  const resourcesPromise = level
+    ? listResources(query, category, level)
+    : Promise.resolve([]);
+
+  const [resources, filters, levelCards, memberContext] = await Promise.all([
+    resourcesPromise,
     getLibraryFilters(),
+    getResourceLevelBrowseCards(),
     getCurrentMemberContext()
   ]);
   const canOpenLibrary = hasPremiumAccess(memberContext);
+  const selectedLevel = levelCards.find((item) => item.slug === level) ?? null;
+
+  const createLevelHref = (nextLevel: string) => {
+    const nextParams = new URLSearchParams();
+
+    if (query) {
+      nextParams.set("q", query);
+    }
+
+    if (category) {
+      nextParams.set("category", category);
+    }
+
+    nextParams.set("level", nextLevel);
+    return `/resources?${nextParams.toString()}`;
+  };
+
+  const createResetHref = () => {
+    const nextParams = new URLSearchParams();
+
+    if (query) {
+      nextParams.set("q", query);
+    }
+
+    if (category) {
+      nextParams.set("category", category);
+    }
+
+    const serialized = nextParams.toString();
+    return serialized ? `/resources?${serialized}` : "/resources";
+  };
 
   if (!memberContext.user) {
     return (
@@ -107,10 +147,11 @@ export default async function ResourcesPage({
               Member library
             </p>
             <h1 className="font-display mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-              Premium resources
+              Browse by school level
             </h1>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600">
-              Search, open, and download what you need.
+              Pick a level card first, then open the right materials for that
+              level.
             </p>
           </div>
 
@@ -154,28 +195,31 @@ export default async function ResourcesPage({
                     ))}
                   </select>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="level"
-                    className="mb-2 block text-sm font-semibold text-slate-700"
-                  >
-                    School stage
-                  </label>
-                  <select
-                    id="level"
-                    name="level"
-                    defaultValue={level}
-                    className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-700"
-                  >
-                    <option value="">All levels</option>
-                    {filters.levels.map((item) => (
-                      <option key={item.slug} value={item.slug}>
-                        {item.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {selectedLevel ? (
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
+                      Selected level
+                    </p>
+                    <p className="mt-2 text-lg font-bold text-slate-900">
+                      {selectedLevel.title}
+                    </p>
+                    <Link
+                      href={createResetHref()}
+                      className="mt-3 inline-flex text-sm font-semibold text-emerald-700 transition hover:text-emerald-800"
+                    >
+                      Clear level filter
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border border-dashed border-stone-300 bg-white px-4 py-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+                      Level first
+                    </p>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      Choose a level below to open its materials.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-3 pt-2">
@@ -201,10 +245,79 @@ export default async function ResourcesPage({
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
+              Levels
+            </p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
+              Choose a school level
+            </h2>
+          </div>
+          {selectedLevel ? (
+            <p className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-800">
+              Showing {selectedLevel.title}
+            </p>
+          ) : null}
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {levelCards.map((card, index) => {
+            const active = card.slug === level;
+            const accents = [
+              "from-rose-500 to-orange-400",
+              "from-emerald-500 to-lime-400",
+              "from-sky-500 to-cyan-400",
+              "from-violet-500 to-fuchsia-400"
+            ];
+            const accent = accents[index % accents.length];
+
+            return (
+              <Link
+                key={card.slug}
+                href={createLevelHref(card.slug)}
+                className={`group relative overflow-hidden rounded-[2rem] border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] ${
+                  active
+                    ? "border-emerald-300 ring-2 ring-emerald-200"
+                    : "border-stone-200"
+                }`}
+              >
+                <div
+                  className={`absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-to-br ${accent} opacity-20 blur-2xl transition group-hover:opacity-40`}
+                />
+                <div className="relative">
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] ${
+                      active
+                        ? "bg-emerald-100 text-emerald-800"
+                        : "bg-slate-100 text-slate-600"
+                    }`}
+                  >
+                    {card.count} material{card.count === 1 ? "" : "s"}
+                  </span>
+                  <h3 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">
+                    {card.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    {card.subtitle}
+                  </p>
+                  <span className="mt-6 inline-flex text-sm font-semibold text-rose-900 transition group-hover:text-emerald-700">
+                    Open level -&gt;
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto mt-10 max-w-7xl">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
               Results
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-              {resources.length} resources
+              {selectedLevel
+                ? `${selectedLevel.title} resources (${resources.length})`
+                : `${resources.length} resources`}
             </h2>
           </div>
           <Link
@@ -215,7 +328,16 @@ export default async function ResourcesPage({
           </Link>
         </div>
 
-        {resources.length > 0 ? (
+        {!selectedLevel ? (
+          <div className="rounded-[2rem] border border-dashed border-stone-300 bg-white/85 p-10 text-center shadow-sm">
+            <h3 className="text-xl font-bold text-slate-900">
+              Choose a school level
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Each level card opens only the materials for that group.
+            </p>
+          </div>
+        ) : resources.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {resources.map((resource) => (
               <ResourceCard key={resource.slug} resource={resource} />

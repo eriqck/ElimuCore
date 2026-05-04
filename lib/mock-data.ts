@@ -56,7 +56,7 @@ export const fallbackSchoolLevels: SchoolLevel[] = [
     subtitle: "CBE planning and revision support for Grade 7-9",
     items: [
       { label: "Grade 7 Notes", href: "/resources?level=junior-school&q=Grade 7" },
-      { label: "Grade 8 Exams", href: "/resources?level=junior-school&q=Grade 8 exams" },
+      { label: "Grade 8 Assessments", href: "/resources?level=junior-school&q=Grade 8 assessments" },
       { label: "Grade 9 Assessment", href: "/resources?level=junior-school&q=Grade 9" },
       { label: "Schemes of Work", href: "/resources?level=junior-school&category=schemes-of-work" },
       { label: "Lesson Plans", href: "/resources?level=junior-school&category=lesson-plans" },
@@ -70,7 +70,7 @@ export const fallbackSchoolLevels: SchoolLevel[] = [
     items: [
       { label: "Grade 1-3 Resources", href: "/resources?level=primary-school&q=Grade" },
       { label: "Grade 4-6 Notes", href: "/resources?level=primary-school&category=notes" },
-      { label: "CBE Exams", href: "/resources?level=primary-school&category=exams" },
+      { label: "CBE Assessments", href: "/resources?level=primary-school&category=exams" },
       { label: "Assignments", href: "/resources?level=primary-school&category=assignments" },
       { label: "Class Notes", href: "/resources?level=primary-school&q=Class Notes" },
       { label: "Revision Papers", href: "/resources?level=primary-school&category=past-papers" }
@@ -83,7 +83,7 @@ export const fallbackSchoolLevels: SchoolLevel[] = [
     items: [
       { label: "Approved Syllabus", href: "/resources?level=pre-primary&q=syllabus" },
       { label: "Schemes of Work", href: "/resources?level=pre-primary&category=schemes-of-work" },
-      { label: "Exams and Answers", href: "/resources?level=pre-primary&category=exams" },
+      { label: "Assessments and Answers", href: "/resources?level=pre-primary&category=exams" },
       { label: "CBE Design Materials", href: "/resources?level=pre-primary&q=design" },
       { label: "Teacher Notes", href: "/resources?level=pre-primary&category=notes" },
       { label: "Class Activities", href: "/resources?level=pre-primary&q=activities" }
@@ -100,7 +100,7 @@ export const fallbackCategoryFilters: CategoryFilter[] = [
   { slug: "assignments", name: "Assignments" },
   { slug: "setbooks", name: "Setbooks" },
   { slug: "powerpoint-notes", name: "PowerPoint Notes" },
-  { slug: "exams", name: "Exams" },
+  { slug: "exams", name: "Assessments" },
   { slug: "marking-schemes", name: "Marking Schemes" }
 ];
 
@@ -141,7 +141,7 @@ export const fallbackResources: Resource[] = [
       "A strong starter item for your junior school library, ideal for organizing assessment packs by subject, term, and year.",
     level: "Junior School",
     levelSlug: "junior-school",
-    category: "Exams",
+    category: "Assessments",
     categorySlug: "exams",
     subject: "Mixed Subjects",
     access: "Premium",
@@ -181,7 +181,7 @@ export const fallbackResources: Resource[] = [
       "A pre-primary assessment pack with simple answer support for teachers, caregivers, and parents.",
     level: "Pre-Primary",
     levelSlug: "pre-primary",
-    category: "Exams",
+    category: "Assessments",
     categorySlug: "exams",
     subject: "Mixed Subjects",
     access: "Premium",

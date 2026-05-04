@@ -14,6 +14,7 @@ import type {
   ResourceDetail,
   ResourceFile,
   ResourceFileKind,
+  ResourceLevelBrowseCard,
   SchoolLevel
 } from "@/lib/types";
 
@@ -296,6 +297,73 @@ async function getSupabaseResources(
 export const getLibraryFilters = cache(async (): Promise<LibraryFilters> => {
   return getSupabaseFilters();
 });
+
+export const getResourceLevelBrowseCards = cache(
+  async (): Promise<ResourceLevelBrowseCard[]> => {
+    const filters = await getSupabaseFilters();
+
+    if (!hasSupabaseEnv()) {
+      const counts = new Map<string, number>();
+
+      for (const resource of fallbackResources) {
+        counts.set(
+          resource.levelSlug,
+          (counts.get(resource.levelSlug) ?? 0) + 1
+        );
+      }
+
+      return filters.levels.map((level) => ({
+        slug: level.slug,
+        title: level.title,
+        subtitle: level.subtitle ?? "Browse resources for this level.",
+        count: counts.get(level.slug) ?? 0
+      }));
+    }
+
+    try {
+      const supabase = await createClient();
+      const { data, error } = await supabase
+        .from("resources")
+        .select("school_level_slug")
+        .eq("published", true)
+        .limit(1000);
+
+      if (error || !data) {
+        throw error ?? new Error("Could not load resource level counts.");
+      }
+
+      const counts = new Map<string, number>();
+
+      for (const row of data as Array<{ school_level_slug: string | null }>) {
+        const slug = row.school_level_slug ?? "secondary-school";
+        counts.set(slug, (counts.get(slug) ?? 0) + 1);
+      }
+
+      return filters.levels.map((level) => ({
+        slug: level.slug,
+        title: level.title,
+        subtitle: level.subtitle ?? "Browse resources for this level.",
+        count: counts.get(level.slug) ?? 0
+      }));
+    } catch {
+      const counts = new Map<string, number>();
+
+      for (const resource of fallbackResources) {
+        counts.set(
+          resource.levelSlug,
+          (counts.get(resource.levelSlug) ?? 0) + 1
+        );
+      }
+
+      return filters.levels.map((level) => ({
+        slug: level.slug,
+        title: level.title,
+        subtitle: level.subtitle ?? "Browse resources for this level.",
+        count: counts.get(level.slug) ?? 0
+      }));
+    }
+  }
+);
 
 export const listResources = cache(
   async (query?: string, category?: string, level?: string) => {

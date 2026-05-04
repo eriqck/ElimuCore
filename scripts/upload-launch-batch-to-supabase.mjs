@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { basename, extname, resolve } from "node:path";
 import process from "node:process";
 import { createClient } from "@supabase/supabase-js";
+import { fileKindForCategorySlug } from "./lib/resource-classification.mjs";
 
 const args = parseArgs(process.argv.slice(2));
 const manifestPath = resolve(
@@ -128,7 +129,7 @@ for (const [index, resource] of selectedResources.entries()) {
         supabase.from("resource_files").insert({
           resource_id: upsertedResource.id,
           label: resource.title,
-          file_kind: fileKindForCategory(resource.category_slug),
+          file_kind: fileKindForCategorySlug(resource.category_slug),
           bucket_path: bucketPath,
           mime_type: contentType,
           file_size_bytes: fileBuffer.byteLength,
@@ -200,7 +201,7 @@ async function ensureContentLookups() {
     { slug: "assignments", name: "Assignments", sort_order: 6 },
     { slug: "setbooks", name: "Setbooks", sort_order: 7 },
     { slug: "powerpoint-notes", name: "PowerPoint Notes", sort_order: 8 },
-    { slug: "exams", name: "Exams", sort_order: 9 },
+    { slug: "exams", name: "Assessments", sort_order: 9 },
     { slug: "marking-schemes", name: "Marking Schemes", sort_order: 10 }
   ];
 
@@ -263,22 +264,6 @@ function toResourceRow(resource, bucketPath) {
     storage_path: bucketPath,
     source_url: resource.source_url ?? null
   };
-}
-
-function fileKindForCategory(categorySlug) {
-  if (categorySlug === "past-papers") {
-    return "paper";
-  }
-  if (categorySlug === "marking-schemes") {
-    return "marking-scheme";
-  }
-  if (categorySlug === "notes" || categorySlug === "powerpoint-notes") {
-    return "notes";
-  }
-  if (categorySlug === "exams") {
-    return "download";
-  }
-  return "download";
 }
 
 function mimeTypeForExtension(extension) {

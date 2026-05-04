@@ -4,6 +4,7 @@ import { dirname, extname, join, resolve } from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import process from "node:process";
+import { inferImportedResourceMetadata } from "./lib/resource-classification.mjs";
 
 const SITE_ORIGIN = "https://kcseonline.co.ke";
 const LOGIN_URL = `${SITE_ORIGIN}/membership-login/`;
@@ -287,13 +288,17 @@ async function crawl(initialUrls) {
 function buildManifest(crawlResult, account) {
   const resources = crawlResult.resources.map((material) => {
     const title = material.fileName || material.label || material.pageTitle;
-    const category_slug = inferCategory(`${title} ${material.pageTitle}`);
-    const school_level_slug = inferSchoolLevel(`${title} ${material.pageTitle}`);
-    const subject = inferSubject(`${title} ${material.pageTitle}`);
+    const inferred = inferImportedResourceMetadata({
+      title,
+      summary: material.pageTitle,
+      description: material.pageTitle,
+      sourcePageTitle: material.pageTitle,
+      sourceUrl: material.url
+    });
     const resource_year = inferYear(`${title} ${material.pageTitle}`);
     const format = inferFormat(title, material.url);
     const slug = uniqueSlug(
-      `${resource_year ?? ""} ${subject} ${title}`,
+      `${resource_year ?? ""} ${inferred.subject} ${title}`,
       material.key
     );
 
@@ -302,9 +307,9 @@ function buildManifest(crawlResult, account) {
       title: cleanText(title),
       summary: `Authorized migration from ${material.pageTitle}.`,
       description: `Material migrated from KCSE Online page: ${material.pageTitle}.`,
-      school_level_slug,
-      category_slug,
-      subject,
+      school_level_slug: inferred.school_level_slug,
+      category_slug: inferred.category_slug,
+      subject: inferred.subject,
       access: "premium",
       format,
       resource_year,
@@ -629,87 +634,6 @@ function toDownloadUrl(url) {
   }
 
   return url;
-}
-
-function inferCategory(text) {
-  const lower = text.toLowerCase();
-  if (lower.includes("marking scheme") || lower.includes(" ms") || lower.includes("answer")) {
-    return "marking-schemes";
-  }
-  if (lower.includes("scheme")) {
-    return "schemes-of-work";
-  }
-  if (lower.includes("lesson plan")) {
-    return "lesson-plans";
-  }
-  if (lower.includes("assignment")) {
-    return "assignments";
-  }
-  if (lower.includes("setbook") || lower.includes("set book")) {
-    return "setbooks";
-  }
-  if (lower.includes("powerpoint") || lower.includes("power point") || lower.includes(".ppt")) {
-    return "powerpoint-notes";
-  }
-  if (lower.includes("topical") || lower.includes("topic")) {
-    return "topical-questions";
-  }
-  if (lower.includes("exam") || lower.includes("mock") || lower.includes("test")) {
-    return "exams";
-  }
-  if (lower.includes("past paper") || lower.includes("pastpaper") || lower.includes("pp1") || lower.includes("pp2") || lower.includes("pp3")) {
-    return "past-papers";
-  }
-  if (lower.includes("note")) {
-    return "notes";
-  }
-  return "notes";
-}
-
-function inferSchoolLevel(text) {
-  const lower = text.toLowerCase();
-  if (lower.includes("pre-primary") || lower.includes("pp1") || lower.includes("pp2")) {
-    return "pre-primary";
-  }
-  if (lower.includes("grade 7") || lower.includes("grade 8") || lower.includes("grade 9")) {
-    return "junior-school";
-  }
-  if (
-    lower.includes("grade 1") ||
-    lower.includes("grade 2") ||
-    lower.includes("grade 3") ||
-    lower.includes("grade 4") ||
-    lower.includes("grade 5") ||
-    lower.includes("grade 6")
-  ) {
-    return "primary-school";
-  }
-  return "secondary-school";
-}
-
-function inferSubject(text) {
-  const subjects = [
-    "Agriculture",
-    "Biology",
-    "Business Studies",
-    "Chemistry",
-    "CRE",
-    "English",
-    "Geography",
-    "History",
-    "Kiswahili",
-    "Mathematics",
-    "Maths",
-    "Physics",
-    "Computer Studies",
-    "Life Skills"
-  ];
-  const lower = text.toLowerCase();
-  const subject = subjects.find((candidate) =>
-    lower.includes(candidate.toLowerCase())
-  );
-
-  return subject === "Maths" ? "Mathematics" : subject ?? "Mixed Subjects";
 }
 
 function inferYear(text) {

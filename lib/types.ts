@@ -218,3 +218,10 @@ export type LibraryFilters = {
   categories: CategoryFilter[];
   levels: SchoolLevelFilter[];
 };
+
+export type ResourceLevelBrowseCard = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  count: number;
+};

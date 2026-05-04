@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { mkdir } from "node:fs/promises";
 import process from "node:process";
+import { inferLaunchLevel } from "./lib/resource-classification.mjs";
 
 const sourcePath = resolve(
   process.cwd(),
@@ -65,6 +66,22 @@ console.log(`Skipped for later: ${skipped.length}`);
 console.log(`Manifest written to ${outputPath}`);
 
 function classifyLaunchLevel(resource) {
+  const inferredLevel = inferLaunchLevel({
+    title: resource.title,
+    summary: resource.summary,
+    description: resource.description,
+    sourcePageTitle: resource.source_page_title,
+    sourceUrl: resource.source_url
+  });
+
+  if (inferredLevel) {
+    return {
+      include: true,
+      level: inferredLevel,
+      reason: inferredLevel.replaceAll("-", " ")
+    };
+  }
+
   const text = normalizeText(
     [
       resource.title,
@@ -74,57 +91,6 @@ function classifyLaunchLevel(resource) {
       resource.source_url
     ].join(" ")
   );
-
-  const ppMatch = text.match(/\bpp\s*([12])\b|\bpre[-\s]?primary\s*([12])\b/);
-  if (ppMatch) {
-    const pp = ppMatch[1] || ppMatch[2];
-    return {
-      include: true,
-      level: `pp${pp}`,
-      reason: `PP${pp}`
-    };
-  }
-
-  const gradeMatch = text.match(/\bgrade\s*([1-9]|10)\b|\bgrade[-_]?([1-9]|10)\b/);
-  if (gradeMatch) {
-    const grade = gradeMatch[1] || gradeMatch[2];
-    return {
-      include: true,
-      level: `grade-${grade}`,
-      reason: `Grade ${grade}`
-    };
-  }
-
-  const grediMatch = text.match(/\bgredi\s*(ya\s*)?([1-9]|10)\b/);
-  if (grediMatch) {
-    return {
-      include: true,
-      level: `grade-${grediMatch[2]}`,
-      reason: `Gredi ${grediMatch[2]}`
-    };
-  }
-
-  const classMatch = text.match(/\b(class|std|standard)\s*([1-9]|10)\b/);
-  if (classMatch) {
-    const grade = classMatch[2];
-    return {
-      include: true,
-      level: `grade-${grade}`,
-      reason: `${classMatch[1]} ${grade}`
-    };
-  }
-
-  const formTargetMatch =
-    /\bform\s*(3|4)\b|\bf\s*(3|4)\b|\bform\s*3\s*[-/ ]\s*4\b|\bform\s*34\b/.exec(
-      text
-    );
-  if (formTargetMatch) {
-    return {
-      include: true,
-      level: "form-3-4",
-      reason: "Form 3/4"
-    };
-  }
 
   const formExcludedMatch = /\bform\s*(1|2)\b|\bf\s*(1|2)\b/.exec(text);
   if (formExcludedMatch) {

@@ -15,7 +15,8 @@
     "download:kcseonline": "node ./scripts/kcseonline-authorized-downloader.mjs --download",
     "filter:launch-materials": "node ./scripts/create-launch-materials-manifest.mjs",
     "upload:launch-batch": "node ./scripts/upload-launch-batch-to-supabase.mjs",
-    "import:materials": "node ./scripts/import-authorized-materials.mjs ./data/authorized-materials.sample.json"
+    "import:materials": "node ./scripts/import-authorized-materials.mjs ./data/authorized-materials.sample.json",
+    "repair:resource-metadata": "node ./scripts/repair-resource-classification.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "latest",
