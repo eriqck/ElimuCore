@@ -12,7 +12,11 @@ type ResetPasswordPageProps = {
 
 export const metadata: Metadata = {
   title: "Reset Password",
-  description: "Enter your ELimuCore OTP code and set a new password."
+  description: "Enter your ELimuCore OTP code and set a new password.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function ResetPasswordPage({

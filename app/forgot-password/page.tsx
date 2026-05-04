@@ -12,7 +12,11 @@ type ForgotPasswordPageProps = {
 
 export const metadata: Metadata = {
   title: "Forgot Password",
-  description: "Request an ELimuCore password reset code."
+  description: "Request an ELimuCore password reset code.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function ForgotPasswordPage({

@@ -30,7 +30,11 @@ type PaymentBadgeProps = {
 export const metadata: Metadata = {
   title: "My Account",
   description:
-    "Manage your ELimuCore membership and premium learning access."
+    "Manage your ELimuCore membership and premium learning access.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 function formatPrice(priceKes: number) {

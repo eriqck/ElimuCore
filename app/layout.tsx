@@ -3,6 +3,13 @@ import { Fraunces, Manrope } from "next/font/google";
 import { FloatingChat } from "@/components/site/floating-chat";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import {
+  siteDescription,
+  siteKeywords,
+  siteName,
+  siteOgImageUrl,
+  siteUrl
+} from "@/lib/site";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -16,28 +23,53 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "ELimuCore",
-    template: "%s | ELimuCore"
+    default: siteName,
+    template: `%s | ${siteName}`
   },
   verification: {
     google: "migO_x8dcUjQihsjF67GSo1OfQJhCi1dPu3luAKikIo"
   },
-  description:
-    "ELimuCore helps teachers and parents access trusted CBE and KCSE learning materials, lesson plans, exams, and revision support in one place.",
-  applicationName: "ELimuCore",
-  keywords: [
-    "KCSE",
-    "CBE",
-    "teachers",
-    "parents",
-    "learning materials",
-    "past papers",
-    "lesson plans",
-    "revision resources",
-    "exams"
-  ]
+  description: siteDescription,
+  applicationName: siteName,
+  keywords: siteKeywords,
+  alternates: {
+    canonical: siteUrl
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_KE",
+    siteName,
+    url: siteUrl,
+    title: siteName,
+    description: siteDescription,
+    images: [
+      {
+        url: siteOgImageUrl,
+        width: 1200,
+        height: 630,
+        alt: `${siteName} social preview`
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteName,
+    description: siteDescription,
+    images: [siteOgImageUrl]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
+  }
 };
 
 export default async function RootLayout({

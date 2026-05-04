@@ -13,7 +13,11 @@ type LoginPageProps = {
 
 export const metadata: Metadata = {
   title: "Login",
-  description: "Login to ELimuCore."
+  description: "Login to ELimuCore.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {

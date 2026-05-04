@@ -13,7 +13,11 @@ type SignupPageProps = {
 
 export const metadata: Metadata = {
   title: "Sign Up",
-  description: "Create an ELimuCore account."
+  description: "Create an ELimuCore account.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function SignupPage({ searchParams }: SignupPageProps) {

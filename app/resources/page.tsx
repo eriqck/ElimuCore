@@ -20,7 +20,11 @@ type ResourcesPageProps = {
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "Premium member library for ELimuCore resources."
+    "Premium member library for ELimuCore resources.",
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function ResourcesPage({

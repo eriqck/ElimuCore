@@ -1,24 +1,44 @@
 import type { MetadataRoute } from "next";
-import { fallbackResources } from "@/lib/mock-data";
+import { getLearningClasses } from "@/lib/learning";
+import { siteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const lastModified = new Date();
+  const learningClasses = await getLearningClasses();
+  const availableClasses = learningClasses.filter((item) => item.available);
 
   return [
     {
-      url: baseUrl,
+      url: siteUrl,
+      lastModified,
       changeFrequency: "daily",
       priority: 1
     },
     {
-      url: `${baseUrl}/resources`,
-      changeFrequency: "daily",
+      url: `${siteUrl}/classes`,
+      lastModified,
+      changeFrequency: "weekly",
       priority: 0.9
     },
-    ...fallbackResources.map((resource) => ({
-      url: `${baseUrl}/resources/${resource.slug}`,
+    {
+      url: `${siteUrl}/scheme-bot`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8
+    },
+    ...learningClasses.map((learningClass) => ({
+      url: `${siteUrl}/classes/${learningClass.slug}`,
+      lastModified,
       changeFrequency: "weekly" as const,
       priority: 0.7
-    }))
+    })),
+    ...availableClasses.flatMap((learningClass) =>
+      learningClass.topics.map((topic) => ({
+        url: `${siteUrl}/classes/${learningClass.slug}/${topic.slug}`,
+        lastModified,
+        changeFrequency: "weekly" as const,
+        priority: 0.7
+      }))
+    )
   ];
 }
