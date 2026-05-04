@@ -60,17 +60,3 @@ export function getPaystackPublicKey() {
 
   return publicKey;
 }
-
-export function getOpenAiApiKey() {
-  const apiKey = process.env.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("Missing OPENAI_API_KEY.");
-  }
-
-  return apiKey;
-}
-
-export function getOpenAiSchemeModel() {
-  return (process.env.OPENAI_SCHEME_MODEL || "gpt-5.2").trim();
-}

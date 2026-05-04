@@ -154,7 +154,7 @@ export default async function SchemeRequestDetailPage({
                 type="submit"
                 className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
               >
-                Retry generation
+                Build again
               </button>
             </form>
           ) : null}
@@ -169,7 +169,7 @@ export default async function SchemeRequestDetailPage({
         {request.generatedContent ? (
           <section className="mt-10 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-              Generated plan preview
+              Scheme preview
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
               {request.generatedOverview || request.generatedContent.subtitle}
@@ -227,7 +227,7 @@ export default async function SchemeRequestDetailPage({
         ) : request.status === "failed" ? (
           <section className="mt-10 rounded-[2rem] border border-rose-200 bg-rose-50 p-6">
             <h2 className="text-xl font-bold text-slate-900">
-              Generation needs another try
+              This scheme needs another try
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-700">
               {request.errorMessage ||
@@ -237,10 +237,10 @@ export default async function SchemeRequestDetailPage({
         ) : (
           <section className="mt-10 rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
             <h2 className="text-xl font-bold text-slate-900">
-              Processing your scheme
+              Preparing your scheme
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-700">
-              This request is still being prepared. Refresh shortly to check the
+              This scheme is still being prepared. Refresh shortly to check the
               final document.
             </p>
           </section>
@@ -249,3 +249,4 @@ export default async function SchemeRequestDetailPage({
     </main>
   );
 }
+

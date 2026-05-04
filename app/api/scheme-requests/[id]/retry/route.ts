@@ -48,11 +48,11 @@ export async function POST(
   try {
     await generateSchemeRequestOutput(schemeRequest.id);
 
-    return NextResponse.redirect(
-      new URL(
-        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("Scheme generated successfully.")}`,
-        request.url
-      ),
+      return NextResponse.redirect(
+        new URL(
+          `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("Scheme prepared successfully.")}`,
+          request.url
+        ),
       { status: 303 }
     );
   } catch (error) {

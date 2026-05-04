@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import {
+  getSuggestedSchemeTextbook,
+  schemeSubjectSuggestions
+} from "@/lib/scheme-catalog";
 import type { SchemeLanguage, SchemeStage } from "@/lib/types";
 
 type SchemeGeneratorFormProps = {
@@ -41,28 +45,6 @@ const stageOptions: Array<{
   }
 ];
 
-const subjectSuggestions = [
-  "Mathematics",
-  "English",
-  "Kiswahili",
-  "C.R.E",
-  "I.R.E",
-  "H.R.E",
-  "Integrated Science",
-  "Social Studies",
-  "Agriculture",
-  "Creative Arts & Sports",
-  "Home Science",
-  "Computer Studies",
-  "Performing Arts",
-  "Visual Arts",
-  "Music",
-  "Business Studies",
-  "Pre-Technical Studies",
-  "Life Skills",
-  "Christian Religious Education"
-];
-
 function getClassesForStage(stage: SchemeStage) {
   return stageOptions.find((item) => item.value === stage)?.classes ?? [];
 }
@@ -80,8 +62,14 @@ export function SchemeGeneratorForm({
   const [classLabel, setClassLabel] = useState("Grade 7");
   const [subject, setSubject] = useState("Mathematics");
   const [language, setLanguage] = useState<SchemeLanguage>("en");
+  const [textbook, setTextbook] = useState("");
 
   const classOptions = getClassesForStage(stage);
+  const suggestedTextbook = getSuggestedSchemeTextbook({
+    stage,
+    classLabel,
+    subject
+  });
 
   return (
     <form
@@ -162,7 +150,7 @@ export function SchemeGeneratorForm({
             required
           />
           <datalist id="scheme-subjects">
-            {subjectSuggestions.map((item) => (
+            {schemeSubjectSuggestions.map((item) => (
               <option key={item} value={item} />
             ))}
           </datalist>
@@ -301,14 +289,26 @@ export function SchemeGeneratorForm({
             htmlFor="textbook"
             className="mb-2 block text-sm font-semibold text-slate-700"
           >
-            Textbook or reference
+            Main textbook or book reference
           </label>
           <input
             id="textbook"
             name="textbook"
+            value={textbook}
+            onChange={(event) => setTextbook(event.target.value)}
             className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
-            placeholder="KLB, MST, teacher notes, or other reference"
+            placeholder={suggestedTextbook}
           />
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <span>Suggested:</span>
+            <button
+              type="button"
+              onClick={() => setTextbook(suggestedTextbook)}
+              className="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700 transition hover:bg-emerald-100"
+            >
+              {suggestedTextbook}
+            </button>
+          </div>
         </div>
         <div>
           <label
@@ -328,15 +328,15 @@ export function SchemeGeneratorForm({
 
       <div className="rounded-[1.5rem] bg-emerald-50 px-4 py-4 text-sm text-emerald-900">
         {hasUnlimitedAccess
-          ? "Premium access: generate and download as many schemes as you need."
-          : "Single scheme access: KSh 20 per generated scheme."}
+          ? "Premium access: build and download as many schemes as you need."
+          : "Single scheme access: KSh 20 per scheme."}
       </div>
 
       <button
         type="submit"
         className="brand-button-primary rounded-2xl px-6 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5"
       >
-        {hasUnlimitedAccess ? "Generate scheme" : "Continue to KSh 20 checkout"}
+        {hasUnlimitedAccess ? "Build scheme" : "Continue to KSh 20 checkout"}
       </button>
     </form>
   );

@@ -326,7 +326,7 @@ export async function generateSchemeRequestOutput(requestId: string) {
     const message =
       error instanceof Error && error.message.trim()
         ? error.message
-        : "Could not finish generating that scheme right now.";
+        : "Could not finish preparing that scheme right now.";
 
     await markSchemeRequestFailed(request.id, message);
     throw new Error(message);

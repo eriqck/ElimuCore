@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.redirect(
           new URL(
-            `/scheme-bot/${generated.id}?notice=${encodeNotice("Scheme generated successfully.")}`,
+            `/scheme-bot/${generated.id}?notice=${encodeNotice("Scheme prepared successfully.")}`,
             request.url
           ),
           { status: 303 }
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
         const message =
           error instanceof Error && error.message.trim()
             ? error.message
-            : "We could not finish generating your scheme right now.";
+            : "We could not finish preparing your scheme right now.";
 
         return NextResponse.redirect(
           new URL(
@@ -222,7 +222,7 @@ export async function POST(request: NextRequest) {
     const message =
       error instanceof Error && error.message.trim()
         ? error.message
-        : "We could not start the scheme generator right now.";
+        : "We could not start that scheme right now.";
 
     return NextResponse.redirect(getSchemeBotUrl(request, message), {
       status: 303

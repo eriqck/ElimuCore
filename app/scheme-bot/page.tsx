@@ -40,11 +40,11 @@ export default async function SchemeBotPage({
             Scheme Bot
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-900">
-            Sign in to generate schemes
+            Sign in to build schemes
           </h1>
           <p className="mt-4 text-sm leading-7 text-slate-600">
-            Premium members generate freely. Single-use teachers can pay KSh 20
-            per scheme.
+            Premium teachers build freely. Single-use teachers pay KSh 20 per
+            scheme.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -81,11 +81,12 @@ export default async function SchemeBotPage({
               Scheme Bot
             </p>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-              Generate teacher-ready schemes fast
+              Build textbook-based schemes fast
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-              Choose the class, subject, term, and year. ELimuCore builds the
-              scheme and prepares a Word document you can download.
+              Pick the class, subject, term, and book reference. ELimuCore
+              prepares a ready Word document in the same planning style teachers
+              already use.
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -94,7 +95,7 @@ export default async function SchemeBotPage({
                   Premium teachers
                 </p>
                 <p className="mt-2 text-2xl font-black text-slate-900">
-                  Unlimited
+                  Unlimited schemes
                 </p>
               </div>
               <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
@@ -107,7 +108,7 @@ export default async function SchemeBotPage({
               </div>
               <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
                 <p className="text-sm font-semibold text-slate-500">
-                  Export
+                  Format
                 </p>
                 <p className="mt-2 text-2xl font-black text-slate-900">
                   DOCX
@@ -164,7 +165,7 @@ export default async function SchemeBotPage({
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
                   {request.generatedOverview ||
-                    "Open this request to download the scheme or check the latest status."}
+                    "Open this scheme to download the document or check the latest status."}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
@@ -191,8 +192,7 @@ export default async function SchemeBotPage({
               No schemes yet
             </h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Start with one subject and ELimuCore will save the generated
-              document here.
+              Build your first scheme and it will appear here.
             </p>
           </div>
         )}
