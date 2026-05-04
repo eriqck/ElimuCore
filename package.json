@@ -21,8 +21,10 @@
   "dependencies": {
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@types/nodemailer": "^8.0.0",
     "docx": "^9.6.1",
     "next": "latest",
+    "nodemailer": "^8.0.7",
     "openai": "^6.35.0",
     "react": "latest",
     "react-dom": "latest"
