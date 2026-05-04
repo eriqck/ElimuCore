@@ -82,7 +82,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
               id="password"
               name="password"
               type="password"
-              minLength={6}
+              minLength={8}
               placeholder="Password"
               required
               className="w-full border-0 bg-transparent px-1 py-3 text-base text-slate-900 outline-none placeholder:text-slate-400"

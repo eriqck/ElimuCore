@@ -19,6 +19,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (password.length < 8) {
+    return NextResponse.redirect(
+      new URL(
+        `/signup?error=${encodeNotice("Use a password with at least 8 characters.")}&next=${encodeURIComponent(next)}`,
+        request.url
+      )
+    );
+  }
+
   const adminSupabase = createAdminClient();
   const { error: createUserError } = await adminSupabase.auth.admin.createUser({
     email,

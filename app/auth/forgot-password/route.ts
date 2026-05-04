@@ -16,7 +16,16 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await startPasswordReset(email);
+    const result = await startPasswordReset(email);
+
+    if (!result.dispatched) {
+      return NextResponse.redirect(
+        new URL(
+          `/forgot-password?error=${encodeNotice("No account was found with that email address.")}&email=${encodeURIComponent(email)}`,
+          request.url
+        )
+      );
+    }
 
     return NextResponse.redirect(
       new URL(

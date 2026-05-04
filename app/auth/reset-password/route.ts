@@ -18,10 +18,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (password.length < 6) {
+  if (password.length < 8) {
     return NextResponse.redirect(
       new URL(
-        `/reset-password?email=${encodeURIComponent(email)}&error=${encodeNotice("Use a password with at least 6 characters.")}`,
+        `/reset-password?email=${encodeURIComponent(email)}&error=${encodeNotice("Use a password with at least 8 characters.")}`,
         request.url
       )
     );

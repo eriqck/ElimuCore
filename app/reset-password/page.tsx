@@ -83,7 +83,7 @@ export default async function ResetPasswordPage({
               id="password"
               name="password"
               type="password"
-              minLength={6}
+              minLength={8}
               placeholder="New password"
               required
               className="w-full border-0 bg-transparent px-1 py-3 text-base text-slate-900 outline-none placeholder:text-slate-400"
@@ -98,7 +98,7 @@ export default async function ResetPasswordPage({
               id="confirm_password"
               name="confirm_password"
               type="password"
-              minLength={6}
+              minLength={8}
               placeholder="Confirm password"
               required
               className="w-full border-0 bg-transparent px-1 py-3 text-base text-slate-900 outline-none placeholder:text-slate-400"
