@@ -106,14 +106,14 @@ function SocialButton({
   children: ReactNode;
 }) {
   const className =
-    "inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#e8d8dd] bg-white text-[#8b1028] shadow-sm transition hover:border-[#25b24a] hover:bg-[#25b24a] hover:text-white";
+    "inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-white/8 text-white shadow-sm transition hover:border-[#25b24a] hover:bg-[#25b24a] hover:text-white";
 
   if (!href) {
     return (
       <span
         aria-label={label}
         title={`${label} coming soon`}
-        className={`${className} cursor-default text-slate-400 hover:border-[#e8d8dd] hover:bg-white hover:text-slate-400`}
+        className={`${className} cursor-default text-white/45 hover:border-white/12 hover:bg-white/8 hover:text-white/45`}
       >
         {children}
       </span>
@@ -137,7 +137,7 @@ export function SiteFooter() {
   return (
     <footer
       id="footer"
-      className="border-t border-[#ecdde1] bg-[linear-gradient(180deg,#fffafc_0%,#f9fbf9_100%)] px-4 py-10 sm:px-6 lg:px-8"
+      className="border-t border-white/8 bg-[#151515] px-4 py-10 text-white sm:px-6 lg:px-8"
     >
       <div className="mx-auto max-w-[1360px]">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.9fr_1fr]">
@@ -147,12 +147,12 @@ export function SiteFooter() {
               alt="ELimuCore"
               width={190}
               height={60}
-              className="h-12 w-auto"
+              className="h-12 w-auto rounded-md bg-white px-2 py-1"
             />
-            <h2 className="mt-5 text-3xl font-semibold tracking-tight text-[#8b1028]">
+            <h2 className="mt-5 text-3xl font-semibold tracking-tight text-white">
               Have a Question?
             </h2>
-            <div className="mt-6 space-y-4 text-sm text-slate-700">
+            <div className="mt-6 space-y-4 text-sm text-white/80">
               <div className="flex items-start gap-3">
                 <span className="mt-0.5 text-[#25b24a]">
                   <LocationIcon />
@@ -174,7 +174,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-[#8b1028]">
+            <h2 className="text-3xl font-semibold tracking-tight text-white">
               Links
             </h2>
             <div className="mt-6 space-y-3">
@@ -182,7 +182,7 @@ export function SiteFooter() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="flex w-fit items-center gap-2 text-sm font-medium text-slate-700 transition hover:text-[#25b24a]"
+                  className="flex w-fit items-center gap-2 text-sm font-medium text-white/80 transition hover:text-[#25b24a]"
                 >
                   <span className="text-[#25b24a]">
                     <ArrowIcon />
@@ -194,7 +194,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-[#8b1028]">
+            <h2 className="text-3xl font-semibold tracking-tight text-white">
               Connect with us on social media.
             </h2>
             <div className="mt-6 flex items-center gap-3">
@@ -211,7 +211,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-[#ecdde1] pt-5 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-5 text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between">
           <p>Copyright ©2026 ELimuCore. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-6">
             <span>Privacy Policy</span>
@@ -222,3 +222,4 @@ export function SiteFooter() {
     </footer>
   );
 }
+
