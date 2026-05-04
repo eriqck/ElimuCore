@@ -7,15 +7,15 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/#package" },
   { label: "Pricing", href: "/#plans" },
-  { label: "Support", href: "/#how-to-use" }
+  { label: "Support", href: "/#how-to-use" },
+  { label: "Scheme Bot", href: "/scheme-bot" }
 ] as const;
 
 export async function SiteHeader() {
   const memberContext = await getCurrentMemberContext();
   const signedInNavItems = [
     ...navItems,
-    { label: "Premium Materials", href: "/resources" },
-    { label: "Scheme Bot", href: "/scheme-bot" }
+    { label: "Premium Materials", href: "/resources" }
   ];
 
   return (

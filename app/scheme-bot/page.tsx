@@ -40,11 +40,11 @@ export default async function SchemeBotPage({
             Scheme Bot
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-900">
-            Sign in to build schemes
+            Sign in to start your scheme
           </h1>
           <p className="mt-4 text-sm leading-7 text-slate-600">
-            Premium teachers build freely. Single-use teachers pay KSh 20 per
-            scheme.
+            Premium teachers build freely. One-time scheme requests are charged
+            KSh 20 and the document is prepared after payment.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -107,9 +107,7 @@ export default async function SchemeBotPage({
                 </p>
               </div>
               <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
-                <p className="text-sm font-semibold text-slate-500">
-                  Format
-                </p>
+                <p className="text-sm font-semibold text-slate-500">Format</p>
                 <p className="mt-2 text-2xl font-black text-slate-900">
                   DOCX
                 </p>
@@ -161,7 +159,7 @@ export default async function SchemeBotPage({
                   {request.classLabel} {request.subject}
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Term {request.term} • {request.year}
+                  {`Term ${request.term} • ${request.year}`}
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
                   {request.generatedOverview ||
@@ -200,3 +198,4 @@ export default async function SchemeBotPage({
     </main>
   );
 }
+
