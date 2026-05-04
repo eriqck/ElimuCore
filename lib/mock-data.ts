@@ -286,7 +286,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     slug: "1-month",
     name: "1 Month",
     durationMonths: 1,
-    priceKes: 300,
+    priceKes: 299,
     description: "Unlimited access for one month.",
     active: true,
     sortOrder: 1
@@ -295,7 +295,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     slug: "6-months",
     name: "6 Months",
     durationMonths: 6,
-    priceKes: 500,
+    priceKes: 499,
     description: "A flexible plan for steady classroom and home-learning support.",
     active: true,
     sortOrder: 2
@@ -304,7 +304,7 @@ export const fallbackMembershipPlans: MembershipPlan[] = [
     slug: "1-year",
     name: "1 Year",
     durationMonths: 12,
-    priceKes: 1000,
+    priceKes: 999,
     description: "The best-value plan for year-round access to the full library.",
     active: true,
     sortOrder: 3

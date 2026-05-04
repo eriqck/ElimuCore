@@ -29,6 +29,7 @@ body {
   background: #ffffff;
   color: var(--ink);
   font-family: var(--font-body), sans-serif;
+  overflow-x: hidden;
 }
 
 a {
@@ -356,6 +357,25 @@ a[class]:not([class*="text-"]) {
   background: linear-gradient(135deg, #31b8a7, #58d4c2);
   color: #ffffff;
   box-shadow: 0 20px 40px rgba(49, 184, 167, 0.28);
+}
+
+@media (max-width: 640px) {
+  .learning-panel,
+  .learning-band,
+  .learning-highlight-shell,
+  .brand-button-primary,
+  .brand-button-secondary,
+  .learning-green-button,
+  .learning-outline-button {
+    animation: none;
+  }
+
+  .brand-button-primary:hover,
+  .brand-button-secondary:hover,
+  .learning-green-button:hover,
+  .learning-outline-button:hover {
+    transform: translateY(-1px);
+  }
 }
 
 @keyframes learning-float {

@@ -138,7 +138,7 @@ export default async function ResourcesPage({
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <section className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 surface-card">
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div>
@@ -221,7 +221,7 @@ export default async function ResourcesPage({
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap">
                 <button
                   type="submit"
                   className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
@@ -257,7 +257,7 @@ export default async function ResourcesPage({
           ) : null}
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {levelCards.map((card, index) => {
             const active = card.slug === level;
             const accents = [
@@ -339,7 +339,7 @@ export default async function ResourcesPage({
             </p>
           </div>
         ) : resources.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {resources.map((resource) => (
               <ResourceCard key={resource.slug} resource={resource} />
             ))}

@@ -28,21 +28,21 @@ export function PremiumLock({ loginHref, signupHref }: PremiumLockProps) {
         quizzes, and saved progress.
       </p>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {[
           {
             name: "1 Month",
-            price: "KSh 300",
+            price: "KSh 299",
             detail: "Full access for one month."
           },
           {
             name: "6 Months",
-            price: "KSh 500",
+            price: "KSh 499",
             detail: "Full access for six months."
           },
           {
             name: "1 Year",
-            price: "KSh 1000",
+            price: "KSh 999",
             detail: "Full access for one year."
           }
         ].map((plan) => (

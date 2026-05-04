@@ -152,7 +152,7 @@ export default async function LearningClassPage({
 
   if (!learningClass.available) {
     return (
-      <main className="min-h-screen bg-[#fbfaf7] px-5 py-12 text-slate-950 lg:px-8">
+      <main className="min-h-screen bg-[#fbfaf7] px-4 py-12 text-slate-950 sm:px-5 lg:px-8">
         <div className="mx-auto max-w-4xl rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-sm">
           <p className="text-sm font-black uppercase tracking-[0.32em] text-emerald-600">
             Coming soon
@@ -184,7 +184,7 @@ export default async function LearningClassPage({
 
   return (
     <main className="min-h-screen bg-[#fbfaf7] text-slate-950">
-      <section className="relative overflow-hidden px-5 pb-16 pt-10 lg:px-8 lg:pb-24 lg:pt-14">
+      <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
         <Bubble className="left-8 top-20 h-28 w-28 bg-emerald-300/60" />
         <Bubble className="right-20 top-40 h-32 w-32 bg-sky-300/70" />
         <Bubble className="bottom-10 left-1/2 h-28 w-28 bg-amber-300/50" />
@@ -195,7 +195,7 @@ export default async function LearningClassPage({
               <Icon name="sparkles" size={16} /> Self-learning junior class
             </div>
 
-            <h1 className="max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
               Start strong.
               <span className="block text-emerald-600">
                 {learningClass.title}
@@ -208,14 +208,14 @@ export default async function LearningClassPage({
               study or classroom follow-up.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={
                   primaryTopic
                     ? `/classes/${learningClass.slug}/${primaryTopic.slug}`
                     : "/classes"
                 }
-                className="group rounded-full bg-emerald-500 px-7 py-4 text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600"
+                className="group rounded-full bg-emerald-500 px-7 py-4 text-center text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600"
               >
                 Open first topic
                 <Icon
@@ -226,13 +226,13 @@ export default async function LearningClassPage({
               </Link>
               <Link
                 href={memberContext.user ? "/account" : "/signup"}
-                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-center text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 {memberContext.user ? "View membership" : "Create account"}
               </Link>
             </div>
 
-            <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
+            <div className="mt-10 grid max-w-xl gap-3 sm:grid-cols-3">
               {[
                 [`${learningClass.topics.length}`, "Topics"],
                 [`${totalLessons}`, "Lessons"],
@@ -326,7 +326,7 @@ export default async function LearningClassPage({
         </div>
       </section>
 
-      <section className="px-5 pb-20 lg:px-8">
+      <section className="px-4 pb-20 sm:px-5 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>

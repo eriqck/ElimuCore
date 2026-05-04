@@ -33,21 +33,21 @@ const howToSteps = [
 const membershipPlans = [
   {
     name: "1 Month",
-    price: "KSh 300",
+    price: "KSh 299",
     detail:
       "Full unlimited access for one month. Membership expires after 1 month.",
     icon: PlanStarterIcon
   },
   {
     name: "6 Months",
-    price: "KSh 500",
+    price: "KSh 499",
     detail:
       "Full unlimited access for six months. Membership expires after 6 months.",
     icon: PlanGrowthIcon
   },
   {
     name: "1 Year",
-    price: "KSh 1000",
+    price: "KSh 999",
     detail:
       "Full unlimited access for one year. Membership expires after 1 year.",
     icon: PlanProIcon
@@ -64,7 +64,7 @@ function ActionButton({
   return (
     <Link
       href={href}
-      className="inline-flex items-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317]"
+      className="inline-flex w-full max-w-xs items-center justify-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:w-auto"
     >
       <span className="px-5 py-3 text-sm font-bold sm:px-6 sm:py-4 sm:text-base">
         {label}
@@ -178,7 +178,7 @@ export function ElimuCoreHome() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 max-w-5xl px-2 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
+          <div className="mx-auto mt-10 max-w-5xl px-0 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
             <div>
               <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
                 ELimuCore Complete Resource Library
@@ -189,8 +189,8 @@ export function ElimuCoreHome() {
                 home-learning materials from one clean member library.
               </p>
               <p className="mt-4 text-base leading-8 text-slate-600">
-                Subscription options are KSh 300 for 1 month, KSh 500 for 6
-                months, and KSh 1000 for 1 year.
+                Subscription options are KSh 299 for 1 month, KSh 499 for 6
+                months, and KSh 999 for 1 year.
               </p>
               <p className="mt-4 text-base font-semibold text-slate-800">
                 Your subscription has no limitations, so you download all the
@@ -225,7 +225,7 @@ export function ElimuCoreHome() {
             How to <span className="text-[#31b8a7]">use</span>
           </h2>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-4 lg:gap-5">
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
             {howToSteps.map((item, index) => (
               <div key={item.step} className="text-left">
                 <div className="flex items-center gap-3">
@@ -235,11 +235,11 @@ export function ElimuCoreHome() {
                   <span className="h-[2px] flex-1 bg-[#31b8a7]" />
                 </div>
 
-                <h3 className="mt-6 text-3xl font-medium tracking-tight text-slate-900">
+                <h3 className="mt-6 text-2xl font-medium tracking-tight text-slate-900 sm:text-3xl">
                   {item.title}
                   {index < howToSteps.length - 1 ? " ->" : ""}
                 </h3>
-                <p className="mt-5 text-lg leading-9 text-slate-400">
+                <p className="mt-4 text-base leading-8 text-slate-500 sm:text-lg">
                   {item.description}
                 </p>
               </div>
@@ -260,7 +260,7 @@ export function ElimuCoreHome() {
             charge during the subscription period.
           </p>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {membershipPlans.map((plan) => {
               const Icon = plan.icon;
 

@@ -141,7 +141,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   return (
     <main className="min-h-screen bg-[#fbfaf7] text-slate-950">
-      <section className="relative overflow-hidden px-5 pb-16 pt-10 lg:px-8 lg:pb-24 lg:pt-14">
+      <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
         <Bubble className="left-8 top-20 h-28 w-28 bg-emerald-300/60" />
         <Bubble className="right-20 top-40 h-32 w-32 bg-fuchsia-300/70" />
         <Bubble className="bottom-10 left-1/2 h-28 w-28 bg-sky-300/50" />
@@ -152,7 +152,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
               <Icon name="sparkles" size={16} /> Topic path
             </div>
 
-            <h1 className="max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
               Learn step by step.
               <span className="block text-emerald-600">{topic.title}</span>
             </h1>
@@ -163,14 +163,14 @@ export default async function TopicPage({ params }: TopicPageProps) {
               teachers along the way.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={
                   firstLesson
                     ? `/lessons/${topic.slug}/${firstLesson.slug}`
                     : `/classes/${learningClass.slug}`
                 }
-                className="group rounded-full bg-emerald-500 px-7 py-4 text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600"
+                className="group rounded-full bg-emerald-500 px-7 py-4 text-center text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600"
               >
                 Start learning
                 <Icon
@@ -181,13 +181,13 @@ export default async function TopicPage({ params }: TopicPageProps) {
               </Link>
               <Link
                 href={`/classes/${learningClass.slug}`}
-                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-center text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 Back to class
               </Link>
             </div>
 
-            <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
+            <div className="mt-10 grid max-w-xl gap-3 sm:grid-cols-3">
               {[
                 [`${topic.lessons.length}`, "Lessons"],
                 [`${summary.percent}%`, "Progress"],
@@ -284,7 +284,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
         </div>
       </section>
 
-      <section className="px-5 pb-20 lg:px-8">
+      <section className="px-4 pb-20 sm:px-5 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>

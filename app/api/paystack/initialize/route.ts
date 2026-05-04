@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { encodeNotice } from "@/lib/auth";
 import { createPaymentReference } from "@/lib/payments";
 import { initializePaystackTransaction } from "@/lib/paystack";
+import { getCanonicalMembershipPrice } from "@/lib/pricing";
 import { getCurrentMemberContext } from "@/lib/membership";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -77,13 +78,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const amountKes = getCanonicalMembershipPrice(plan.slug, plan.price_kes);
     const reference = createPaymentReference(plan.slug, user.id);
     const { error: createTransactionError } = await paymentsTable
       .insert({
         user_id: user.id,
         plan_slug: plan.slug,
         reference,
-        amount_kes: plan.price_kes,
+        amount_kes: amountKes,
         currency: "KES",
         customer_email: user.email
       });
@@ -101,7 +103,7 @@ export async function POST(request: NextRequest) {
     try {
       const checkout = await initializePaystackTransaction({
         email: user.email,
-        amountKes: plan.price_kes,
+        amountKes,
         reference,
         metadata: {
           purchase_type: "membership",

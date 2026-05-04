@@ -37,7 +37,7 @@ const slides: HeroSlide[] = [
     ribbon: "Digital learning for teachers and parents",
     description:
       "Access practical digital learning support, classroom-ready resources, and guided member access from one clear library.",
-    note: "Full unlimited access starts from KSh 300.",
+    note: "Full unlimited access starts from KSh 299.",
     backgroundClass: "bg-[#f7f5f2]",
     titleClass: "text-[#2f3640]",
     bodyClass: "text-slate-700",
@@ -94,7 +94,7 @@ const slides: HeroSlide[] = [
     ribbon: "One account. Full unlimited access.",
     description:
       "Choose 1 month, 6 months, or 1 year and download as many resources as you need with no extra charge during the subscription period.",
-    note: "KSh 300, KSh 500, or KSh 1000.",
+    note: "KSh 299, KSh 499, or KSh 999.",
     backgroundClass: "bg-[#faf7f2]",
     titleClass: "text-[#2f3640]",
     bodyClass: "text-slate-700",
@@ -142,31 +142,31 @@ export function HeroGallery() {
   return (
     <section className={`overflow-hidden ${activeSlide.backgroundClass}`}>
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
-        <div className="relative grid min-h-[620px] items-center gap-12 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:py-0">
-          <div className="max-w-[560px] py-4">
+        <div className="relative grid items-center gap-8 py-10 pb-20 sm:min-h-[620px] sm:gap-12 sm:py-12 sm:pb-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:py-0">
+          <div className="max-w-[560px] py-2 sm:py-4">
             <h1
-              className={`whitespace-pre-line text-[clamp(2.75rem,5vw,4.5rem)] font-black leading-[1.02] tracking-tight ${activeSlide.titleClass}`}
+              className={`whitespace-pre-line text-[clamp(2.25rem,10vw,4.5rem)] font-black leading-[1.02] tracking-tight ${activeSlide.titleClass}`}
             >
               {activeSlide.title}
             </h1>
 
             <div
-              className={`mt-5 inline-flex px-4 py-2 text-sm font-black uppercase tracking-[0.2em] ${activeSlide.ribbonClass}`}
+              className={`mt-5 inline-flex px-4 py-2 text-xs font-black uppercase tracking-[0.18em] sm:text-sm sm:tracking-[0.2em] ${activeSlide.ribbonClass}`}
             >
               {activeSlide.ribbon}
             </div>
 
-            <p className={`mt-5 max-w-xl text-lg leading-8 ${activeSlide.bodyClass}`}>
+            <p className={`mt-5 max-w-xl text-base leading-7 sm:text-lg sm:leading-8 ${activeSlide.bodyClass}`}>
               {activeSlide.description}
             </p>
 
-            <p className={`mt-5 text-xl font-bold ${activeSlide.noteClass}`}>
+            <p className={`mt-5 text-lg font-bold sm:text-xl ${activeSlide.noteClass}`}>
               {activeSlide.note}
             </p>
 
             <Link
               href={activeSlide.href}
-              className="mt-9 inline-flex items-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317]"
+              className="mt-9 inline-flex w-full max-w-xs items-center justify-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:w-auto"
             >
               <span className="px-6 py-4 text-lg font-bold">
                 {activeSlide.ctaLabel}
@@ -177,8 +177,8 @@ export function HeroGallery() {
             </Link>
           </div>
 
-          <div className="flex min-h-[320px] items-center justify-center lg:min-h-[620px]">
-            <div className="relative h-[320px] w-full max-w-[680px] sm:h-[410px] lg:h-[540px]">
+          <div className="flex min-h-[240px] items-center justify-center sm:min-h-[320px] lg:min-h-[620px]">
+            <div className="relative h-[240px] w-full max-w-[680px] sm:h-[410px] lg:h-[540px]">
               <Image
                 key={activeSlide.alt}
                 src={activeSlide.image}
@@ -193,7 +193,7 @@ export function HeroGallery() {
             </div>
           </div>
 
-          <div className="absolute bottom-10 left-1/2 flex -translate-x-1/2 items-center gap-3">
+          <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3 sm:bottom-10">
             {slides.map((slide, index) => (
               <button
                 key={`${slide.title}-${index}`}

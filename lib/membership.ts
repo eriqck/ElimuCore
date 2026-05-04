@@ -1,4 +1,5 @@
 import { fallbackMembershipPlans } from "@/lib/mock-data";
+import { getCanonicalMembershipPrice } from "@/lib/pricing";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type {
@@ -41,7 +42,7 @@ function normalizePlan(row: MembershipPlanRow): MembershipPlan {
     slug: row.slug,
     name: row.name,
     durationMonths: row.duration_months,
-    priceKes: row.price_kes,
+    priceKes: getCanonicalMembershipPrice(row.slug, row.price_kes),
     description:
       row.description?.trim() || "Full unlimited access for active members.",
     active: row.active ?? true,
