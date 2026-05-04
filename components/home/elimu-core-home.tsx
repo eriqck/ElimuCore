@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import logo from "@/assets/weblogo.png";
 import numbersArtwork from "@/assets/numbers.png";
 import { HeroGallery } from "@/components/home/hero-gallery";
 
@@ -293,54 +292,6 @@ export function ElimuCoreHome() {
         </section>
       </main>
 
-      <footer
-        id="footer"
-        className="border-t border-[#ececec] bg-white px-4 py-8 sm:px-6 lg:px-8"
-      >
-        <div className="mx-auto flex max-w-[1360px] flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-4">
-            <Image
-              src={logo}
-              alt="ELimuCore"
-              width={180}
-              height={58}
-              className="h-12 w-auto"
-            />
-            <p className="max-w-xl text-sm leading-7 text-slate-500">
-              ELimuCore gives teachers and parents one clear digital space for
-              member access, learning resources, revision materials, and
-              classroom planning support.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/classes"
-              className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#8b1028] hover:text-white"
-            >
-              Junior Classes
-            </Link>
-            <Link
-              href="/resources"
-              className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#8b1028] hover:text-white"
-            >
-              Resources
-            </Link>
-            <Link
-              href="/login"
-              className="rounded-md bg-[#24bba7] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#179785]"
-            >
-              Login
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-md bg-[#8d4db2] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#7a3f9e]"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
