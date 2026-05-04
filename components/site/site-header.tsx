@@ -72,6 +72,12 @@ export async function SiteHeader() {
             ) : (
               <>
                 <Link
+                  href="/classes"
+                  className="brand-button-primary rounded-md px-5 py-2.5 text-sm font-semibold text-white transition"
+                >
+                  Self-Learning Junior Classes
+                </Link>
+                <Link
                   href="/login"
                   className="brand-button-secondary rounded-md px-5 py-2.5 text-sm font-semibold transition"
                 >
