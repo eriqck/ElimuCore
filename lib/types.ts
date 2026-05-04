@@ -227,3 +227,69 @@ export type ResourceLevelBrowseCard = {
   levelSlugs: string[];
   categorySlug?: string | null;
 };
+
+export type SchemeRequestStatus =
+  | "pending_payment"
+  | "generating"
+  | "completed"
+  | "failed";
+
+export type SchemeAccessMode = "premium" | "single_purchase";
+
+export type SchemeStage = "pre-primary" | "junior-school" | "senior-school";
+
+export type SchemeLanguage = "en" | "sw";
+
+export type SchemeDocumentRow = {
+  weekLabel: string;
+  lessonLabel: string;
+  strand: string;
+  subStrand: string;
+  outcomes: string[];
+  experiences: string[];
+  keyInquiryQuestions: string[];
+  resources: string[];
+  assessment: string[];
+  reflection: string;
+};
+
+export type SchemeDocumentContent = {
+  title: string;
+  subtitle: string;
+  language: SchemeLanguage;
+  schoolName: string;
+  teacherName: string;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  rows: SchemeDocumentRow[];
+};
+
+export type SchemeRequest = {
+  id: string;
+  userId: string;
+  status: SchemeRequestStatus;
+  accessMode: SchemeAccessMode;
+  stage: SchemeStage;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  schoolName: string;
+  teacherName: string;
+  textbook: string;
+  notes: string;
+  weeksInTerm: number;
+  lessonsPerWeek: number;
+  language: SchemeLanguage;
+  generatedTitle: string | null;
+  generatedOverview: string;
+  generatedContent: SchemeDocumentContent | null;
+  storageBucket: string | null;
+  storagePath: string | null;
+  errorMessage: string;
+  paidAt: string | null;
+  completedAt: string | null;
+  createdAt: string;
+};

@@ -21,7 +21,9 @@
   "dependencies": {
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "docx": "^9.6.1",
     "next": "latest",
+    "openai": "^6.35.0",
     "react": "latest",
     "react-dom": "latest"
   },

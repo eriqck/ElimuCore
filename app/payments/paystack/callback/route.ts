@@ -4,6 +4,10 @@ import {
   getPaymentTransaction,
   settleVerifiedMembershipPayment
 } from "@/lib/payments";
+import {
+  getSchemePaymentTransaction,
+  settleVerifiedSchemePayment
+} from "@/lib/scheme-payments";
 import { verifyPaystackTransaction } from "@/lib/paystack";
 import { createClient } from "@/lib/supabase/server";
 
@@ -37,6 +41,36 @@ async function redirectAfterSuccess(
   return redirectToAccount(request, message);
 }
 
+async function redirectToSchemeRequest(
+  request: NextRequest,
+  userId: string,
+  requestId: string,
+  message: string
+) {
+  const supabase = await createClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user || user.id !== userId) {
+    return NextResponse.redirect(
+      new URL(
+        `/login?message=${encodeNotice("Payment confirmed. Sign in to open your generated scheme.")}&next=${encodeURIComponent(`/scheme-bot/${requestId}`)}`,
+        request.url
+      ),
+      { status: 303 }
+    );
+  }
+
+  return NextResponse.redirect(
+    new URL(
+      `/scheme-bot/${requestId}?notice=${encodeNotice(message)}`,
+      request.url
+    ),
+    { status: 303 }
+  );
+}
+
 export async function GET(request: NextRequest) {
   const reference =
     request.nextUrl.searchParams.get("reference")?.trim() ||
@@ -50,45 +84,84 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const payment = await getPaymentTransaction(reference);
+  const membershipPayment = await getPaymentTransaction(reference);
 
-  if (!payment) {
+  if (membershipPayment) {
+    if (membershipPayment.status === "success" && membershipPayment.activated_membership_id) {
+      return redirectAfterSuccess(
+        request,
+        membershipPayment.user_id,
+        "Payment confirmed. Your membership is already active."
+      );
+    }
+
+    try {
+      const verification = await verifyPaystackTransaction(reference);
+      const result = await settleVerifiedMembershipPayment({
+        payment: membershipPayment,
+        verification
+      });
+
+      if (result.outcome !== "success") {
+        return redirectToAccount(request, result.message);
+      }
+
+      return redirectAfterSuccess(
+        request,
+        membershipPayment.user_id,
+        result.message
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message.trim()
+          ? error.message
+          : "We could not verify that payment right now.";
+
+      return redirectToAccount(request, message);
+    }
+  }
+
+  const schemePayment = await getSchemePaymentTransaction(reference);
+
+  if (!schemePayment) {
     return redirectToAccount(
       request,
       "We could not find that payment request. Please try again from your account."
     );
   }
 
-  if (payment.status === "success" && payment.activated_membership_id) {
-    return redirectAfterSuccess(
-      request,
-      payment.user_id,
-      "Payment confirmed. Your membership is already active."
-    );
-  }
-
   try {
     const verification = await verifyPaystackTransaction(reference);
-    const result = await settleVerifiedMembershipPayment({
-      payment,
+    const result = await settleVerifiedSchemePayment({
+      payment: schemePayment,
       verification
     });
 
     if (result.outcome !== "success") {
-      return redirectToAccount(request, result.message);
+      return NextResponse.redirect(
+        new URL(
+          `/scheme-bot?notice=${encodeNotice(result.message)}`,
+          request.url
+        ),
+        { status: 303 }
+      );
     }
 
-    return redirectAfterSuccess(
+    return redirectToSchemeRequest(
       request,
-      payment.user_id,
+      schemePayment.user_id,
+      result.requestId,
       result.message
     );
   } catch (error) {
     const message =
       error instanceof Error && error.message.trim()
         ? error.message
-        : "We could not verify that payment right now.";
+        : "We could not verify that scheme payment right now.";
 
-    return redirectToAccount(request, message);
+    return NextResponse.redirect(
+      new URL(`/scheme-bot?notice=${encodeNotice(message)}`, request.url),
+      { status: 303 }
+    );
   }
 }

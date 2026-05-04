@@ -104,6 +104,7 @@ export async function POST(request: NextRequest) {
         amountKes: plan.price_kes,
         reference,
         metadata: {
+          purchase_type: "membership",
           plan_slug: plan.slug,
           user_id: user.id
         }

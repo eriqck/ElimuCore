@@ -162,7 +162,8 @@ export async function settleVerifiedMembershipPayment(args: {
 
   if (
     verification.metadata &&
-    (verification.metadata.plan_slug !== payment.plan_slug ||
+    (verification.metadata.purchase_type !== "membership" ||
+      verification.metadata.plan_slug !== payment.plan_slug ||
       verification.metadata.user_id !== payment.user_id)
   ) {
     await paymentsTable

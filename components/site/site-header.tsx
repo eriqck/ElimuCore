@@ -14,7 +14,8 @@ export async function SiteHeader() {
   const memberContext = await getCurrentMemberContext();
   const signedInNavItems = [
     ...navItems,
-    { label: "Premium Materials", href: "/resources" }
+    { label: "Premium Materials", href: "/resources" },
+    { label: "Scheme Bot", href: "/scheme-bot" }
   ];
 
   return (

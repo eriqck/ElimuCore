@@ -4,6 +4,10 @@ import {
   settleVerifiedMembershipPayment
 } from "@/lib/payments";
 import {
+  getSchemePaymentTransaction,
+  settleVerifiedSchemePayment
+} from "@/lib/scheme-payments";
+import {
   parsePaystackWebhookPayload,
   verifyPaystackTransaction,
   verifyPaystackWebhookSignature
@@ -38,26 +42,56 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const payment = await getPaymentTransaction(reference);
+  const membershipPayment = await getPaymentTransaction(reference);
 
-  if (!payment) {
+  if (membershipPayment) {
+    if (
+      membershipPayment.status === "success" &&
+      membershipPayment.activated_membership_id
+    ) {
+      return NextResponse.json(
+        { ok: true, processed: true, status: "already-active" },
+        { status: 200 }
+      );
+    }
+
+    try {
+      const verification = await verifyPaystackTransaction(reference);
+      const result = await settleVerifiedMembershipPayment({
+        payment: membershipPayment,
+        verification
+      });
+
+      return NextResponse.json(
+        { ok: true, processed: true, status: result.outcome },
+        { status: 200 }
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message.trim()
+          ? error.message
+          : "Webhook processing failed.";
+
+      return NextResponse.json(
+        { ok: false, error: message },
+        { status: 500 }
+      );
+    }
+  }
+
+  const schemePayment = await getSchemePaymentTransaction(reference);
+
+  if (!schemePayment) {
     return NextResponse.json(
       { ok: true, ignored: true, reason: "unknown-reference" },
       { status: 200 }
     );
   }
 
-  if (payment.status === "success" && payment.activated_membership_id) {
-    return NextResponse.json(
-      { ok: true, processed: true, status: "already-active" },
-      { status: 200 }
-    );
-  }
-
   try {
     const verification = await verifyPaystackTransaction(reference);
-    const result = await settleVerifiedMembershipPayment({
-      payment,
+    const result = await settleVerifiedSchemePayment({
+      payment: schemePayment,
       verification
     });
 

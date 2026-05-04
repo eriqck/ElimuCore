@@ -282,6 +282,22 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <p className="mt-1 text-sm text-slate-500">Saved items</p>
               </div>
             </div>
+
+            <div className="mt-5 rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-5">
+              <SectionLabel>Teacher Tools</SectionLabel>
+              <h3 className="mt-3 text-xl font-bold tracking-tight text-slate-950">
+                Scheme Bot
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                Generate ready-to-download schemes of work for all subjects.
+              </p>
+              <Link
+                href="/scheme-bot"
+                className="mt-4 inline-flex rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
+              >
+                Open Scheme Bot
+              </Link>
+            </div>
           </section>
 
           <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">

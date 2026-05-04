@@ -2,10 +2,21 @@ import "server-only";
 import crypto from "node:crypto";
 import { getPaystackSecretKey, getSiteUrl } from "@/lib/supabase/env";
 
-type PaystackInitializeMetadata = {
+type PaystackMembershipMetadata = {
+  purchase_type: "membership";
   plan_slug: string;
   user_id: string;
 };
+
+type PaystackSchemeMetadata = {
+  purchase_type: "scheme";
+  scheme_request_id: string;
+  user_id: string;
+};
+
+export type PaystackInitializeMetadata =
+  | PaystackMembershipMetadata
+  | PaystackSchemeMetadata;
 
 type PaystackCustomer = {
   email?: string | null;
@@ -104,12 +115,47 @@ function parseMetadata(value: unknown): PaystackInitializeMetadata | null {
   if (
     parsed &&
     typeof parsed === "object" &&
+    "purchase_type" in parsed &&
+    "user_id" in parsed &&
+    typeof parsed.user_id === "string" &&
+    parsed.purchase_type === "membership" &&
+    "plan_slug" in parsed &&
+    typeof parsed.plan_slug === "string"
+  ) {
+    return {
+      purchase_type: "membership",
+      plan_slug: parsed.plan_slug,
+      user_id: parsed.user_id
+    };
+  }
+
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    "purchase_type" in parsed &&
+    "user_id" in parsed &&
+    typeof parsed.user_id === "string" &&
+    parsed.purchase_type === "scheme" &&
+    "scheme_request_id" in parsed &&
+    typeof parsed.scheme_request_id === "string"
+  ) {
+    return {
+      purchase_type: "scheme",
+      scheme_request_id: parsed.scheme_request_id,
+      user_id: parsed.user_id
+    };
+  }
+
+  if (
+    parsed &&
+    typeof parsed === "object" &&
     "plan_slug" in parsed &&
     "user_id" in parsed &&
     typeof parsed.plan_slug === "string" &&
     typeof parsed.user_id === "string"
   ) {
     return {
+      purchase_type: "membership",
       plan_slug: parsed.plan_slug,
       user_id: parsed.user_id
     };
