@@ -22,6 +22,11 @@ type PlanCardProps = {
   featured?: boolean;
 };
 
+type PaymentBadgeProps = {
+  label: string;
+  className: string;
+};
+
 export const metadata: Metadata = {
   title: "My Account",
   description:
@@ -47,6 +52,16 @@ function SectionLabel({ children }: SectionLabelProps) {
     <p className="text-xs font-bold uppercase tracking-[0.28em] text-emerald-600">
       {children}
     </p>
+  );
+}
+
+function PaymentBadge({ label, className }: PaymentBadgeProps) {
+  return (
+    <span
+      className={`inline-flex min-w-[72px] items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] shadow-sm ${className}`}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -340,10 +355,25 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               ))}
             </div>
 
-            <div className="mt-5 rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50 p-5">
-              <p className="text-sm leading-7 text-slate-600">
-                Pay with card, bank, or mobile money. Premium access opens automatically after confirmation.
-              </p>
+            <div className="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-2xl font-medium tracking-tight text-slate-900">
+                    Lipa Na Mpesa
+                  </p>
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Secured by Paystack
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <PaymentBadge label="VISA" className="text-blue-700" />
+                  <PaymentBadge label="MC" className="text-red-600" />
+                  <PaymentBadge label="Verve" className="text-sky-700" />
+                  <PaymentBadge label="M-Pesa" className="text-emerald-700" />
+                  <PaymentBadge label="Apple Pay" className="text-slate-700" />
+                </div>
+              </div>
             </div>
           </section>
         </div>
