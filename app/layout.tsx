@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import { FloatingChat } from "@/components/site/floating-chat";
 import { SiteHeader } from "@/components/site/site-header";
 import "./globals.css";
 
@@ -45,6 +46,10 @@ export default async function RootLayout({
       <body suppressHydrationWarning>
         <SiteHeader />
         {children}
+        <FloatingChat
+          supportEmail={process.env.NEXT_PUBLIC_SUPPORT_EMAIL}
+          supportWhatsapp={process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP}
+        />
       </body>
     </html>
   );
