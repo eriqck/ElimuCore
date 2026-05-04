@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     if (!result.dispatched) {
       return NextResponse.redirect(
         new URL(
-          `/forgot-password?error=${encodeNotice("No account was found with that email address.")}&email=${encodeURIComponent(email)}`,
+          `/forgot-password?error=${encodeNotice("User not registered.")}&email=${encodeURIComponent(email)}`,
           request.url
         )
       );

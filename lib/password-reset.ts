@@ -10,6 +10,12 @@ type PasswordResetProfileRow = {
   full_name: string | null;
 };
 
+type PasswordResetUser = {
+  id: string;
+  email: string;
+  fullName: string;
+};
+
 type PasswordResetOtpRow = {
   id: string;
   user_id: string;
@@ -87,29 +93,73 @@ function buildResetEmail(args: { fullName: string; otp: string }) {
   };
 }
 
-async function getProfileByEmail(email: string) {
+async function getProfileById(id: string) {
   const supabase = createAdminClient();
   const { data } = await supabase
     .from("profiles")
     .select("id, email, full_name")
-    .eq("email", normalizeEmail(email))
+    .eq("id", id)
     .maybeSingle();
 
   return (data ?? null) as PasswordResetProfileRow | null;
 }
 
-export async function startPasswordReset(email: string) {
-  const profile = await getProfileByEmail(email);
+async function getRegisteredUserByEmail(email: string) {
+  const supabase = createAdminClient();
+  const normalizedEmail = normalizeEmail(email);
+  const perPage = 200;
+  let page = 1;
 
-  if (!profile?.id || !profile.email) {
+  while (true) {
+    const { data, error } = await supabase.auth.admin.listUsers({
+      page,
+      perPage
+    });
+
+    if (error) {
+      throw new Error("We could not check that account right now.");
+    }
+
+    const users = data?.users ?? [];
+    const authUser = users.find(
+      (user) => normalizeEmail(user.email ?? "") === normalizedEmail
+    );
+
+    if (authUser?.id && authUser.email) {
+      const profile = await getProfileById(authUser.id);
+
+      return {
+        id: authUser.id,
+        email: authUser.email,
+        fullName:
+          profile?.full_name?.trim() ||
+          String(authUser.user_metadata?.full_name ?? "").trim() ||
+          authUser.email
+      } satisfies PasswordResetUser;
+    }
+
+    if (users.length < perPage) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return null;
+}
+
+export async function startPasswordReset(email: string) {
+  const registeredUser = await getRegisteredUserByEmail(email);
+
+  if (!registeredUser?.id || !registeredUser.email) {
     return { dispatched: false as const };
   }
 
   const supabase = createAdminClient();
   const otp = generateOtp();
   const otpHash = createOtpHash({
-    userId: profile.id,
-    email: profile.email,
+    userId: registeredUser.id,
+    email: registeredUser.email,
     otp
   });
   const expiresAt = new Date(
@@ -117,11 +167,11 @@ export async function startPasswordReset(email: string) {
   ).toISOString();
   const otpTable = (supabase as any).from("password_reset_otps");
 
-  await otpTable.delete().eq("user_id", profile.id).is("used_at", null);
+  await otpTable.delete().eq("user_id", registeredUser.id).is("used_at", null);
 
   const { error: insertError } = await otpTable.insert({
-    user_id: profile.id,
-    email: profile.email,
+    user_id: registeredUser.id,
+    email: registeredUser.email,
     otp_hash: otpHash,
     expires_at: expiresAt
   });
@@ -131,19 +181,22 @@ export async function startPasswordReset(email: string) {
   }
 
   const message = buildResetEmail({
-    fullName: profile.full_name?.trim() || profile.email,
+    fullName: registeredUser.fullName,
     otp
   });
 
   try {
     await sendMail({
-      to: profile.email,
+      to: registeredUser.email,
       subject: message.subject,
       text: message.text,
       html: message.html
     });
   } catch (error) {
-    await otpTable.delete().eq("user_id", profile.id).eq("otp_hash", otpHash);
+    await otpTable
+      .delete()
+      .eq("user_id", registeredUser.id)
+      .eq("otp_hash", otpHash);
 
     throw error instanceof Error
       ? error
@@ -152,7 +205,7 @@ export async function startPasswordReset(email: string) {
 
   return {
     dispatched: true as const,
-    email: profile.email
+    email: registeredUser.email
   };
 }
 
@@ -161,9 +214,9 @@ export async function resetPasswordWithOtp(args: {
   otp: string;
   password: string;
 }) {
-  const profile = await getProfileByEmail(args.email);
+  const registeredUser = await getRegisteredUserByEmail(args.email);
 
-  if (!profile?.id || !profile.email) {
+  if (!registeredUser?.id || !registeredUser.email) {
     return {
       success: false as const,
       message: "That code is not valid. Request a new one and try again."
@@ -174,7 +227,7 @@ export async function resetPasswordWithOtp(args: {
   const otpTable = (supabase as any).from("password_reset_otps");
   const { data } = await otpTable
     .select("id, user_id, email, otp_hash, attempts, expires_at, used_at")
-    .eq("user_id", profile.id)
+    .eq("user_id", registeredUser.id)
     .is("used_at", null)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -208,8 +261,8 @@ export async function resetPasswordWithOtp(args: {
   }
 
   const expectedHash = createOtpHash({
-    userId: profile.id,
-    email: profile.email,
+    userId: registeredUser.id,
+    email: registeredUser.email,
     otp: args.otp.trim()
   });
 
@@ -229,7 +282,7 @@ export async function resetPasswordWithOtp(args: {
   }
 
   const { error: updateUserError } = await supabase.auth.admin.updateUserById(
-    profile.id,
+    registeredUser.id,
     {
       password: args.password
     }
@@ -239,7 +292,10 @@ export async function resetPasswordWithOtp(args: {
     throw new Error("We could not update your password right now.");
   }
 
-  await otpTable.update({ used_at: nowIso }).eq("user_id", profile.id).is("used_at", null);
+  await otpTable
+    .update({ used_at: nowIso })
+    .eq("user_id", registeredUser.id)
+    .is("used_at", null);
 
   return {
     success: true as const,
