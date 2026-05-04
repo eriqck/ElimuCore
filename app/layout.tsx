@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     default: "ELimuCore",
     template: "%s | ELimuCore"
   },
+  verification: {
+    google: "migO_x8dcUjQihsjF67GSo1OfQJhCi1dPu3luAKikIo"
+  },
   description:
     "ELimuCore helps teachers and parents access trusted CBE and KCSE learning materials, lesson plans, exams, and revision support in one place.",
   applicationName: "ELimuCore",
