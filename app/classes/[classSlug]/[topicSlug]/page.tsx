@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import {
   canAccessLearningItem,
   getLearningProgressForCurrentUser,
@@ -141,6 +142,17 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   return (
     <main className="min-h-screen bg-[#fbfaf7] text-slate-950">
+      <MarketingEvent
+        eventName="ViewContent"
+        dedupeKey={`topic:${learningClass.slug}:${topic.slug}`}
+        payload={{
+          content_name: topic.title,
+          content_category: "junior_class_topic",
+          content_type: "topic",
+          parent_class: learningClass.title,
+          access: hasPremium ? "premium" : "preview"
+        }}
+      />
       <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
         <Bubble className="left-8 top-20 h-28 w-28 bg-emerald-300/60" />
         <Bubble className="right-20 top-40 h-32 w-32 bg-fuchsia-300/70" />

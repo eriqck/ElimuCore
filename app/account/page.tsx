@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
+import { TrackedSubmitButton } from "@/components/marketing/tracked-submit-button";
 import { getCurrentMemberContext } from "@/lib/membership";
 
 type AccountPageProps = {
@@ -170,9 +172,21 @@ function PlanAction({
   return (
     <form action="/api/paystack/initialize" method="post">
       <input type="hidden" name="plan_slug" value={planSlug} />
-      <button type="submit" className={buttonClassName}>
+      <TrackedSubmitButton
+        eventName="InitiateCheckout"
+        dedupeKey={`membership-checkout:${planSlug}`}
+        payload={{
+          value:
+            planSlug === "1-month" ? 299 : planSlug === "6-months" ? 499 : 999,
+          currency: "KES",
+          content_name: planSlug,
+          content_category: "membership",
+          checkout_type: "membership"
+        }}
+        className={buttonClassName}
+      >
         Pay now
-      </button>
+      </TrackedSubmitButton>
     </form>
   );
 }
@@ -210,6 +224,14 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
   return (
     <main className="min-h-screen bg-[#f8f8f6] px-5 py-10 text-slate-950 lg:px-8 lg:py-14">
+      <MarketingEvent
+        eventName="ViewPricing"
+        dedupeKey="account:view-pricing"
+        payload={{
+          content_name: "ELimuCore membership plans",
+          content_category: "membership"
+        }}
+      />
       <section className="mx-auto max-w-7xl">
         <div className="mb-10 max-w-3xl">
           <SectionLabel>My Account</SectionLabel>

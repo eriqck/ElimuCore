@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import { ResourceCard } from "@/components/resources/resource-card";
 import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import {
@@ -80,6 +81,15 @@ export default async function ResourcesPage({
   if (!memberContext.user) {
     return (
       <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+        <MarketingEvent
+          eventName="ViewContent"
+          dedupeKey="resources:login-gate"
+          payload={{
+            content_name: "Premium resource library",
+            content_category: "resources",
+            access: "login_required"
+          }}
+        />
         <section className="mx-auto max-w-3xl rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm sm:p-10">
           <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
             Member library
@@ -112,6 +122,15 @@ export default async function ResourcesPage({
   if (!canOpenLibrary) {
     return (
       <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+        <MarketingEvent
+          eventName="ViewContent"
+          dedupeKey="resources:membership-gate"
+          payload={{
+            content_name: "Premium resource library",
+            content_category: "resources",
+            access: "membership_required"
+          }}
+        />
         <section className="mx-auto max-w-3xl rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm sm:p-10">
           <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
             Member library
@@ -143,6 +162,27 @@ export default async function ResourcesPage({
 
   return (
     <main className="min-h-screen px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <MarketingEvent
+        eventName="ViewContent"
+        dedupeKey={`resources:view:${selectedLevel?.slug ?? "all"}:${category || "all"}:${query || "browse"}`}
+        payload={{
+          content_name: selectedLevel?.title ?? "Premium resource library",
+          content_category: category || "resources",
+          level: selectedLevel?.slug ?? "all_levels",
+          search_term: query || null
+        }}
+      />
+      {query ? (
+        <MarketingEvent
+          eventName="Search"
+          dedupeKey={`resources:search:${selectedLevel?.slug ?? "all"}:${category || "all"}:${query}`}
+          payload={{
+            search_string: query,
+            content_category: category || "resources",
+            level: selectedLevel?.slug ?? "all_levels"
+          }}
+        />
+      ) : null}
       <section className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 surface-card">
         <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import { getLearningClasses } from "@/lib/learning";
 import { getCurrentMemberContext } from "@/lib/membership";
 
@@ -176,6 +177,14 @@ export default async function ClassesPage() {
 
   return (
     <main className="min-h-screen bg-[#fbfaf7] text-slate-950">
+      <MarketingEvent
+        eventName="ViewJuniorClass"
+        dedupeKey="classes:index"
+        payload={{
+          content_name: "Self-Learning Junior Classes",
+          content_category: "junior_classes"
+        }}
+      />
       <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
         <Bubble className="left-8 top-20 h-28 w-28 bg-emerald-300/60" />
         <Bubble className="right-20 top-40 h-32 w-32 bg-amber-300/70" />

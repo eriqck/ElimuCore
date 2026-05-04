@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Fraunces, Manrope } from "next/font/google";
+import { MarketingPageTracker } from "@/components/marketing/marketing-page-tracker";
+import { MarketingScripts } from "@/components/marketing/marketing-scripts";
 import { FloatingChat } from "@/components/site/floating-chat";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -80,6 +83,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${fraunces.variable}`}>
       <body suppressHydrationWarning>
+        <MarketingScripts />
+        <Suspense fallback={null}>
+          <MarketingPageTracker />
+        </Suspense>
         <SiteHeader />
         {children}
         <SiteFooter />

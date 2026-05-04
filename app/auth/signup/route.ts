@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodeNotice, getSafeRedirectPath } from "@/lib/auth";
+import {
+  marketingEventCookieName,
+  serializeMarketingEvents
+} from "@/lib/marketing";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -62,7 +66,33 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.redirect(
-    new URL(next, request.url)
+  const response = NextResponse.redirect(new URL(next, request.url));
+  response.cookies.set(
+    marketingEventCookieName,
+    serializeMarketingEvents([
+      {
+        eventName: "Lead",
+        dedupeKey: `signup-lead:${Date.now()}`,
+        payload: {
+          content_name: "ELimuCore account signup",
+          source: "signup_form"
+        }
+      },
+      {
+        eventName: "CompleteRegistration",
+        dedupeKey: `signup-complete:${Date.now()}`,
+        payload: {
+          content_name: "ELimuCore account signup",
+          status: "confirmed"
+        }
+      }
+    ]),
+    {
+      path: "/",
+      maxAge: 60 * 10,
+      sameSite: "lax"
+    }
   );
+
+  return response;
 }

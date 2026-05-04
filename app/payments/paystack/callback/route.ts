@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodeNotice } from "@/lib/auth";
 import {
+  marketingEventCookieName,
+  serializeMarketingEvents,
+  type MarketingEventEnvelope
+} from "@/lib/marketing";
+import {
   getPaymentTransaction,
   settleVerifiedMembershipPayment
 } from "@/lib/payments";
@@ -16,6 +21,19 @@ function redirectToAccount(request: NextRequest, message: string) {
     new URL(`/account?notice=${encodeNotice(message)}`, request.url),
     { status: 303 }
   );
+}
+
+function attachMarketingEvents(
+  response: NextResponse,
+  events: MarketingEventEnvelope[]
+) {
+  response.cookies.set(marketingEventCookieName, serializeMarketingEvents(events), {
+    path: "/",
+    maxAge: 60 * 10,
+    sameSite: "lax"
+  });
+
+  return response;
 }
 
 async function redirectAfterSuccess(
@@ -106,11 +124,26 @@ export async function GET(request: NextRequest) {
         return redirectToAccount(request, result.message);
       }
 
-      return redirectAfterSuccess(
+      const response = await redirectAfterSuccess(
         request,
         membershipPayment.user_id,
         result.message
       );
+
+      return attachMarketingEvents(response, [
+        {
+          eventName: "Purchase",
+          dedupeKey: `membership-purchase:${reference}`,
+          payload: {
+            value: membershipPayment.amount_kes,
+            currency: membershipPayment.currency,
+            content_name: membershipPayment.plan_slug,
+            content_category: "membership",
+            purchase_type: "membership",
+            reference
+          }
+        }
+      ]);
     } catch (error) {
       const message =
         error instanceof Error && error.message.trim()
@@ -147,12 +180,27 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return redirectToSchemeRequest(
+    const response = await redirectToSchemeRequest(
       request,
       schemePayment.user_id,
       result.requestId,
       result.message
     );
+
+    return attachMarketingEvents(response, [
+      {
+        eventName: "Purchase",
+        dedupeKey: `scheme-purchase:${reference}`,
+        payload: {
+          value: schemePayment.amount_kes,
+          currency: schemePayment.currency,
+          content_name: "Scheme Bot single purchase",
+          content_category: "scheme_bot",
+          purchase_type: "scheme",
+          reference
+        }
+      }
+    ]);
   } catch (error) {
     const message =
       error instanceof Error && error.message.trim()

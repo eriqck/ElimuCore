@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { HighlightHeading } from "@/components/learning/highlight-heading";
 import { LessonPlayer } from "@/components/learning/lesson-player";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import { PremiumLock } from "@/components/learning/premium-lock";
 import {
   canAccessLearningItem,
@@ -63,6 +64,18 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   return (
     <main className="learning-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <MarketingEvent
+        eventName="ViewContent"
+        dedupeKey={`lesson:${topic.slug}:${lesson.slug}`}
+        payload={{
+          content_name: lesson.title,
+          content_category: lesson.lessonType,
+          content_type: "lesson",
+          parent_topic: topic.title,
+          parent_class: learningClass.title,
+          access: lesson.access
+        }}
+      />
       <section className="learning-panel relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
         <div className="learning-orb absolute -left-10 top-10 h-24 w-24" />
         <div className="learning-orb-secondary absolute right-0 top-0 h-36 w-36 sm:h-44 sm:w-44" />

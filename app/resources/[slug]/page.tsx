@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import { notFound } from "next/navigation";
 import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import { getResourceBySlug } from "@/lib/resources";
@@ -75,6 +76,17 @@ export default async function ResourceDetailPage({
 
   return (
     <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+      <MarketingEvent
+        eventName="ViewContent"
+        dedupeKey={`resource:${resource.slug}`}
+        payload={{
+          content_name: resource.title,
+          content_category: resource.category,
+          content_type: "resource",
+          level: resource.level,
+          access: resource.access.toLowerCase()
+        }}
+      />
       <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/60 surface-card p-6 sm:p-8 lg:p-12">
         <div className="flex flex-wrap items-center gap-3">
           <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-rose-900">

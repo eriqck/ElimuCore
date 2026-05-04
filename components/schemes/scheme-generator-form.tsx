@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackMarketingEvent } from "@/lib/marketing-client";
 import {
   getSuggestedSchemeTextbook,
   schemeSubjectSuggestions
@@ -75,6 +76,22 @@ export function SchemeGeneratorForm({
     <form
       action="/api/scheme-bot/create"
       method="post"
+      onSubmit={() => {
+        if (!hasUnlimitedAccess) {
+          trackMarketingEvent({
+            eventName: "InitiateCheckout",
+            dedupeKey: `scheme-checkout:${stage}:${classLabel}:${subject}`,
+            payload: {
+              value: 20,
+              currency: "KES",
+              content_name: `${classLabel} ${subject}`,
+              content_category: "scheme_bot",
+              checkout_type: "single_scheme",
+              level: stage
+            }
+          });
+        }
+      }}
       className="grid gap-5 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm"
     >
       <div className="grid gap-3 sm:grid-cols-2">

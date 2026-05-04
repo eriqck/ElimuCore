@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarketingEvent } from "@/components/marketing/marketing-event";
 import { getCurrentMemberContext } from "@/lib/membership";
 import {
   hasUnlimitedSchemeAccess,
@@ -35,6 +36,15 @@ export default async function SchemeBotPage({
   if (!memberContext.user) {
     return (
       <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+        <MarketingEvent
+          eventName="OpenSchemeBot"
+          dedupeKey="scheme-bot:public"
+          payload={{
+            content_name: "Scheme Bot",
+            content_category: "teacher_tools",
+            access: "public"
+          }}
+        />
         <section className="mx-auto max-w-3xl rounded-[2rem] border border-stone-200 bg-white p-8 shadow-sm">
           <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
             Scheme Bot
@@ -74,6 +84,15 @@ export default async function SchemeBotPage({
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <MarketingEvent
+        eventName="OpenSchemeBot"
+        dedupeKey={`scheme-bot:${hasUnlimitedAccess ? "premium" : "single-purchase"}`}
+        payload={{
+          content_name: "Scheme Bot",
+          content_category: "teacher_tools",
+          access: hasUnlimitedAccess ? "premium" : "single_purchase"
+        }}
+      />
       <section className="mx-auto max-w-7xl rounded-[2rem] border border-white/60 surface-card p-6 sm:p-8 lg:p-10">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
@@ -198,4 +217,3 @@ export default async function SchemeBotPage({
     </main>
   );
 }
-
