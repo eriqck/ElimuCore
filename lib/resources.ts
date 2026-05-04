@@ -59,6 +59,60 @@ type ResourceFileRow = {
   created_at: string | null;
 };
 
+const ALL_RESOURCE_LEVEL_SLUGS = [
+  "pre-primary",
+  "primary-school",
+  "junior-school",
+  "secondary-school"
+] as const;
+
+type ResourceBrowseCardConfig = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  levelSlugs: string[];
+  categorySlug?: string | null;
+  aliases?: string[];
+};
+
+const RESOURCE_BROWSE_CARD_CONFIGS: ResourceBrowseCardConfig[] = [
+  {
+    slug: "pre-primary",
+    title: "Pre-Primary",
+    subtitle: "PP1 and PP2 learning materials",
+    levelSlugs: ["pre-primary"],
+    aliases: ["pp1", "pp2", "pre primary"]
+  },
+  {
+    slug: "junior-school",
+    title: "Junior School",
+    subtitle: "Grade 1-9 materials",
+    levelSlugs: ["primary-school", "junior-school"],
+    aliases: ["primary-school", "grade 1", "grade 2", "grade 3", "grade 4", "grade 5", "grade 6", "grade 7", "grade 8", "grade 9"]
+  },
+  {
+    slug: "senior-school",
+    title: "Senior School",
+    subtitle: "Grade 10 and revision materials",
+    levelSlugs: ["secondary-school"],
+    aliases: ["secondary-school", "grade 10", "form 3", "form 4", "kcse"]
+  },
+  {
+    slug: "ready-schemes",
+    title: "Ready Schemes",
+    subtitle: "Schemes of work for all subjects and levels",
+    levelSlugs: [...ALL_RESOURCE_LEVEL_SLUGS],
+    categorySlug: "schemes-of-work",
+    aliases: ["schemes", "schemes of work", "ready schemes"]
+  }
+];
+
+type ResourceQueryHints = {
+  levelSlugs: string[] | null;
+  categorySlug: string | null;
+  searchTerm: string;
+};
+
 function cleanText(value: string | null | undefined, fallback: string) {
   const normalized = String(value ?? "")
     .replace(/\s+/g, " ")
@@ -89,6 +143,109 @@ function escapeSearchTerm(query: string) {
   return query.replace(/[%(),]/g, " ").trim();
 }
 
+function stripMigrationCopy(value: string | null | undefined) {
+  return cleanText(value, "")
+    .replace(/Authorized migration from\s+.+?(?=(?:\s+[A-Z][A-Za-z]+(?:\s+[A-Za-z]+)*\.)|$)/i, "")
+    .replace(/Material migrated from KCSE Online page:\s+.+?(?=(?:\s+[A-Z][A-Za-z]+(?:\s+[A-Za-z]+)*\.)|$)/i, "")
+    .replace(/^Authorized migration from\s+.+$/i, "")
+    .replace(/^Material migrated from KCSE Online page:\s+.+$/i, "")
+    .trim();
+}
+
+function getDisplayLevelTitle(levelSlug: string) {
+  if (levelSlug === "primary-school" || levelSlug === "junior-school") {
+    return "Junior School";
+  }
+
+  if (levelSlug === "secondary-school") {
+    return "Senior School";
+  }
+
+  return "Pre-Primary";
+}
+
+function decorateResourceForLibrary(resource: Resource): Resource {
+  const cleanedSummary = stripMigrationCopy(resource.summary);
+  const cleanedDescription = stripMigrationCopy(resource.description);
+
+  return {
+    ...resource,
+    level: getDisplayLevelTitle(resource.levelSlug),
+    summary:
+      cleanedSummary ||
+      cleanedDescription ||
+      `Open this ${resource.category.toLowerCase()} resource in the member library.`,
+    description:
+      cleanedDescription ||
+      cleanedSummary ||
+      `Open this ${resource.category.toLowerCase()} resource in the member library.`
+  };
+}
+
+function findBrowseCardConfig(selected: string | null | undefined) {
+  const normalized = cleanText(selected, "").toLowerCase();
+
+  if (!normalized) {
+    return null;
+  }
+
+  return (
+    RESOURCE_BROWSE_CARD_CONFIGS.find((card) => card.slug === normalized) ??
+    RESOURCE_BROWSE_CARD_CONFIGS.find((card) =>
+      (card.aliases ?? []).some((alias) => alias === normalized)
+    ) ??
+    null
+  );
+}
+
+export function normalizeResourceBrowseSlug(selected: string | null | undefined) {
+  return findBrowseCardConfig(selected)?.slug ?? (cleanText(selected, "") || null);
+}
+
+function getQueryHints(query?: string): ResourceQueryHints {
+  const original = cleanText(query, "");
+  let reduced = original.toLowerCase();
+  let levelSlugs: string[] | null = null;
+  let categorySlug: string | null = null;
+
+  if (/\bpp\s*[12]\b|\bpre[\s-]?primary\b/i.test(reduced)) {
+    levelSlugs = ["pre-primary"];
+    reduced = reduced.replace(/\bpp\s*[12]\b|\bpre[\s-]?primary\b/gi, " ");
+  } else if (
+    /\bgrade\s*([1-9])\b|\bclass\s*([1-9])\b|\bjunior school\b/i.test(reduced)
+  ) {
+    levelSlugs = ["primary-school", "junior-school"];
+    reduced = reduced.replace(
+      /\bgrade\s*([1-9])\b|\bclass\s*([1-9])\b|\bjunior school\b/gi,
+      " "
+    );
+  } else if (
+    /\bgrade\s*10\b|\bform\s*[34]\b|\bsenior school\b|\bsecondary school\b|\bkcse\b/i.test(
+      reduced
+    )
+  ) {
+    levelSlugs = ["secondary-school"];
+    reduced = reduced.replace(
+      /\bgrade\s*10\b|\bform\s*[34]\b|\bsenior school\b|\bsecondary school\b|\bkcse\b/gi,
+      " "
+    );
+  }
+
+  if (/\bready schemes\b|\bschemes of work\b/i.test(reduced)) {
+    categorySlug = "schemes-of-work";
+    reduced = reduced.replace(/\bready schemes\b|\bschemes of work\b/gi, " ");
+  } else if (/^\s*schemes?\s*$/i.test(reduced)) {
+    categorySlug = "schemes-of-work";
+    reduced = " ";
+  }
+
+  return {
+    levelSlugs,
+    categorySlug,
+    searchTerm: escapeSearchTerm(reduced).replace(/\s+/g, " ").trim()
+  };
+}
+
 function getResourceLookups(filters: LibraryFilters) {
   return {
     levelLookup: new Map(filters.levels.map((item) => [item.slug, item.title])),
@@ -105,19 +262,24 @@ function normalizeResource(
   const { levelLookup, categoryLookup } = getResourceLookups(filters);
   const levelSlug = row.school_level_slug ?? "secondary-school";
   const categorySlug = row.category_slug ?? "notes";
+  const categoryName = categoryLookup.get(categorySlug) ?? "Notes";
 
-  return {
+  return decorateResourceForLibrary({
     id: row.id,
     slug: row.slug,
     title: cleanText(row.title, "Untitled resource"),
-    summary: cleanText(row.summary, "A published education resource."),
+    summary:
+      stripMigrationCopy(row.summary) ||
+      stripMigrationCopy(row.description ?? row.summary) ||
+      `Open this ${categoryName.toLowerCase()} resource in the member library.`,
     description: cleanText(
-      row.description ?? row.summary,
-      "A published education resource."
+      stripMigrationCopy(row.description ?? row.summary),
+      stripMigrationCopy(row.summary) ||
+        `Open this ${categoryName.toLowerCase()} resource in the member library.`
     ),
-    level: levelLookup.get(levelSlug) ?? "Secondary School",
+    level: levelLookup.get(levelSlug) ?? getDisplayLevelTitle(levelSlug),
     levelSlug,
-    category: categoryLookup.get(categorySlug) ?? "Notes",
+    category: categoryName,
     categorySlug,
     subject: cleanText(row.subject, "General"),
     access: row.access === "premium" ? "Premium" : "Free",
@@ -127,7 +289,7 @@ function normalizeResource(
     featured: Boolean(row.featured),
     storagePath: row.storage_path,
     sourceUrl: row.source_url
-  };
+  });
 }
 
 function normalizeFile(row: ResourceFileRow): ResourceFile {
@@ -149,11 +311,22 @@ function filterFallbackResources(
   category?: string,
   level?: string
 ) {
+  const selectedCard = findBrowseCardConfig(level);
+  const queryHints = getQueryHints(query);
+  const effectiveCategory = selectedCard?.categorySlug ?? category ?? queryHints.categorySlug;
+  const effectiveLevels =
+    selectedCard?.levelSlugs ??
+    queryHints.levelSlugs ??
+    (level ? [level] : null);
+  const searchTerm = queryHints.searchTerm || cleanText(query, "");
+
   return resources.filter((resource) => {
-    const matchesCategory = category
-      ? resource.categorySlug === category
+    const matchesCategory = effectiveCategory
+      ? resource.categorySlug === effectiveCategory
       : true;
-    const matchesLevel = level ? resource.levelSlug === level : true;
+    const matchesLevel = effectiveLevels
+      ? effectiveLevels.includes(resource.levelSlug)
+      : true;
     const haystack = [
       resource.title,
       resource.summary,
@@ -164,10 +337,12 @@ function filterFallbackResources(
     ]
       .join(" ")
       .toLowerCase();
-    const matchesQuery = query ? haystack.includes(query.toLowerCase()) : true;
+    const matchesQuery = searchTerm
+      ? haystack.includes(searchTerm.toLowerCase())
+      : true;
 
     return matchesCategory && matchesLevel && matchesQuery;
-  });
+  }).map((resource) => decorateResourceForLibrary(resource));
 }
 
 function mergeHomepageLevels(levels: LibraryFilters["levels"]): SchoolLevel[] {
@@ -249,6 +424,14 @@ async function getSupabaseResources(
   try {
     const supabase = await createClient();
     const filters = await getSupabaseFilters();
+    const selectedCard = findBrowseCardConfig(level);
+    const queryHints = getQueryHints(query);
+    const effectiveCategory =
+      selectedCard?.categorySlug ?? category ?? queryHints.categorySlug;
+    const effectiveLevels =
+      selectedCard?.levelSlugs ??
+      queryHints.levelSlugs ??
+      (level ? [level] : null);
     let request = supabase
       .from("resources")
       .select(
@@ -260,16 +443,18 @@ async function getSupabaseResources(
       .order("title", { ascending: true })
       .limit(500);
 
-    if (category) {
-      request = request.eq("category_slug", category);
+    if (effectiveCategory) {
+      request = request.eq("category_slug", effectiveCategory);
     }
 
-    if (level) {
-      request = request.eq("school_level_slug", level);
+    if (effectiveLevels?.length === 1) {
+      request = request.eq("school_level_slug", effectiveLevels[0]);
+    } else if (effectiveLevels && effectiveLevels.length > 1) {
+      request = request.in("school_level_slug", effectiveLevels);
     }
 
-    if (query) {
-      const searchTerm = escapeSearchTerm(query);
+    if (queryHints.searchTerm) {
+      const searchTerm = queryHints.searchTerm;
       if (searchTerm) {
         request = request.or(
           [
@@ -300,23 +485,18 @@ export const getLibraryFilters = cache(async (): Promise<LibraryFilters> => {
 
 export const getResourceLevelBrowseCards = cache(
   async (): Promise<ResourceLevelBrowseCard[]> => {
-    const filters = await getSupabaseFilters();
-
     if (!hasSupabaseEnv()) {
-      const counts = new Map<string, number>();
-
-      for (const resource of fallbackResources) {
-        counts.set(
-          resource.levelSlug,
-          (counts.get(resource.levelSlug) ?? 0) + 1
-        );
-      }
-
-      return filters.levels.map((level) => ({
-        slug: level.slug,
-        title: level.title,
-        subtitle: level.subtitle ?? "Browse resources for this level.",
-        count: counts.get(level.slug) ?? 0
+      return RESOURCE_BROWSE_CARD_CONFIGS.map((card) => ({
+        slug: card.slug,
+        title: card.title,
+        subtitle: card.subtitle,
+        count: fallbackResources.filter(
+          (resource) =>
+            card.levelSlugs.includes(resource.levelSlug) &&
+            (!card.categorySlug || resource.categorySlug === card.categorySlug)
+        ).length,
+        levelSlugs: card.levelSlugs,
+        categorySlug: card.categorySlug ?? null
       }));
     }
 
@@ -324,7 +504,7 @@ export const getResourceLevelBrowseCards = cache(
       const supabase = await createClient();
       const { data, error } = await supabase
         .from("resources")
-        .select("school_level_slug")
+        .select("school_level_slug, category_slug")
         .eq("published", true)
         .limit(1000);
 
@@ -332,34 +512,39 @@ export const getResourceLevelBrowseCards = cache(
         throw error ?? new Error("Could not load resource level counts.");
       }
 
-      const counts = new Map<string, number>();
+      const rows = data as Array<{
+        school_level_slug: string | null;
+        category_slug: string | null;
+      }>;
 
-      for (const row of data as Array<{ school_level_slug: string | null }>) {
-        const slug = row.school_level_slug ?? "secondary-school";
-        counts.set(slug, (counts.get(slug) ?? 0) + 1);
-      }
+      return RESOURCE_BROWSE_CARD_CONFIGS.map((card) => ({
+        slug: card.slug,
+        title: card.title,
+        subtitle: card.subtitle,
+        count: rows.filter((row) => {
+          const levelSlug = row.school_level_slug ?? "secondary-school";
+          const categorySlug = row.category_slug ?? "notes";
 
-      return filters.levels.map((level) => ({
-        slug: level.slug,
-        title: level.title,
-        subtitle: level.subtitle ?? "Browse resources for this level.",
-        count: counts.get(level.slug) ?? 0
+          return (
+            card.levelSlugs.includes(levelSlug) &&
+            (!card.categorySlug || categorySlug === card.categorySlug)
+          );
+        }).length,
+        levelSlugs: card.levelSlugs,
+        categorySlug: card.categorySlug ?? null
       }));
     } catch {
-      const counts = new Map<string, number>();
-
-      for (const resource of fallbackResources) {
-        counts.set(
-          resource.levelSlug,
-          (counts.get(resource.levelSlug) ?? 0) + 1
-        );
-      }
-
-      return filters.levels.map((level) => ({
-        slug: level.slug,
-        title: level.title,
-        subtitle: level.subtitle ?? "Browse resources for this level.",
-        count: counts.get(level.slug) ?? 0
+      return RESOURCE_BROWSE_CARD_CONFIGS.map((card) => ({
+        slug: card.slug,
+        title: card.title,
+        subtitle: card.subtitle,
+        count: fallbackResources.filter(
+          (resource) =>
+            card.levelSlugs.includes(resource.levelSlug) &&
+            (!card.categorySlug || resource.categorySlug === card.categorySlug)
+        ).length,
+        levelSlugs: card.levelSlugs,
+        categorySlug: card.categorySlug ?? null
       }));
     }
   }
@@ -378,7 +563,9 @@ export const getResourceBySlug = cache(
         (resource) => resource.slug === slug
       );
 
-      return fallbackResource ? { ...fallbackResource, files: [] } : null;
+      return fallbackResource
+        ? { ...decorateResourceForLibrary(fallbackResource), files: [] }
+        : null;
     }
 
     try {
@@ -398,7 +585,9 @@ export const getResourceBySlug = cache(
           (resource) => resource.slug === slug
         );
 
-        return fallbackResource ? { ...fallbackResource, files: [] } : null;
+        return fallbackResource
+          ? { ...decorateResourceForLibrary(fallbackResource), files: [] }
+          : null;
       }
 
       const { data: fileRows, error: filesError } = await supabase
@@ -426,7 +615,9 @@ export const getResourceBySlug = cache(
         (resource) => resource.slug === slug
       );
 
-      return fallbackResource ? { ...fallbackResource, files: [] } : null;
+      return fallbackResource
+        ? { ...decorateResourceForLibrary(fallbackResource), files: [] }
+        : null;
     }
   }
 );

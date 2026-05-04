@@ -5,7 +5,8 @@ import { getCurrentMemberContext, hasPremiumAccess } from "@/lib/membership";
 import {
   getLibraryFilters,
   getResourceLevelBrowseCards,
-  listResources
+  listResources,
+  normalizeResourceBrowseSlug
 } from "@/lib/resources";
 
 type ResourcesPageProps = {
@@ -30,9 +31,10 @@ export default async function ResourcesPage({
   const category =
     typeof params.category === "string" ? params.category.trim() : "";
   const level = typeof params.level === "string" ? params.level.trim() : "";
+  const normalizedLevel = normalizeResourceBrowseSlug(level);
 
-  const resourcesPromise = level
-    ? listResources(query, category, level)
+  const resourcesPromise = normalizedLevel || query || category
+    ? listResources(query, category, normalizedLevel ?? undefined)
     : Promise.resolve([]);
 
   const [resources, filters, levelCards, memberContext] = await Promise.all([
@@ -42,17 +44,14 @@ export default async function ResourcesPage({
     getCurrentMemberContext()
   ]);
   const canOpenLibrary = hasPremiumAccess(memberContext);
-  const selectedLevel = levelCards.find((item) => item.slug === level) ?? null;
+  const selectedLevel =
+    levelCards.find((item) => item.slug === normalizedLevel) ?? null;
 
   const createLevelHref = (nextLevel: string) => {
     const nextParams = new URLSearchParams();
 
     if (query) {
       nextParams.set("q", query);
-    }
-
-    if (category) {
-      nextParams.set("category", category);
     }
 
     nextParams.set("level", nextLevel);
@@ -198,7 +197,7 @@ export default async function ResourcesPage({
                 {selectedLevel ? (
                   <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
-                      Selected level
+                      Selected section
                     </p>
                     <p className="mt-2 text-lg font-bold text-slate-900">
                       {selectedLevel.title}
@@ -248,7 +247,7 @@ export default async function ResourcesPage({
               Levels
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
-              Choose a school level
+              Choose where to browse
             </h2>
           </div>
           {selectedLevel ? (
@@ -317,6 +316,8 @@ export default async function ResourcesPage({
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
               {selectedLevel
                 ? `${selectedLevel.title} resources (${resources.length})`
+                : query || category
+                  ? `${resources.length} matching resources`
                 : `${resources.length} resources`}
             </h2>
           </div>
@@ -328,7 +329,7 @@ export default async function ResourcesPage({
           </Link>
         </div>
 
-        {!selectedLevel ? (
+        {!selectedLevel && !query && !category ? (
           <div className="rounded-[2rem] border border-dashed border-stone-300 bg-white/85 p-10 text-center shadow-sm">
             <h3 className="text-xl font-bold text-slate-900">
               Choose a school level

@@ -224,4 +224,6 @@ export type ResourceLevelBrowseCard = {
   title: string;
   subtitle: string;
   count: number;
+  levelSlugs: string[];
+  categorySlug?: string | null;
 };
