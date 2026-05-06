@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import {
   siteDescription,
   siteKeywords,
+  siteLogoUrl,
   siteName,
   siteOgImageUrl,
   siteUrl
@@ -37,6 +38,16 @@ export const metadata: Metadata = {
   description: siteDescription,
   applicationName: siteName,
   keywords: siteKeywords,
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" }
+    ],
+    shortcut: "/favicon.png",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }]
+  },
   alternates: {
     canonical: siteUrl
   },
@@ -61,6 +72,10 @@ export const metadata: Metadata = {
     title: siteName,
     description: siteDescription,
     images: [siteOgImageUrl]
+  },
+  other: {
+    "og:site_name": siteName,
+    "msapplication-TileImage": siteLogoUrl
   },
   robots: {
     index: true,

@@ -5,9 +5,9 @@ import { getCurrentMemberContext } from "@/lib/membership";
 
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/#package" },
-  { label: "Pricing", href: "/#plans" },
-  { label: "Support", href: "/#how-to-use" },
+  { label: "About Us", href: "/about" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Support", href: "/support" },
   { label: "Scheme Bot", href: "/scheme-bot" }
 ] as const;
 

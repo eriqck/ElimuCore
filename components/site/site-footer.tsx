@@ -5,8 +5,9 @@ import logo from "@/assets/weblogo.png";
 
 const footerLinks = [
   { label: "Home", href: "/" },
-  { label: "Pricing", href: "/#plans" },
-  { label: "Support", href: "/#how-to-use" },
+  { label: "About Us", href: "/about" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "Support", href: "/support" },
   { label: "Scheme Bot", href: "/scheme-bot" },
   { label: "Login", href: "/login" }
 ] as const;
@@ -222,4 +223,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-

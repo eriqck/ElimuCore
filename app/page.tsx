@@ -3,6 +3,9 @@ import { ElimuCoreHome } from "@/components/home/elimu-core-home";
 import {
   homePageDescription,
   homePageTitle,
+  primarySiteLinks,
+  siteAlternateNames,
+  siteLogoUrl,
   siteName,
   siteOgImageUrl,
   siteUrl
@@ -39,10 +42,13 @@ export default function HomePage() {
   const structuredData = [
     {
       "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
+      "@type": "Organization",
       name: siteName,
       url: siteUrl,
-      logo: siteOgImageUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: siteLogoUrl
+      },
       description: homePageDescription,
       telephone: "+254759481281",
       address: {
@@ -64,8 +70,14 @@ export default function HomePage() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       name: siteName,
+      alternateName: siteAlternateNames,
       url: siteUrl,
-      description: homePageDescription
+      description: homePageDescription,
+      hasPart: primarySiteLinks.map((item) => ({
+        "@type": "WebPage",
+        name: item.name,
+        url: item.url
+      }))
     }
   ];
 
