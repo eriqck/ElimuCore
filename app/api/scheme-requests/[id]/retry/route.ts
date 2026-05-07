@@ -6,6 +6,7 @@ import {
   getSchemeRequestById,
   getSchemeRequestForUser
 } from "@/lib/scheme-bot";
+import { getTeacherDocumentKindLabel } from "@/lib/teacher-documents";
 
 export async function POST(
   request: NextRequest,
@@ -38,7 +39,7 @@ export async function POST(
   if (schemeRequest.accessMode !== "premium" && !schemeRequest.paidAt) {
     return NextResponse.redirect(
       new URL(
-        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("Complete payment before retrying this scheme.")}`,
+        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("Complete payment before retrying this document.")}`,
         request.url
       ),
       { status: 303 }
@@ -46,20 +47,21 @@ export async function POST(
   }
 
   try {
-    await generateSchemeRequestOutput(schemeRequest.id);
+    const generatedRequest = await generateSchemeRequestOutput(schemeRequest.id);
+    const documentLabel = getTeacherDocumentKindLabel(generatedRequest.outputKind);
 
-      return NextResponse.redirect(
-        new URL(
-          `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("Scheme prepared successfully.")}`,
-          request.url
-        ),
+    return NextResponse.redirect(
+      new URL(
+        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice(`${documentLabel} prepared successfully.`)}`,
+        request.url
+      ),
       { status: 303 }
     );
   } catch (error) {
     const message =
       error instanceof Error && error.message.trim()
         ? error.message
-        : "We could not retry that scheme right now.";
+        : "We could not retry that document right now.";
 
     return NextResponse.redirect(
       new URL(

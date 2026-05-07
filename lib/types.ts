@@ -240,6 +240,8 @@ export type SchemeStage = "pre-primary" | "junior-school" | "senior-school";
 
 export type SchemeLanguage = "en" | "sw";
 
+export type TeacherDocumentKind = "scheme" | "lesson-plan" | "assessment";
+
 export type SchemeDocumentRow = {
   weekLabel: string;
   lessonLabel: string;
@@ -266,11 +268,74 @@ export type SchemeDocumentContent = {
   rows: SchemeDocumentRow[];
 };
 
+export type LessonPlanDocumentLesson = {
+  lessonLabel: string;
+  duration: string;
+  focus: string;
+  objectives: string[];
+  materials: string[];
+  introduction: string[];
+  activities: string[];
+  assessment: string[];
+  homework: string[];
+  differentiation: string[];
+};
+
+export type LessonPlanDocumentContent = {
+  title: string;
+  subtitle: string;
+  language: SchemeLanguage;
+  schoolName: string;
+  teacherName: string;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  lessons: LessonPlanDocumentLesson[];
+};
+
+export type AssessmentQuestionType =
+  | "short-answer"
+  | "structured"
+  | "application";
+
+export type AssessmentDocumentItem = {
+  numberLabel: string;
+  prompt: string;
+  expectedAnswer: string;
+  marks: number;
+  type: AssessmentQuestionType;
+};
+
+export type AssessmentDocumentSection = {
+  title: string;
+  instructions: string;
+  items: AssessmentDocumentItem[];
+};
+
+export type AssessmentDocumentContent = {
+  title: string;
+  subtitle: string;
+  language: SchemeLanguage;
+  schoolName: string;
+  teacherName: string;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  durationMinutes: number;
+  totalMarks: number;
+  instructions: string[];
+  sections: AssessmentDocumentSection[];
+};
+
 export type SchemeRequest = {
   id: string;
   userId: string;
   status: SchemeRequestStatus;
   accessMode: SchemeAccessMode;
+  outputKind: TeacherDocumentKind;
+  sourceRequestId: string | null;
   stage: SchemeStage;
   classLabel: string;
   subject: string;
@@ -285,7 +350,11 @@ export type SchemeRequest = {
   language: SchemeLanguage;
   generatedTitle: string | null;
   generatedOverview: string;
-  generatedContent: SchemeDocumentContent | null;
+  generatedContent:
+    | SchemeDocumentContent
+    | LessonPlanDocumentContent
+    | AssessmentDocumentContent
+    | null;
   storageBucket: string | null;
   storagePath: string | null;
   errorMessage: string;

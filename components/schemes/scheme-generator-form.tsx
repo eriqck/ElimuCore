@@ -85,8 +85,8 @@ export function SchemeGeneratorForm({
               value: 20,
               currency: "KES",
               content_name: `${classLabel} ${subject}`,
-              content_category: "scheme_bot",
-              checkout_type: "single_scheme",
+              content_category: "teacher_documents",
+              checkout_type: "single_document",
               level: stage
             }
           });
@@ -345,8 +345,8 @@ export function SchemeGeneratorForm({
 
       <div className="rounded-[1.5rem] bg-emerald-50 px-4 py-4 text-sm text-emerald-900">
         {hasUnlimitedAccess
-          ? "Premium access: build and download as many schemes as you need."
-          : "Single scheme access: KSh 20 per scheme."}
+          ? "Premium access: build and download as many teacher documents as you need."
+          : "Single document access: KSh 20 per document."}
       </div>
 
       <button

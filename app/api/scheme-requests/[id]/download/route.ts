@@ -32,7 +32,7 @@ export async function GET(
   if (!schemeRequest.storageBucket || !schemeRequest.storagePath) {
     return NextResponse.redirect(
       new URL(
-        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("This scheme file is not ready yet.")}`,
+        `/scheme-bot/${schemeRequest.id}?notice=${encodeNotice("This document file is not ready yet.")}`,
         request.url
       ),
       { status: 303 }
@@ -43,7 +43,9 @@ export async function GET(
   const { data: signedUrl, error } = await supabase.storage
     .from(schemeRequest.storageBucket)
     .createSignedUrl(schemeRequest.storagePath, 60 * 5, {
-      download: schemeRequest.generatedTitle ?? `${schemeRequest.classLabel} ${schemeRequest.subject} scheme.docx`
+      download:
+        schemeRequest.generatedTitle ??
+        `${schemeRequest.classLabel} ${schemeRequest.subject} document.docx`
     });
 
   if (error || !signedUrl?.signedUrl) {

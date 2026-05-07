@@ -62,6 +62,7 @@ function parseFormData(formData: FormData): SchemeRequestCreateInput {
   }
 
   return {
+    outputKind: "scheme",
     stage,
     classLabel,
     subject,
@@ -182,6 +183,7 @@ export async function POST(request: NextRequest) {
         reference,
         metadata: {
           purchase_type: "scheme",
+          output_kind: "scheme",
           scheme_request_id: schemeRequest.id,
           user_id: memberContext.user.id
         }

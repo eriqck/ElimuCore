@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { type PaystackVerifyResult } from "@/lib/paystack";
 import { createPaymentReference, normalizePaymentStatus } from "@/lib/payments";
 import { generateSchemeRequestOutput } from "@/lib/scheme-bot";
+import { getTeacherDocumentKindLabel } from "@/lib/teacher-documents";
 
 export type SchemePaymentTransactionStatus =
   | "initialized"
@@ -69,7 +70,7 @@ export async function settleVerifiedSchemePayment(args: {
 
     return {
       outcome: "mismatch" as const,
-      message: "We could not match that payment to your scheme request."
+      message: "We could not match that payment to your teacher document request."
     };
   }
 
@@ -90,7 +91,7 @@ export async function settleVerifiedSchemePayment(args: {
 
     return {
       outcome: "mismatch" as const,
-      message: "That payment did not match the KSh 20 scheme purchase."
+      message: "That payment did not match the KSh 20 teacher document purchase."
     };
   }
 
@@ -120,6 +121,7 @@ export async function settleVerifiedSchemePayment(args: {
     .eq("id", payment.scheme_request_id);
 
   const schemeRequest = await generateSchemeRequestOutput(payment.scheme_request_id);
+  const documentLabel = getTeacherDocumentKindLabel(schemeRequest.outputKind);
 
   const { error: updateError } = await paymentsTable
     .update({
@@ -139,7 +141,7 @@ export async function settleVerifiedSchemePayment(args: {
 
   return {
     outcome: "success" as const,
-    message: "Payment confirmed. Your scheme is ready.",
+    message: `Payment confirmed. Your ${documentLabel.toLowerCase()} is ready.`,
     requestId: schemeRequest.id
   };
 }

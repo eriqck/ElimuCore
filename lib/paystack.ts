@@ -1,6 +1,7 @@
 import "server-only";
 import crypto from "node:crypto";
 import { getPaystackSecretKey, getSiteUrl } from "@/lib/supabase/env";
+import type { TeacherDocumentKind } from "@/lib/types";
 
 type PaystackMembershipMetadata = {
   purchase_type: "membership";
@@ -12,6 +13,7 @@ type PaystackSchemeMetadata = {
   purchase_type: "scheme";
   scheme_request_id: string;
   user_id: string;
+  output_kind?: TeacherDocumentKind;
 };
 
 export type PaystackInitializeMetadata =
@@ -142,7 +144,14 @@ function parseMetadata(value: unknown): PaystackInitializeMetadata | null {
     return {
       purchase_type: "scheme",
       scheme_request_id: parsed.scheme_request_id,
-      user_id: parsed.user_id
+      user_id: parsed.user_id,
+      output_kind:
+        "output_kind" in parsed &&
+        (parsed.output_kind === "scheme" ||
+          parsed.output_kind === "lesson-plan" ||
+          parsed.output_kind === "assessment")
+          ? parsed.output_kind
+          : undefined
     };
   }
 

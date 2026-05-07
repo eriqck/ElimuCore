@@ -15,6 +15,8 @@ import {
   WidthType
 } from "docx";
 import type {
+  AssessmentDocumentContent,
+  LessonPlanDocumentContent,
   SchemeDocumentContent,
   SchemeDocumentRow,
   SchemeLanguage
@@ -261,6 +263,330 @@ export async function buildSchemeDocxBuffer(content: SchemeDocumentContent) {
               ...content.rows.map((row) => createDataRow(row, columns))
             ]
           })
+        ]
+      }
+    ]
+  });
+
+  return Packer.toBuffer(doc);
+}
+
+function createStandardDocumentHeader(children: Array<Paragraph | Table>) {
+  return children;
+}
+
+export async function buildLessonPlanDocxBuffer(
+  content: LessonPlanDocumentContent
+) {
+  const language = content.language;
+  const columns: ColumnDefinition[] =
+    language === "sw"
+      ? [
+          { title: "Kipindi", width: 1200 },
+          { title: "Muda", width: 900 },
+          { title: "Lengo", width: 1800 },
+          { title: "Matokeo Mahususi", width: 2100 },
+          { title: "Utangulizi", width: 1800 },
+          { title: "Shughuli za Ujifunzaji", width: 2600 },
+          { title: "Nyenzo", width: 1800 },
+          { title: "Tathmini", width: 1500 },
+          { title: "Kazi ya Nyumbani", width: 1700 },
+          { title: "Tofauti za Wanafunzi", width: 1800 }
+        ]
+      : [
+          { title: "Lesson", width: 1200 },
+          { title: "Duration", width: 900 },
+          { title: "Focus", width: 1800 },
+          { title: "Objectives", width: 2100 },
+          { title: "Introduction", width: 1800 },
+          { title: "Learning Activities", width: 2600 },
+          { title: "Resources", width: 1800 },
+          { title: "Assessment", width: 1500 },
+          { title: "Homework", width: 1700 },
+          { title: "Differentiation", width: 1800 }
+        ];
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 720,
+              bottom: 720,
+              left: 540,
+              right: 540
+            },
+            size: {
+              orientation: PageOrientation.LANDSCAPE
+            }
+          }
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Prepared with ELimuCore Scheme Bot",
+                    italics: true,
+                    color: "475569",
+                    size: 18
+                  })
+                ]
+              })
+            ]
+          })
+        },
+        children: createStandardDocumentHeader([
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.title,
+                bold: true,
+                underline: {},
+                size: 28,
+                color: "166534"
+              })
+            ]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 180
+            },
+            children: [
+              new TextRun({
+                text:
+                  language === "sw"
+                    ? `MWALIMU ${content.teacherName || "........................"}    SHULE ${content.schoolName || "........................"}    MUHULA ${content.term}    MWAKA ${content.year}`
+                    : `TEACHER ${content.teacherName || "........................"}    SCHOOL ${content.schoolName || "........................"}    TERM ${content.term}    YEAR ${content.year}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.subtitle,
+                size: 20,
+                color: "334155"
+              })
+            ]
+          }),
+          new Table({
+            width: {
+              size: 100,
+              type: WidthType.PERCENTAGE
+            },
+            layout: TableLayoutType.FIXED,
+            rows: [
+              createHeaderRow(columns),
+              ...content.lessons.map(
+                (lesson) =>
+                  new TableRow({
+                    children: [
+                      tableCell(lesson.lessonLabel, columns[0].width),
+                      tableCell(lesson.duration, columns[1].width, "FAFAFA"),
+                      tableCell(lesson.focus, columns[2].width),
+                      tableCell(lesson.objectives, columns[3].width, "FAFAFA"),
+                      tableCell(lesson.introduction, columns[4].width),
+                      tableCell(lesson.activities, columns[5].width, "FAFAFA"),
+                      tableCell(lesson.materials, columns[6].width),
+                      tableCell(lesson.assessment, columns[7].width, "FAFAFA"),
+                      tableCell(lesson.homework, columns[8].width),
+                      tableCell(
+                        lesson.differentiation,
+                        columns[9].width,
+                        "FAFAFA"
+                      )
+                    ]
+                  })
+              )
+            ]
+          })
+        ])
+      }
+    ]
+  });
+
+  return Packer.toBuffer(doc);
+}
+
+export async function buildAssessmentDocxBuffer(
+  content: AssessmentDocumentContent
+) {
+  const isSwahili = content.language === "sw";
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 900,
+              bottom: 900,
+              left: 720,
+              right: 720
+            }
+          }
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Prepared with ELimuCore Scheme Bot",
+                    italics: true,
+                    color: "475569",
+                    size: 18
+                  })
+                ]
+              })
+            ]
+          })
+        },
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.title,
+                bold: true,
+                underline: {},
+                size: 28,
+                color: "166534"
+              })
+            ]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text:
+                  isSwahili
+                    ? `${content.classLabel} - ${content.subject} - Muhula ${content.term} - ${content.year}`
+                    : `${content.classLabel} - ${content.subject} - Term ${content.term} - ${content.year}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.subtitle,
+                size: 20,
+                color: "334155"
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 160
+            },
+            children: [
+              new TextRun({
+                text: isSwahili
+                  ? `Muda: Dakika ${content.durationMinutes}    Jumla ya Alama: ${content.totalMarks}`
+                  : `Duration: ${content.durationMinutes} minutes    Total Marks: ${content.totalMarks}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          ...content.instructions.map(
+            (instruction) =>
+              new Paragraph({
+                spacing: {
+                  after: 80
+                },
+                children: [
+                  new TextRun({
+                    text: `- ${instruction}`,
+                    size: 20
+                  })
+                ]
+              })
+          ),
+          ...content.sections.flatMap((section) => [
+            new Paragraph({
+              spacing: {
+                before: 180,
+                after: 80
+              },
+              children: [
+                new TextRun({
+                  text: section.title,
+                  bold: true,
+                  size: 24,
+                  color: "166534"
+                })
+              ]
+            }),
+            new Paragraph({
+              spacing: {
+                after: 120
+              },
+              children: [
+                new TextRun({
+                  text: section.instructions,
+                  italics: true,
+                  size: 20,
+                  color: "475569"
+                })
+              ]
+            }),
+            ...section.items.flatMap((item) => [
+              new Paragraph({
+                spacing: {
+                  after: 80
+                },
+                children: [
+                  new TextRun({
+                    text: `${item.numberLabel} ${item.prompt} (${item.marks} ${
+                      isSwahili ? "alama" : "marks"
+                    })`,
+                    bold: true,
+                    size: 21
+                  })
+                ]
+              }),
+              new Paragraph({
+                spacing: {
+                  after: 120
+                },
+                children: [
+                  new TextRun({
+                    text: isSwahili
+                      ? `Mwongozo wa mwalimu: ${item.expectedAnswer}`
+                      : `Teacher guide: ${item.expectedAnswer}`,
+                    size: 19,
+                    color: "334155"
+                  })
+                ]
+              })
+            ])
+          ])
         ]
       }
     ]

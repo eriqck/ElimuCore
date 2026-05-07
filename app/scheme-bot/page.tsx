@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { MarketingEvent } from "@/components/marketing/marketing-event";
+import { SchemeGeneratorForm } from "@/components/schemes/scheme-generator-form";
 import { getCurrentMemberContext } from "@/lib/membership";
 import {
+  getTeacherDocumentPreviewTitle,
+  getTeacherDocumentRowCount,
   hasUnlimitedSchemeAccess,
   listUserSchemeRequests
 } from "@/lib/scheme-bot";
-import { SchemeGeneratorForm } from "@/components/schemes/scheme-generator-form";
+import { getTeacherDocumentKindLabel } from "@/lib/teacher-documents";
 
 type SchemeBotPageProps = {
   searchParams?: Promise<{
@@ -23,6 +26,18 @@ function formatStageLabel(stage: string) {
   }
 
   return "Junior School";
+}
+
+function getDocumentCountLabel(outputKind: string) {
+  if (outputKind === "assessment") {
+    return "questions";
+  }
+
+  if (outputKind === "lesson-plan") {
+    return "lessons";
+  }
+
+  return "weeks";
 }
 
 export default async function SchemeBotPage({
@@ -50,11 +65,12 @@ export default async function SchemeBotPage({
             Scheme Bot
           </p>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-900">
-            Sign in to start your scheme
+            Sign in to start planning
           </h1>
           <p className="mt-4 text-sm leading-7 text-slate-600">
-            Premium teachers build freely. One-time scheme requests are charged
-            KSh 20 and the document is prepared after payment.
+            Premium teachers build schemes, lesson plans, and assessments
+            freely. One-time teacher documents are charged KSh 20 and are
+            prepared after payment.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
@@ -100,12 +116,12 @@ export default async function SchemeBotPage({
               Scheme Bot
             </p>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
-              Build textbook-based schemes fast
+              Start with a scheme. Build the rest from there.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
               Pick the class, subject, term, and book reference. ELimuCore
-              prepares a ready Word document in the same planning style teachers
-              already use.
+              prepares a ready scheme first, then helps you turn it into a
+              lesson plan or assessment without starting over.
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -114,12 +130,12 @@ export default async function SchemeBotPage({
                   Premium teachers
                 </p>
                 <p className="mt-2 text-2xl font-black text-slate-900">
-                  Unlimited schemes
+                  Unlimited documents
                 </p>
               </div>
               <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
                 <p className="text-sm font-semibold text-slate-500">
-                  Single scheme
+                  Single document
                 </p>
                 <p className="mt-2 text-2xl font-black text-slate-900">
                   KSh 20
@@ -151,7 +167,7 @@ export default async function SchemeBotPage({
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
             <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
-              My schemes
+              My teacher documents
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900">
               Recent requests
@@ -167,6 +183,9 @@ export default async function SchemeBotPage({
                 className="rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm"
               >
                 <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-sky-800">
+                    {getTeacherDocumentKindLabel(request.outputKind)}
+                  </span>
                   <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">
                     {formatStageLabel(request.stage)}
                   </span>
@@ -175,14 +194,19 @@ export default async function SchemeBotPage({
                   </span>
                 </div>
                 <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-900">
-                  {request.classLabel} {request.subject}
+                  {getTeacherDocumentPreviewTitle(request)}
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  {`Term ${request.term} • ${request.year}`}
+                  {`Term ${request.term} - ${request.year}`}
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
                   {request.generatedOverview ||
-                    "Open this scheme to download the document or check the latest status."}
+                    `Open this ${getTeacherDocumentKindLabel(request.outputKind).toLowerCase()} to download it or check the latest status.`}
+                </p>
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  {`${getTeacherDocumentRowCount(request)} ${getDocumentCountLabel(
+                    request.outputKind
+                  )}`}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
@@ -206,10 +230,11 @@ export default async function SchemeBotPage({
         ) : (
           <div className="rounded-[2rem] border border-dashed border-stone-300 bg-white p-10 text-center shadow-sm">
             <h3 className="text-xl font-bold text-slate-900">
-              No schemes yet
+              No teacher documents yet
             </h3>
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              Build your first scheme and it will appear here.
+              Build your first scheme and then create follow-up lesson plans
+              and assessments from it.
             </p>
           </div>
         )}

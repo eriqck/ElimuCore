@@ -73,7 +73,7 @@ async function redirectToSchemeRequest(
   if (!user || user.id !== userId) {
     return NextResponse.redirect(
       new URL(
-        `/login?message=${encodeNotice("Payment confirmed. Sign in to open your generated scheme.")}&next=${encodeURIComponent(`/scheme-bot/${requestId}`)}`,
+        `/login?message=${encodeNotice("Payment confirmed. Sign in to open your generated document.")}&next=${encodeURIComponent(`/scheme-bot/${requestId}`)}`,
         request.url
       ),
       { status: 303 }
@@ -194,7 +194,7 @@ export async function GET(request: NextRequest) {
         payload: {
           value: schemePayment.amount_kes,
           currency: schemePayment.currency,
-          content_name: "Scheme Bot single purchase",
+          content_name: "Scheme Bot teacher document",
           content_category: "scheme_bot",
           purchase_type: "scheme",
           reference
