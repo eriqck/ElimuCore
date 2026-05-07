@@ -32,21 +32,6 @@ const followUpKinds = [
     outputKind: "lesson-plan",
     premiumLabel: "Create lesson plan",
     paidLabel: "Create lesson plan - KSh 20"
-  },
-  {
-    outputKind: "assessment",
-    premiumLabel: "Create assessment",
-    paidLabel: "Create assessment - KSh 20"
-  },
-  {
-    outputKind: "marking-scheme",
-    premiumLabel: "Create marking scheme",
-    paidLabel: "Create marking scheme - KSh 20"
-  },
-  {
-    outputKind: "lesson-notes",
-    premiumLabel: "Create lesson notes",
-    paidLabel: "Create lesson notes - KSh 20"
   }
 ] as const;
 
@@ -461,8 +446,7 @@ export default async function SchemeRequestDetailPage({
               {`Term ${request.term} - ${request.year}`}
             </p>
             <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600">
-              {request.generatedOverview ||
-                "Open your document, download it, or continue into the next planning task from here."}
+              {request.generatedOverview || "Open your document."}
             </p>
 
             {notice ? (
@@ -550,10 +534,10 @@ export default async function SchemeRequestDetailPage({
                 </p>
                 <p className="mt-3 text-sm leading-7 text-white/78">
                   {request.status === "completed"
-                    ? "This document is ready. You can download it now or continue into the next teacher task."
+                    ? "This document is ready."
                     : request.status === "failed"
-                      ? "You can build this document again from the same saved details."
-                      : "Refresh shortly while ELimuCore finishes your document."}
+                      ? "You can build this document again."
+                      : "Refresh shortly."}
                 </p>
               </div>
             </div>
@@ -564,14 +548,9 @@ export default async function SchemeRequestDetailPage({
           <section className="scheme-bot-surface-card mt-8 p-7 sm:p-8">
             <span className="scheme-bot-chip">Next step</span>
             <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
-              Turn this scheme into more teacher documents
+              Create lesson plan
             </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Keep building from the same saved scheme instead of filling the
-              form again. Pick the next document you need.
-            </p>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-2">
               {followUpKinds.map((item) => (
                 <form
                   key={item.outputKind}
@@ -584,9 +563,6 @@ export default async function SchemeRequestDetailPage({
                   <h3 className="mt-2 text-lg font-bold text-slate-950">
                     {getTeacherDocumentKindLabel(item.outputKind)}
                   </h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
-                    Open this next from the same class, subject, and term details.
-                  </p>
                   <button type="submit" className="scheme-bot-button-primary mt-5">
                     {hasUnlimitedAccess ? item.premiumLabel : item.paidLabel}
                   </button>

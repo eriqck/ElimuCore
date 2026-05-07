@@ -17,19 +17,19 @@ type SchemeGeneratorFormProps = {
 const stageOptions: Array<{
   value: SchemeStage;
   label: string;
-  description: string;
+  range: string;
   classes: string[];
 }> = [
   {
     value: "pre-primary",
     label: "Pre-Primary",
-    description: "PP1 and PP2 planning support",
+    range: "PP1 and PP2",
     classes: ["PP1", "PP2"]
   },
   {
     value: "junior-school",
     label: "Junior School",
-    description: "Grade 1 to Grade 9 documents",
+    range: "Grade 1 to Grade 9",
     classes: [
       "Grade 1",
       "Grade 2",
@@ -45,7 +45,7 @@ const stageOptions: Array<{
   {
     value: "senior-school",
     label: "Senior School",
-    description: "Grade 10 classroom planning",
+    range: "Grade 10",
     classes: ["Grade 10"]
   }
 ];
@@ -102,13 +102,8 @@ export function SchemeGeneratorForm({
         <div>
           <span className="scheme-bot-chip">New document</span>
           <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
-            Start your scheme
+            Scheme of Work
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            Fill the class details once. You can open lesson plans,
-            assessments, notes, and marking guides from the completed scheme
-            later.
-          </p>
         </div>
         <div className="scheme-bot-access-pill">
           {hasUnlimitedAccess ? "Premium access" : "KSh 20 per document"}
@@ -137,11 +132,11 @@ export function SchemeGeneratorForm({
                 }}
                 className="sr-only"
               />
-              <span className="text-sm font-bold text-slate-950">
+              <span className="block text-base font-bold text-slate-950">
                 {option.label}
               </span>
-              <span className="mt-2 text-sm leading-6 text-slate-600">
-                {option.description}
+              <span className="mt-2 block text-sm leading-6 text-slate-600">
+                {option.range}
               </span>
             </label>
           );
@@ -350,11 +345,11 @@ export function SchemeGeneratorForm({
       <div className="scheme-bot-form-footer">
         <div className="scheme-bot-form-note">
           {hasUnlimitedAccess
-            ? "Premium teachers can build and download as many documents as they need."
-            : "Single-purchase teachers are charged only when they continue to document checkout."}
+            ? "Unlimited access"
+            : "KSh 20 one-time access"}
         </div>
         <button type="submit" className="scheme-bot-button-primary">
-          {hasUnlimitedAccess ? "Build scheme" : "Continue to KSh 20 checkout"}
+          {hasUnlimitedAccess ? "Build scheme of work" : "Continue to checkout"}
         </button>
       </div>
     </form>

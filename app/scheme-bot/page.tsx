@@ -16,43 +16,7 @@ type SchemeBotPageProps = {
   }>;
 };
 
-const outputPreview = [
-  "Scheme of work",
-  "Lesson plan",
-  "Assessment",
-  "Marking scheme",
-  "Lesson notes"
-];
-
-const workflowSteps = [
-  {
-    title: "Choose your class and subject",
-    body: "Pick the level, class, term, subject, and book reference your school is already using."
-  },
-  {
-    title: "Build one clean base document",
-    body: "Start with a structured scheme that stays aligned with your class level and textbook."
-  },
-  {
-    title: "Open follow-up documents faster",
-    body: "Turn the same scheme into a lesson plan, assessment, notes, or marking guide without restarting."
-  }
-];
-
-const builderHighlights = [
-  {
-    title: "Built for real classroom planning",
-    body: "Use real book references, term details, and class information before you download."
-  },
-  {
-    title: "Easy for premium and one-time use",
-    body: "Premium teachers build freely. One-time teachers can pay KSh 20 only when they need one document."
-  },
-  {
-    title: "Clean downloadable Word format",
-    body: "Every document is prepared as a DOCX file that is easy to edit before printing or sharing."
-  }
-];
+const outputPreview = ["Scheme of Work", "Lesson Plan"];
 
 function formatStageLabel(stage: string) {
   if (stage === "pre-primary") {
@@ -95,12 +59,11 @@ function PreviewPanel() {
           Teacher workflow
         </span>
         <h2 className="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
-          One scheme.
-          <span className="block text-white/72">Many classroom documents.</span>
+          Scheme of Work
+          <span className="block text-white/72">Lesson Plan</span>
         </h2>
         <p className="mt-4 max-w-md text-sm leading-7 text-white/82">
-          Build your scheme first, then open lesson plans, assessments,
-          marking guides, and notes from the same planning path.
+          Start with your scheme, then open the matching lesson plan.
         </p>
 
         <div className="mt-7 grid gap-3 sm:grid-cols-2">
@@ -119,7 +82,7 @@ function PreviewPanel() {
                 Access
               </p>
               <p className="mt-2 text-xl font-bold text-white">
-                Premium or pay once
+                Premium or one time
               </p>
             </div>
             <div className="rounded-full bg-white/12 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white">
@@ -173,12 +136,13 @@ export default async function SchemeBotPage({
             <div className="scheme-bot-surface-card p-7 sm:p-10">
               <span className="scheme-bot-chip">Scheme Bot</span>
               <h1 className="mt-6 max-w-2xl text-4xl font-black tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-                Create teacher documents faster with one clean workflow.
+                Scheme of Work.
+                <span className="scheme-bot-gradient-text block">
+                  Lesson Plan.
+                </span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-8 text-slate-600">
-                Sign in first, then choose your class, subject, and term.
-                Premium teachers build freely. One-time purchases are charged
-                only when you continue to document checkout.
+                Sign in to start.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -216,7 +180,10 @@ export default async function SchemeBotPage({
     );
   }
 
-  const requests = await listUserSchemeRequests(memberContext.user.id);
+  const requests = (await listUserSchemeRequests(memberContext.user.id)).filter(
+    (request) =>
+      request.outputKind === "scheme" || request.outputKind === "lesson-plan"
+  );
   const hasUnlimitedAccess = hasUnlimitedSchemeAccess(memberContext);
   const teacherName =
     memberContext.profile?.fullName?.trim() ||
@@ -240,15 +207,13 @@ export default async function SchemeBotPage({
           <div className="scheme-bot-surface-card p-7 sm:p-10">
             <span className="scheme-bot-chip">Scheme Bot</span>
             <h1 className="mt-6 max-w-2xl text-4xl font-black tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-              Build one planning document.
+              Scheme of Work.
               <span className="scheme-bot-gradient-text block">
-                Open the rest from it.
+                Lesson Plan.
               </span>
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600">
-              Prepare a scheme first, then keep moving into lesson plans,
-              assessments, notes, and marking guides without repeating the
-              whole setup again.
+              Build what you need.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -270,8 +235,8 @@ export default async function SchemeBotPage({
                 <p className="scheme-bot-metric-value">KSh 20</p>
               </div>
               <div className="scheme-bot-metric-card">
-                <p className="scheme-bot-metric-label">Workflow</p>
-                <p className="scheme-bot-metric-value">5 outputs</p>
+                <p className="scheme-bot-metric-label">Outputs</p>
+                <p className="scheme-bot-metric-value">2</p>
               </div>
             </div>
 
@@ -296,44 +261,30 @@ export default async function SchemeBotPage({
             hasUnlimitedAccess={hasUnlimitedAccess}
           />
         </div>
-
-        <div className="grid gap-6">
-          <article className="scheme-bot-dark-card">
+        <div className="scheme-bot-dark-card flex items-center justify-center p-7 sm:p-10">
+          <div className="w-full max-w-md">
             <span className="scheme-bot-chip scheme-bot-chip-dark">
-              How it works
+              Included
             </span>
-            <div className="mt-6 space-y-4">
-              {workflowSteps.map((step, index) => (
-                <div key={step.title} className="scheme-bot-step-card">
-                  <span className="scheme-bot-step-index">{index + 1}</span>
-                  <div>
-                    <h2 className="text-base font-bold text-white">
-                      {step.title}
-                    </h2>
-                    <p className="mt-2 text-sm leading-7 text-white/76">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="scheme-bot-surface-card p-7">
-            <span className="scheme-bot-chip">Teacher support</span>
             <div className="mt-6 grid gap-4">
-              {builderHighlights.map((item) => (
-                <div key={item.title} className="scheme-bot-note-card">
-                  <h2 className="text-base font-bold text-slate-950">
-                    {item.title}
+              <div className="scheme-bot-step-card">
+                <span className="scheme-bot-step-index">1</span>
+                <div>
+                  <h2 className="text-base font-bold text-white">
+                    Scheme of Work
                   </h2>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">
-                    {item.body}
-                  </p>
                 </div>
-              ))}
+              </div>
+              <div className="scheme-bot-step-card">
+                <span className="scheme-bot-step-index">2</span>
+                <div>
+                  <h2 className="text-base font-bold text-white">
+                    Lesson Plan
+                  </h2>
+                </div>
+              </div>
             </div>
-          </article>
+          </div>
         </div>
       </section>
 
@@ -345,10 +296,6 @@ export default async function SchemeBotPage({
               Recent teacher work
             </h2>
           </div>
-          <p className="max-w-xl text-sm leading-7 text-slate-600">
-            Reopen a completed document, download it, or continue into the next
-            planning step.
-          </p>
         </div>
 
         {requests.length > 0 ? (
@@ -375,7 +322,7 @@ export default async function SchemeBotPage({
                 </p>
                 <p className="mt-4 text-sm leading-7 text-slate-600">
                   {request.generatedOverview ||
-                    `Open this ${getTeacherDocumentKindLabel(request.outputKind).toLowerCase()} to download it or continue to the next step.`}
+                    `Open this ${getTeacherDocumentKindLabel(request.outputKind).toLowerCase()} to download it.`}
                 </p>
 
                 <div className="mt-5 grid grid-cols-2 gap-3">
@@ -417,10 +364,6 @@ export default async function SchemeBotPage({
             <h3 className="text-2xl font-black text-slate-950">
               No teacher documents yet
             </h3>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Start with one scheme today, then use it to open lesson plans,
-              assessments, notes, and marking guides later.
-            </p>
           </div>
         )}
       </section>
