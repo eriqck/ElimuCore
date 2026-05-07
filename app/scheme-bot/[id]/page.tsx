@@ -27,6 +27,29 @@ type SchemeRequestDetailPageProps = {
   }>;
 };
 
+const followUpKinds = [
+  {
+    outputKind: "lesson-plan",
+    premiumLabel: "Create lesson plan",
+    paidLabel: "Create lesson plan - KSh 20"
+  },
+  {
+    outputKind: "assessment",
+    premiumLabel: "Create assessment",
+    paidLabel: "Create assessment - KSh 20"
+  },
+  {
+    outputKind: "marking-scheme",
+    premiumLabel: "Create marking scheme",
+    paidLabel: "Create marking scheme - KSh 20"
+  },
+  {
+    outputKind: "lesson-notes",
+    premiumLabel: "Create lesson notes",
+    paidLabel: "Create lesson notes - KSh 20"
+  }
+] as const;
+
 function formatStageLabel(stage: string) {
   if (stage === "pre-primary") {
     return "Pre-Primary";
@@ -156,49 +179,26 @@ function renderSchemePreview(content: SchemeDocumentContent) {
 
   return (
     <div className="mt-6 overflow-x-auto">
-      <table className="min-w-full border-collapse overflow-hidden rounded-2xl border border-stone-200">
-        <thead className="bg-emerald-50">
+      <table className="scheme-bot-preview-table min-w-full">
+        <thead>
           <tr>
             {headings.map((heading) => (
-              <th
-                key={heading}
-                className="border border-stone-200 px-3 py-3 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-700"
-              >
-                {heading}
-              </th>
+              <th key={heading}>{heading}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {content.rows.slice(0, 6).map((row, index) => (
             <tr key={`${row.weekLabel}-${row.lessonLabel}-${index}`}>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.weekLabel}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.lessonLabel}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.strand}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.subStrand}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.outcomes.join(" ")}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.experiences.join(" ")}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.keyInquiryQuestions.join(" ")}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.resources.join(" ")}
-              </td>
-              <td className="border border-stone-200 px-3 py-3 text-sm text-slate-700">
-                {row.assessment.join(" ")}
-              </td>
+              <td>{row.weekLabel}</td>
+              <td>{row.lessonLabel}</td>
+              <td>{row.strand}</td>
+              <td>{row.subStrand}</td>
+              <td>{row.outcomes.join(" ")}</td>
+              <td>{row.experiences.join(" ")}</td>
+              <td>{row.keyInquiryQuestions.join(" ")}</td>
+              <td>{row.resources.join(" ")}</td>
+              <td>{row.assessment.join(" ")}</td>
             </tr>
           ))}
         </tbody>
@@ -211,66 +211,49 @@ function renderLessonPlanPreview(content: LessonPlanDocumentContent) {
   return (
     <div className="mt-6 grid gap-4">
       {content.lessons.slice(0, 6).map((lesson) => (
-        <article
-          key={lesson.lessonLabel}
-          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
-        >
+        <article key={lesson.lessonLabel} className="scheme-bot-preview-block">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-lg font-bold text-slate-900">
+            <h3 className="text-lg font-bold text-slate-950">
               {lesson.lessonLabel}
             </h3>
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
-              {lesson.duration}
-            </span>
+            <span className="scheme-bot-detail-pill">{lesson.duration}</span>
           </div>
-          <p className="mt-3 text-sm font-semibold text-emerald-800">
+          <p className="mt-3 text-sm font-semibold text-[#5a51f5]">
             {lesson.focus}
           </p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Objectives
-              </p>
+              <p className="scheme-bot-field-mini-label">Objectives</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.objectives.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Introduction
-              </p>
+              <p className="scheme-bot-field-mini-label">Introduction</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.introduction.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Activities
-              </p>
+              <p className="scheme-bot-field-mini-label">Activities</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.activities.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Assessment
-              </p>
+              <p className="scheme-bot-field-mini-label">Assessment</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.assessment.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Homework
-              </p>
+              <p className="scheme-bot-field-mini-label">Homework</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.homework.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Differentiation
-              </p>
+              <p className="scheme-bot-field-mini-label">Differentiation</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {lesson.differentiation.join(" ")}
               </p>
@@ -285,8 +268,8 @@ function renderLessonPlanPreview(content: LessonPlanDocumentContent) {
 function renderAssessmentPreview(content: AssessmentDocumentContent) {
   return (
     <div className="mt-6 space-y-5">
-      <div className="rounded-[1.5rem] border border-emerald-100 bg-emerald-50 p-5">
-        <p className="text-sm font-semibold text-emerald-900">
+      <div className="scheme-bot-highlight-card">
+        <p className="text-sm font-semibold text-[#271f76]">
           {`Duration: ${content.durationMinutes} minutes - Total marks: ${content.totalMarks}`}
         </p>
         <div className="mt-3 space-y-2">
@@ -299,11 +282,8 @@ function renderAssessmentPreview(content: AssessmentDocumentContent) {
       </div>
 
       {content.sections.map((section) => (
-        <section
-          key={section.title}
-          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
-        >
-          <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
+        <section key={section.title} className="scheme-bot-preview-block">
+          <h3 className="text-lg font-bold text-slate-950">{section.title}</h3>
           <p className="mt-2 text-sm italic leading-7 text-slate-600">
             {section.instructions}
           </p>
@@ -311,15 +291,15 @@ function renderAssessmentPreview(content: AssessmentDocumentContent) {
             {section.items.slice(0, 4).map((item) => (
               <article
                 key={`${section.title}-${item.numberLabel}`}
-                className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm"
+                className="scheme-bot-sub-block"
               >
-                <p className="text-sm font-bold text-slate-900">
+                <p className="text-sm font-bold text-slate-950">
                   {`${item.numberLabel} ${item.prompt}`}
                 </p>
                 <p className="mt-2 text-sm text-slate-600">
                   {`Teacher guide: ${item.expectedAnswer}`}
                 </p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-[#5a51f5]">
                   {`${item.marks} marks`}
                 </p>
               </article>
@@ -334,18 +314,15 @@ function renderAssessmentPreview(content: AssessmentDocumentContent) {
 function renderMarkingSchemePreview(content: MarkingSchemeDocumentContent) {
   return (
     <div className="mt-6 space-y-5">
-      <div className="rounded-[1.5rem] border border-emerald-100 bg-emerald-50 p-5">
-        <p className="text-sm font-semibold text-emerald-900">
+      <div className="scheme-bot-highlight-card">
+        <p className="text-sm font-semibold text-[#271f76]">
           {`Total marks: ${content.totalMarks}`}
         </p>
       </div>
 
       {content.sections.map((section) => (
-        <section
-          key={section.title}
-          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
-        >
-          <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
+        <section key={section.title} className="scheme-bot-preview-block">
+          <h3 className="text-lg font-bold text-slate-950">{section.title}</h3>
           <p className="mt-2 text-sm italic leading-7 text-slate-600">
             {section.guidance}
           </p>
@@ -353,9 +330,9 @@ function renderMarkingSchemePreview(content: MarkingSchemeDocumentContent) {
             {section.items.slice(0, 4).map((item) => (
               <article
                 key={`${section.title}-${item.questionLabel}`}
-                className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm"
+                className="scheme-bot-sub-block"
               >
-                <p className="text-sm font-bold text-slate-900">
+                <p className="text-sm font-bold text-slate-950">
                   {`${item.questionLabel} ${item.prompt}`}
                 </p>
                 <div className="mt-2 space-y-2">
@@ -365,7 +342,7 @@ function renderMarkingSchemePreview(content: MarkingSchemeDocumentContent) {
                     </p>
                   ))}
                 </div>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-[#5a51f5]">
                   {`${item.marks} marks`}
                 </p>
               </article>
@@ -381,53 +358,40 @@ function renderLessonNotesPreview(content: LessonNotesDocumentContent) {
   return (
     <div className="mt-6 grid gap-4">
       {content.sections.slice(0, 5).map((section) => (
-        <article
-          key={section.sectionLabel}
-          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
-        >
-          <h3 className="text-lg font-bold text-slate-900">
+        <article key={section.sectionLabel} className="scheme-bot-preview-block">
+          <h3 className="text-lg font-bold text-slate-950">
             {section.sectionLabel}
           </h3>
-          <p className="mt-2 text-sm font-semibold text-emerald-800">
+          <p className="mt-2 text-sm font-semibold text-[#5a51f5]">
             {section.focus}
           </p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Objectives
-              </p>
+              <p className="scheme-bot-field-mini-label">Objectives</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {section.objectives.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Notes
-              </p>
+              <p className="scheme-bot-field-mini-label">Notes</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {section.explanation.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Examples
-              </p>
+              <p className="scheme-bot-field-mini-label">Examples</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {section.examples.join(" ")}
               </p>
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Learner tasks
-              </p>
+              <p className="scheme-bot-field-mini-label">Learner tasks</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {section.learnerTasks.join(" ")}
               </p>
             </div>
             <div className="md:col-span-2">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
-                Home support
-              </p>
+              <p className="scheme-bot-field-mini-label">Home support</p>
               <p className="mt-2 text-sm leading-7 text-slate-700">
                 {section.homeSupport.join(" ")}
               </p>
@@ -469,190 +433,182 @@ export default async function SchemeRequestDetailPage({
   const hasUnlimitedAccess = hasUnlimitedSchemeAccess(memberContext);
 
   return (
-    <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
-      <section className="mx-auto max-w-6xl rounded-[2rem] border border-white/60 surface-card p-6 sm:p-8 lg:p-10">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-sky-800">
-            {documentLabel}
-          </span>
-          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-emerald-800">
-            {formatStageLabel(request.stage)}
-          </span>
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-700">
-            {request.status.replaceAll("_", " ")}
-          </span>
-          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-amber-800">
-            {request.accessMode === "premium"
-              ? "Premium access"
-              : "Single purchase"}
-          </span>
-        </div>
+    <main className="scheme-bot-stage min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl">
+        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="scheme-bot-surface-card p-7 sm:p-10">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="scheme-bot-tag scheme-bot-tag-primary">
+                {documentLabel}
+              </span>
+              <span className="scheme-bot-tag scheme-bot-tag-soft">
+                {formatStageLabel(request.stage)}
+              </span>
+              <span className="scheme-bot-tag scheme-bot-tag-neutral">
+                {request.status.replaceAll("_", " ")}
+              </span>
+              <span className="scheme-bot-tag scheme-bot-tag-neutral">
+                {request.accessMode === "premium"
+                  ? "Premium access"
+                  : "Single purchase"}
+              </span>
+            </div>
 
-        <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-900">
-          {getTeacherDocumentPreviewTitle(request)}
-        </h1>
-        <p className="mt-3 text-sm leading-7 text-slate-600">
-          {`Term ${request.term} - ${request.year}`}
-        </p>
+            <h1 className="mt-6 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+              {getTeacherDocumentPreviewTitle(request)}
+            </h1>
+            <p className="mt-4 text-sm font-semibold text-slate-500">
+              {`Term ${request.term} - ${request.year}`}
+            </p>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600">
+              {request.generatedOverview ||
+                "Open your document, download it, or continue into the next planning task from here."}
+            </p>
 
-        {notice ? (
-          <div className="mt-6 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm font-medium text-emerald-900">
-            {notice}
-          </div>
-        ) : null}
+            {notice ? (
+              <div className="mt-6 rounded-[1.25rem] border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm font-semibold text-emerald-900">
+                {notice}
+              </div>
+            ) : null}
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Teacher
-            </p>
-            <p className="mt-2 text-lg font-bold text-slate-900">
-              {request.teacherName || "Not added"}
-            </p>
-          </div>
-          <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              School
-            </p>
-            <p className="mt-2 text-lg font-bold text-slate-900">
-              {request.schoolName || "Not added"}
-            </p>
-          </div>
-          <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              {getDocumentCountHeading(request)}
-            </p>
-            <p className="mt-2 text-lg font-bold text-slate-900">
-              {getTeacherDocumentRowCount(request)}
-            </p>
-          </div>
-          <div className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Textbook
-            </p>
-            <p className="mt-2 text-lg font-bold text-slate-900">
-              {request.textbook || "Not added"}
-            </p>
-          </div>
-        </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              {request.status === "completed" ? (
+                <Link
+                  href={`/api/scheme-requests/${request.id}/download`}
+                  className="scheme-bot-button-primary"
+                >
+                  Download DOCX
+                </Link>
+              ) : null}
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          {request.status === "completed" ? (
-            <Link
-              href={`/api/scheme-requests/${request.id}/download`}
-              className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
-            >
-              Download DOCX
-            </Link>
-          ) : null}
-          {request.status === "failed" &&
-          (request.accessMode === "premium" || request.paidAt) ? (
-            <form action={`/api/scheme-requests/${request.id}/retry`} method="post">
-              <button
-                type="submit"
-                className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
-              >
-                Build again
-              </button>
-            </form>
-          ) : null}
-          <Link
-            href="/scheme-bot"
-            className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
-          >
-            Back to Scheme Bot
-          </Link>
+              {request.status === "failed" &&
+              (request.accessMode === "premium" || request.paidAt) ? (
+                <form
+                  action={`/api/scheme-requests/${request.id}/retry`}
+                  method="post"
+                >
+                  <button
+                    type="submit"
+                    className="scheme-bot-button-primary"
+                  >
+                    Build again
+                  </button>
+                </form>
+              ) : null}
+
+              <Link href="/scheme-bot" className="scheme-bot-button-secondary">
+                Back to Scheme Bot
+              </Link>
+            </div>
+          </div>
+
+          <div className="scheme-bot-preview-panel">
+            <div className="scheme-bot-preview-glow" />
+            <div className="relative">
+              <span className="scheme-bot-chip scheme-bot-chip-dark">
+                Document summary
+              </span>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="scheme-bot-preview-stat">
+                  <p className="scheme-bot-field-mini-label">Teacher</p>
+                  <p className="mt-2 text-lg font-bold text-slate-950">
+                    {request.teacherName || "Not added"}
+                  </p>
+                </div>
+                <div className="scheme-bot-preview-stat">
+                  <p className="scheme-bot-field-mini-label">School</p>
+                  <p className="mt-2 text-lg font-bold text-slate-950">
+                    {request.schoolName || "Not added"}
+                  </p>
+                </div>
+                <div className="scheme-bot-preview-stat">
+                  <p className="scheme-bot-field-mini-label">
+                    {getDocumentCountHeading(request)}
+                  </p>
+                  <p className="mt-2 text-lg font-bold text-slate-950">
+                    {getTeacherDocumentRowCount(request)}
+                  </p>
+                </div>
+                <div className="scheme-bot-preview-stat">
+                  <p className="scheme-bot-field-mini-label">Textbook</p>
+                  <p className="mt-2 text-lg font-bold text-slate-950">
+                    {request.textbook || "Not added"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-[1.75rem] bg-white/12 p-5 ring-1 ring-white/18 backdrop-blur-sm">
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/60">
+                  Status
+                </p>
+                <p className="mt-2 text-xl font-bold text-white">
+                  {request.status === "completed"
+                    ? "Ready to download"
+                    : request.status === "failed"
+                      ? "Needs another try"
+                      : "Still preparing"}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-white/78">
+                  {request.status === "completed"
+                    ? "This document is ready. You can download it now or continue into the next teacher task."
+                    : request.status === "failed"
+                      ? "You can build this document again from the same saved details."
+                      : "Refresh shortly while ELimuCore finishes your document."}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {canCreateFollowUps ? (
-          <section className="mt-10 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
-              Next step
-            </p>
-            <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
-              Turn this scheme into the next teacher document
+          <section className="scheme-bot-surface-card mt-8 p-7 sm:p-8">
+            <span className="scheme-bot-chip">Next step</span>
+            <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
+              Turn this scheme into more teacher documents
             </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
-              Use this completed scheme as the base for your next teacher
-              document. You do not need to fill the planning form again.
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
+              Keep building from the same saved scheme instead of filling the
+              form again. Pick the next document you need.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <form
-                action={`/api/scheme-requests/${request.id}/create-follow-up`}
-                method="post"
-              >
-                <input type="hidden" name="output_kind" value="lesson-plan" />
-                <button
-                  type="submit"
-                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition"
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {followUpKinds.map((item) => (
+                <form
+                  key={item.outputKind}
+                  action={`/api/scheme-requests/${request.id}/create-follow-up`}
+                  method="post"
+                  className="scheme-bot-note-card"
                 >
-                  {hasUnlimitedAccess
-                    ? "Create lesson plan"
-                    : "Create lesson plan - KSh 20"}
-                </button>
-              </form>
-              <form
-                action={`/api/scheme-requests/${request.id}/create-follow-up`}
-                method="post"
-              >
-                <input type="hidden" name="output_kind" value="assessment" />
-                <button
-                  type="submit"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
-                >
-                  {hasUnlimitedAccess
-                    ? "Create assessment"
-                    : "Create assessment - KSh 20"}
-                </button>
-              </form>
-              <form
-                action={`/api/scheme-requests/${request.id}/create-follow-up`}
-                method="post"
-              >
-                <input
-                  type="hidden"
-                  name="output_kind"
-                  value="marking-scheme"
-                />
-                <button
-                  type="submit"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
-                >
-                  {hasUnlimitedAccess
-                    ? "Create marking scheme"
-                    : "Create marking scheme - KSh 20"}
-                </button>
-              </form>
-              <form
-                action={`/api/scheme-requests/${request.id}/create-follow-up`}
-                method="post"
-              >
-                <input
-                  type="hidden"
-                  name="output_kind"
-                  value="lesson-notes"
-                />
-                <button
-                  type="submit"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
-                >
-                  {hasUnlimitedAccess
-                    ? "Create lesson notes"
-                    : "Create lesson notes - KSh 20"}
-                </button>
-              </form>
+                  <input type="hidden" name="output_kind" value={item.outputKind} />
+                  <p className="scheme-bot-field-mini-label">Follow-up</p>
+                  <h3 className="mt-2 text-lg font-bold text-slate-950">
+                    {getTeacherDocumentKindLabel(item.outputKind)}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                    Open this next from the same class, subject, and term details.
+                  </p>
+                  <button type="submit" className="scheme-bot-button-primary mt-5">
+                    {hasUnlimitedAccess ? item.premiumLabel : item.paidLabel}
+                  </button>
+                </form>
+              ))}
             </div>
           </section>
         ) : null}
 
         {request.generatedContent ? (
-          <section className="mt-10 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-              {`${documentLabel} preview`}
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
-              {request.generatedOverview || request.generatedContent.subtitle}
-            </p>
+          <section className="scheme-bot-surface-card mt-8 p-7 sm:p-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <span className="scheme-bot-chip">Preview</span>
+                <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
+                  {`${documentLabel} preview`}
+                </h2>
+              </div>
+              <p className="max-w-2xl text-sm leading-7 text-slate-600">
+                {request.generatedOverview || request.generatedContent.subtitle}
+              </p>
+            </div>
             {isSchemePreview(request.generatedContent)
               ? renderSchemePreview(request.generatedContent)
               : null}
@@ -670,8 +626,8 @@ export default async function SchemeRequestDetailPage({
               : null}
           </section>
         ) : request.status === "failed" ? (
-          <section className="mt-10 rounded-[2rem] border border-rose-200 bg-rose-50 p-6">
-            <h2 className="text-xl font-bold text-slate-900">
+          <section className="scheme-bot-error-card mt-8">
+            <h2 className="text-xl font-bold text-slate-950">
               {getFailedHeading(request)}
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-700">
@@ -680,8 +636,8 @@ export default async function SchemeRequestDetailPage({
             </p>
           </section>
         ) : (
-          <section className="mt-10 rounded-[2rem] border border-amber-200 bg-amber-50 p-6">
-            <h2 className="text-xl font-bold text-slate-900">
+          <section className="scheme-bot-pending-card mt-8">
+            <h2 className="text-xl font-bold text-slate-950">
               {getPendingHeading(request)}
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-700">

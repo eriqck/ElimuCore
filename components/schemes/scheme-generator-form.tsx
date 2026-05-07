@@ -17,16 +17,19 @@ type SchemeGeneratorFormProps = {
 const stageOptions: Array<{
   value: SchemeStage;
   label: string;
+  description: string;
   classes: string[];
 }> = [
   {
     value: "pre-primary",
     label: "Pre-Primary",
+    description: "PP1 and PP2 planning support",
     classes: ["PP1", "PP2"]
   },
   {
     value: "junior-school",
     label: "Junior School",
+    description: "Grade 1 to Grade 9 documents",
     classes: [
       "Grade 1",
       "Grade 2",
@@ -42,6 +45,7 @@ const stageOptions: Array<{
   {
     value: "senior-school",
     label: "Senior School",
+    description: "Grade 10 classroom planning",
     classes: ["Grade 10"]
   }
 ];
@@ -92,40 +96,61 @@ export function SchemeGeneratorForm({
           });
         }
       }}
-      className="grid gap-5 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-sm"
+      className="scheme-bot-form-card"
     >
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <label
-            htmlFor="stage"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
-            Level
-          </label>
-          <select
-            id="stage"
-            name="stage"
-            value={stage}
-            onChange={(event) => {
-              const nextStage = event.target.value as SchemeStage;
-              const nextClasses = getClassesForStage(nextStage);
-              setStage(nextStage);
-              setClassLabel(nextClasses[0] ?? "");
-            }}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
-          >
-            {stageOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <span className="scheme-bot-chip">New document</span>
+          <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950">
+            Start your scheme
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+            Fill the class details once. You can open lesson plans,
+            assessments, notes, and marking guides from the completed scheme
+            later.
+          </p>
         </div>
+        <div className="scheme-bot-access-pill">
+          {hasUnlimitedAccess ? "Premium access" : "KSh 20 per document"}
+        </div>
+      </div>
+
+      <div className="mt-2 grid gap-3 lg:grid-cols-3">
+        {stageOptions.map((option) => {
+          const active = stage === option.value;
+
+          return (
+            <label
+              key={option.value}
+              className={`scheme-bot-stage-card ${active ? "scheme-bot-stage-card-active" : ""}`}
+            >
+              <input
+                type="radio"
+                name="stage"
+                value={option.value}
+                checked={active}
+                onChange={() => {
+                  const nextStage = option.value;
+                  const nextClasses = getClassesForStage(nextStage);
+                  setStage(nextStage);
+                  setClassLabel(nextClasses[0] ?? "");
+                }}
+                className="sr-only"
+              />
+              <span className="text-sm font-bold text-slate-950">
+                {option.label}
+              </span>
+              <span className="mt-2 text-sm leading-6 text-slate-600">
+                {option.description}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label
-            htmlFor="class_label"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="class_label" className="scheme-bot-field-label">
             Class
           </label>
           <select
@@ -133,7 +158,7 @@ export function SchemeGeneratorForm({
             name="class_label"
             value={classLabel}
             onChange={(event) => setClassLabel(event.target.value)}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
           >
             {classOptions.map((option) => (
               <option key={option} value={option}>
@@ -142,14 +167,9 @@ export function SchemeGeneratorForm({
             ))}
           </select>
         </div>
-      </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label
-            htmlFor="subject"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="subject" className="scheme-bot-field-label">
             Subject
           </label>
           <input
@@ -162,7 +182,7 @@ export function SchemeGeneratorForm({
               setSubject(nextSubject);
               setLanguage(inferLanguage(nextSubject));
             }}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             placeholder="Type or choose a subject"
             required
           />
@@ -172,50 +192,27 @@ export function SchemeGeneratorForm({
             ))}
           </datalist>
         </div>
-        <div>
-          <label
-            htmlFor="language"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
-            Output language
-          </label>
-          <select
-            id="language"
-            name="language"
-            value={language}
-            onChange={(event) => setLanguage(event.target.value as SchemeLanguage)}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
-          >
-            <option value="en">English</option>
-            <option value="sw">Kiswahili</option>
-          </select>
-        </div>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-4">
         <div>
-          <label
-            htmlFor="term"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="term" className="scheme-bot-field-label">
             Term
           </label>
           <select
             id="term"
             name="term"
             defaultValue="2"
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
           >
             <option value="1">Term 1</option>
             <option value="2">Term 2</option>
             <option value="3">Term 3</option>
           </select>
         </div>
+
         <div>
-          <label
-            htmlFor="year"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="year" className="scheme-bot-field-label">
             Year
           </label>
           <input
@@ -225,15 +222,13 @@ export function SchemeGeneratorForm({
             min="2024"
             max="2100"
             defaultValue={new Date().getFullYear()}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             required
           />
         </div>
+
         <div>
-          <label
-            htmlFor="weeks_in_term"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="weeks_in_term" className="scheme-bot-field-label">
             Weeks
           </label>
           <input
@@ -243,15 +238,13 @@ export function SchemeGeneratorForm({
             min="1"
             max="20"
             defaultValue="12"
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             required
           />
         </div>
+
         <div>
-          <label
-            htmlFor="lessons_per_week"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="lessons_per_week" className="scheme-bot-field-label">
             Lessons / week
           </label>
           <input
@@ -261,100 +254,109 @@ export function SchemeGeneratorForm({
             min="1"
             max="10"
             defaultValue="2"
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             required
           />
         </div>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label
-            htmlFor="teacher_name"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="teacher_name" className="scheme-bot-field-label">
             Teacher name
           </label>
           <input
             id="teacher_name"
             name="teacher_name"
             defaultValue={teacherName}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             placeholder="Teacher name"
           />
         </div>
+
         <div>
-          <label
-            htmlFor="school_name"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
+          <label htmlFor="school_name" className="scheme-bot-field-label">
             School name
           </label>
           <input
             id="school_name"
             name="school_name"
             defaultValue={defaultSchoolName}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             placeholder="School name"
           />
         </div>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label
-            htmlFor="textbook"
-            className="mb-2 block text-sm font-semibold text-slate-700"
+          <label htmlFor="language" className="scheme-bot-field-label">
+            Output language
+          </label>
+          <select
+            id="language"
+            name="language"
+            value={language}
+            onChange={(event) => setLanguage(event.target.value as SchemeLanguage)}
+            className="scheme-bot-input"
           >
-            Main textbook or book reference
+            <option value="en">English</option>
+            <option value="sw">Kiswahili</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="textbook" className="scheme-bot-field-label">
+            Main textbook or reference
           </label>
           <input
             id="textbook"
             name="textbook"
             value={textbook}
             onChange={(event) => setTextbook(event.target.value)}
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
+            className="scheme-bot-input"
             placeholder={suggestedTextbook}
           />
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-            <span>Suggested:</span>
-            <button
-              type="button"
-              onClick={() => setTextbook(suggestedTextbook)}
-              className="rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700 transition hover:bg-emerald-100"
-            >
-              {suggestedTextbook}
-            </button>
-          </div>
         </div>
+      </div>
+
+      <div className="scheme-bot-suggestion-card">
         <div>
-          <label
-            htmlFor="notes"
-            className="mb-2 block text-sm font-semibold text-slate-700"
-          >
-            Extra instructions
-          </label>
-          <input
-            id="notes"
-            name="notes"
-            className="w-full rounded-2xl border border-stone-300 px-4 py-3 text-sm text-slate-900 outline-none focus:border-emerald-500"
-            placeholder="Any special focus for this term"
-          />
+          <p className="text-sm font-bold text-slate-950">Suggested reference</p>
+          <p className="mt-1 text-sm text-slate-600">{suggestedTextbook}</p>
         </div>
+        <button
+          type="button"
+          onClick={() => setTextbook(suggestedTextbook)}
+          className="scheme-bot-inline-button"
+        >
+          Use this
+        </button>
       </div>
 
-      <div className="rounded-[1.5rem] bg-emerald-50 px-4 py-4 text-sm text-emerald-900">
-        {hasUnlimitedAccess
-          ? "Premium access: build and download as many teacher documents as you need."
-          : "Single document access: KSh 20 per document."}
+      <div>
+        <label htmlFor="notes" className="scheme-bot-field-label">
+          Extra instructions
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows={4}
+          className="scheme-bot-textarea"
+          placeholder="Add any special term focus, school preference, or topic priority."
+        />
       </div>
 
-      <button
-        type="submit"
-        className="brand-button-primary rounded-2xl px-6 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5"
-      >
-        {hasUnlimitedAccess ? "Build scheme" : "Continue to KSh 20 checkout"}
-      </button>
+      <div className="scheme-bot-form-footer">
+        <div className="scheme-bot-form-note">
+          {hasUnlimitedAccess
+            ? "Premium teachers can build and download as many documents as they need."
+            : "Single-purchase teachers are charged only when they continue to document checkout."}
+        </div>
+        <button type="submit" className="scheme-bot-button-primary">
+          {hasUnlimitedAccess ? "Build scheme" : "Continue to KSh 20 checkout"}
+        </button>
+      </div>
     </form>
   );
 }
