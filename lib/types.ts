@@ -240,7 +240,12 @@ export type SchemeStage = "pre-primary" | "junior-school" | "senior-school";
 
 export type SchemeLanguage = "en" | "sw";
 
-export type TeacherDocumentKind = "scheme" | "lesson-plan" | "assessment";
+export type TeacherDocumentKind =
+  | "scheme"
+  | "lesson-plan"
+  | "assessment"
+  | "marking-scheme"
+  | "lesson-notes";
 
 export type SchemeDocumentRow = {
   weekLabel: string;
@@ -329,6 +334,56 @@ export type AssessmentDocumentContent = {
   sections: AssessmentDocumentSection[];
 };
 
+export type MarkingSchemeDocumentItem = {
+  questionLabel: string;
+  prompt: string;
+  marks: number;
+  answerPoints: string[];
+};
+
+export type MarkingSchemeDocumentSection = {
+  title: string;
+  guidance: string;
+  items: MarkingSchemeDocumentItem[];
+};
+
+export type MarkingSchemeDocumentContent = {
+  title: string;
+  subtitle: string;
+  language: SchemeLanguage;
+  schoolName: string;
+  teacherName: string;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  totalMarks: number;
+  sections: MarkingSchemeDocumentSection[];
+};
+
+export type LessonNotesDocumentSection = {
+  sectionLabel: string;
+  focus: string;
+  objectives: string[];
+  explanation: string[];
+  examples: string[];
+  learnerTasks: string[];
+  homeSupport: string[];
+};
+
+export type LessonNotesDocumentContent = {
+  title: string;
+  subtitle: string;
+  language: SchemeLanguage;
+  schoolName: string;
+  teacherName: string;
+  classLabel: string;
+  subject: string;
+  term: string;
+  year: number;
+  sections: LessonNotesDocumentSection[];
+};
+
 export type SchemeRequest = {
   id: string;
   userId: string;
@@ -354,6 +409,8 @@ export type SchemeRequest = {
     | SchemeDocumentContent
     | LessonPlanDocumentContent
     | AssessmentDocumentContent
+    | MarkingSchemeDocumentContent
+    | LessonNotesDocumentContent
     | null;
   storageBucket: string | null;
   storagePath: string | null;

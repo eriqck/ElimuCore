@@ -1,7 +1,9 @@
 import "server-only";
 import {
   buildAssessmentDocxBuffer,
+  buildLessonNotesDocxBuffer,
   buildLessonPlanDocxBuffer,
+  buildMarkingSchemeDocxBuffer,
   buildSchemeDocxBuffer
 } from "@/lib/scheme-docx";
 import {
@@ -10,11 +12,15 @@ import {
 } from "@/lib/scheme-generator";
 import {
   generateAssessmentDocumentContentFromScheme,
-  generateLessonPlanDocumentContentFromScheme
+  generateLessonNotesDocumentContentFromScheme,
+  generateLessonPlanDocumentContentFromScheme,
+  generateMarkingSchemeDocumentContentFromScheme
 } from "@/lib/teacher-documents";
 import type {
   AssessmentDocumentContent,
+  LessonNotesDocumentContent,
   LessonPlanDocumentContent,
+  MarkingSchemeDocumentContent,
   MemberContext,
   SchemeAccessMode,
   SchemeDocumentContent,
@@ -30,7 +36,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 type TeacherDocumentContent =
   | SchemeDocumentContent
   | LessonPlanDocumentContent
-  | AssessmentDocumentContent;
+  | AssessmentDocumentContent
+  | MarkingSchemeDocumentContent
+  | LessonNotesDocumentContent;
 
 type SchemeRequestRow = {
   id: string;
@@ -98,6 +106,10 @@ function normalizeTeacherDocumentKind(
       return "lesson-plan";
     case "assessment":
       return "assessment";
+    case "marking-scheme":
+      return "marking-scheme";
+    case "lesson-notes":
+      return "lesson-notes";
     default:
       return "scheme";
   }
@@ -118,7 +130,50 @@ function isLessonPlanDocumentContent(
 function isAssessmentDocumentContent(
   value: TeacherDocumentContent | null
 ): value is AssessmentDocumentContent {
-  return Boolean(value && "sections" in value);
+  return Boolean(
+    value &&
+      "sections" in value &&
+      Array.isArray(value.sections) &&
+      value.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "instructions" in section &&
+          "items" in section
+      )
+  );
+}
+
+function isMarkingSchemeDocumentContent(
+  value: TeacherDocumentContent | null
+): value is MarkingSchemeDocumentContent {
+  return Boolean(
+    value &&
+      "sections" in value &&
+      Array.isArray(value.sections) &&
+      value.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "guidance" in section
+      )
+  );
+}
+
+function isLessonNotesDocumentContent(
+  value: TeacherDocumentContent | null
+): value is LessonNotesDocumentContent {
+  return Boolean(
+    value &&
+      "sections" in value &&
+      Array.isArray(value.sections) &&
+      value.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "sectionLabel" in section
+      )
+  );
 }
 
 function normalizeGeneratedContent(
@@ -149,6 +204,18 @@ function normalizeGeneratedContent(
   if (outputKind === "assessment") {
     return Array.isArray((parsed as AssessmentDocumentContent).sections)
       ? (parsed as AssessmentDocumentContent)
+      : null;
+  }
+
+  if (outputKind === "marking-scheme") {
+    return Array.isArray((parsed as MarkingSchemeDocumentContent).sections)
+      ? (parsed as MarkingSchemeDocumentContent)
+      : null;
+  }
+
+  if (outputKind === "lesson-notes") {
+    return Array.isArray((parsed as LessonNotesDocumentContent).sections)
+      ? (parsed as LessonNotesDocumentContent)
       : null;
   }
 
@@ -282,6 +349,32 @@ async function buildTeacherDocumentOutput(request: SchemeRequest) {
     return {
       content,
       docxBuffer: await buildAssessmentDocxBuffer(content)
+    };
+  }
+
+  if (request.outputKind === "marking-scheme") {
+    const sourceScheme = await resolveSourceSchemeContent(request);
+    const content = generateMarkingSchemeDocumentContentFromScheme({
+      scheme: sourceScheme,
+      textbook: request.textbook
+    });
+
+    return {
+      content,
+      docxBuffer: await buildMarkingSchemeDocxBuffer(content)
+    };
+  }
+
+  if (request.outputKind === "lesson-notes") {
+    const sourceScheme = await resolveSourceSchemeContent(request);
+    const content = generateLessonNotesDocumentContentFromScheme({
+      scheme: sourceScheme,
+      textbook: request.textbook
+    });
+
+    return {
+      content,
+      docxBuffer: await buildLessonNotesDocxBuffer(content)
     };
   }
 
@@ -479,6 +572,17 @@ export function getTeacherDocumentRowCount(request: SchemeRequest) {
     return request.generatedContent.lessons.length;
   }
 
+  if (isMarkingSchemeDocumentContent(request.generatedContent)) {
+    return request.generatedContent.sections.reduce(
+      (sum, section) => sum + section.items.length,
+      0
+    );
+  }
+
+  if (isLessonNotesDocumentContent(request.generatedContent)) {
+    return request.generatedContent.sections.length;
+  }
+
   if (isAssessmentDocumentContent(request.generatedContent)) {
     return request.generatedContent.sections.reduce(
       (sum, section) => sum + section.items.length,
@@ -492,6 +596,14 @@ export function getTeacherDocumentRowCount(request: SchemeRequest) {
 
   if (request.outputKind === "assessment") {
     return Math.min(request.weeksInTerm, 10);
+  }
+
+  if (request.outputKind === "marking-scheme") {
+    return Math.min(request.weeksInTerm, 10);
+  }
+
+  if (request.outputKind === "lesson-notes") {
+    return Math.min(request.weeksInTerm, 8);
   }
 
   return request.weeksInTerm;

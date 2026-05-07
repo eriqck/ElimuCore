@@ -3,8 +3,12 @@ import type {
   AssessmentDocumentContent,
   AssessmentDocumentItem,
   AssessmentQuestionType,
+  LessonNotesDocumentContent,
+  LessonNotesDocumentSection,
   LessonPlanDocumentContent,
   LessonPlanDocumentLesson,
+  MarkingSchemeDocumentContent,
+  MarkingSchemeDocumentItem,
   SchemeDocumentContent,
   SchemeDocumentRow,
   SchemeLanguage,
@@ -43,6 +47,24 @@ function buildAssessmentTitle(
   return `${year} ${classLabel.toUpperCase()} ${subject.toUpperCase()} ASSESSMENT TERM ${term}`;
 }
 
+function buildMarkingSchemeTitle(
+  classLabel: string,
+  subject: string,
+  term: string,
+  year: number
+) {
+  return `${year} ${classLabel.toUpperCase()} ${subject.toUpperCase()} MARKING SCHEME TERM ${term}`;
+}
+
+function buildLessonNotesTitle(
+  classLabel: string,
+  subject: string,
+  term: string,
+  year: number
+) {
+  return `${year} ${classLabel.toUpperCase()} ${subject.toUpperCase()} LESSON NOTES TERM ${term}`;
+}
+
 function getStarterPrompt(row: SchemeDocumentRow, language: SchemeLanguage) {
   const question = row.keyInquiryQuestions[0]?.trim();
 
@@ -65,17 +87,18 @@ function buildLessonActivities(
     return activities;
   }
 
-  const fallback = language === "sw"
-    ? [
-        "Mwalimu aongoze kazi ya mfano kwa hatua.",
-        "Wanafunzi wafanye kazi ya jozi au vikundi vidogo.",
-        "Wanafunzi wakamilishe mazoezi ya kujitegemea."
-      ]
-    : [
-        "Teacher models the task step by step.",
-        "Learners work in pairs or small groups.",
-        "Learners complete short independent practice."
-      ];
+  const fallback =
+    language === "sw"
+      ? [
+          "Mwalimu aongoze kazi ya mfano kwa hatua.",
+          "Wanafunzi wafanye kazi ya jozi au vikundi vidogo.",
+          "Wanafunzi wakamilishe mazoezi ya kujitegemea."
+        ]
+      : [
+          "Teacher models the task step by step.",
+          "Learners work in pairs or small groups.",
+          "Learners complete short independent practice."
+        ];
 
   return uniqueValues([...activities, ...fallback], 3);
 }
@@ -199,12 +222,146 @@ function createAssessmentItem(
   };
 }
 
+function buildNotesExplanation(row: SchemeDocumentRow, language: SchemeLanguage) {
+  return uniqueValues(
+    [
+      ...row.outcomes,
+      row.experiences[0] || "",
+      language === "sw"
+        ? `Mada inalenga kueleza ${row.subStrand} kwa njia rahisi ya darasani.`
+        : `The note should explain ${row.subStrand} in a simple classroom-ready way.`
+    ],
+    3
+  );
+}
+
+function buildNotesExamples(row: SchemeDocumentRow, language: SchemeLanguage) {
+  const baseExamples = row.resources.slice(0, 2);
+
+  if (baseExamples.length > 0) {
+    return baseExamples;
+  }
+
+  return language === "sw"
+    ? ["Mfano wa mwalimu darasani.", "Mazoezi mafupi ya wanafunzi."]
+    : ["Worked classroom example.", "Short learner practice example."];
+}
+
+function buildNotesTasks(row: SchemeDocumentRow, language: SchemeLanguage) {
+  return uniqueValues(
+    [
+      ...row.assessment,
+      language === "sw"
+        ? `Wanafunzi waandike kazi fupi kuhusu ${row.subStrand}.`
+        : `Learners complete a short task on ${row.subStrand}.`
+    ],
+    3
+  );
+}
+
+function buildHomeSupport(row: SchemeDocumentRow, language: SchemeLanguage) {
+  return [
+    language === "sw"
+      ? `Mzazi au mlezi akague kama mwanafunzi anaweza kueleza ${row.subStrand} kwa maneno yake mwenyewe.`
+      : `Ask the learner to explain ${row.subStrand} in their own words at home.`,
+    language === "sw"
+      ? "Toa zoezi fupi la mapitio nyumbani."
+      : "Give a short home review activity."
+  ];
+}
+
+function buildLessonNotesSection(
+  row: SchemeDocumentRow,
+  language: SchemeLanguage
+): LessonNotesDocumentSection {
+  return {
+    sectionLabel:
+      language === "sw"
+        ? `Wiki ${row.weekLabel}: ${row.subStrand}`
+        : `Week ${row.weekLabel}: ${row.subStrand}`,
+    focus: pickFocus(row),
+    objectives: row.outcomes.slice(0, 3),
+    explanation: buildNotesExplanation(row, language),
+    examples: buildNotesExamples(row, language),
+    learnerTasks: buildNotesTasks(row, language),
+    homeSupport: buildHomeSupport(row, language)
+  };
+}
+
+function buildMarkingAnswerPoints(
+  item: AssessmentDocumentItem,
+  language: SchemeLanguage
+) {
+  const fallback =
+    language === "sw"
+      ? [
+          `Pointi 1: Tambua wazo kuu la swali.`,
+          `Pointi 2: Toa maelezo sahihi kutoka kwa mada.`,
+          `Pointi 3: Tumia mfano ufaao pale inapohitajika.`
+        ]
+      : [
+          "Point 1: Identify the main idea being tested.",
+          "Point 2: Give a correct explanation from the topic.",
+          "Point 3: Use a relevant example where needed."
+        ];
+
+  const answerParts = item.expectedAnswer
+    .split(/[.;]/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+
+  if (answerParts.length > 0) {
+    return answerParts.map((part, index) =>
+      language === "sw"
+        ? `Alama ${index + 1}: ${part}`
+        : `Mark ${index + 1}: ${part}`
+    );
+  }
+
+  return fallback;
+}
+
+function createMarkingSchemeItem(
+  item: AssessmentDocumentItem,
+  language: SchemeLanguage
+): MarkingSchemeDocumentItem {
+  return {
+    questionLabel: item.numberLabel,
+    prompt: item.prompt,
+    marks: item.marks,
+    answerPoints: buildMarkingAnswerPoints(item, language)
+  };
+}
+
+function buildMarkingSchemeSectionsFromAssessment(
+  assessment: AssessmentDocumentContent
+) {
+  return assessment.sections.map((section) => ({
+    title:
+      assessment.language === "sw"
+        ? `${section.title} - Mwongozo wa Uwekaji Alama`
+        : `${section.title} - Marking Guide`,
+    guidance:
+      assessment.language === "sw"
+        ? "Tumia pointi zifuatazo unapoweka alama za kila swali."
+        : "Use the points below when awarding marks for each question.",
+    items: section.items.map((item) =>
+      createMarkingSchemeItem(item, assessment.language)
+    )
+  }));
+}
+
 export function getTeacherDocumentKindLabel(kind: TeacherDocumentKind) {
   switch (kind) {
     case "lesson-plan":
       return "Lesson Plan";
     case "assessment":
       return "Assessment";
+    case "marking-scheme":
+      return "Marking Scheme";
+    case "lesson-notes":
+      return "Lesson Notes";
     default:
       return "Scheme";
   }
@@ -289,7 +446,10 @@ export function generateAssessmentDocumentContentFromScheme(args: {
   const totalMarks = sections
     .flatMap((section) => section.items)
     .reduce((sum, item) => sum + item.marks, 0);
-  const durationMinutes = Math.max(30, sections.flatMap((section) => section.items).length * 6);
+  const durationMinutes = Math.max(
+    30,
+    sections.flatMap((section) => section.items).length * 6
+  );
   const bookReference = textbook.trim();
 
   return {
@@ -325,5 +485,70 @@ export function generateAssessmentDocumentContentFromScheme(args: {
             "Follow the teacher's instructions on time and presentation."
           ],
     sections
+  };
+}
+
+export function generateMarkingSchemeDocumentContentFromScheme(args: {
+  scheme: SchemeDocumentContent;
+  textbook: string;
+}): MarkingSchemeDocumentContent {
+  const { scheme, textbook } = args;
+  const assessment = generateAssessmentDocumentContentFromScheme({
+    scheme,
+    textbook
+  });
+  const bookReference = textbook.trim();
+
+  return {
+    title: buildMarkingSchemeTitle(
+      scheme.classLabel,
+      scheme.subject,
+      scheme.term,
+      scheme.year
+    ),
+    subtitle:
+      scheme.language === "sw"
+        ? `Mwongozo wa uwekaji alama uliotokana na tathmini ya ${formatTerm(scheme.term, scheme.language)}${bookReference ? ` kwa kurejelea ${bookReference}` : ""}.`
+        : `Marking guide created from the ${formatTerm(scheme.term, scheme.language)} assessment${bookReference ? ` with reference to ${bookReference}` : ""}.`,
+    language: scheme.language,
+    schoolName: scheme.schoolName,
+    teacherName: scheme.teacherName,
+    classLabel: scheme.classLabel,
+    subject: scheme.subject,
+    term: scheme.term,
+    year: scheme.year,
+    totalMarks: assessment.totalMarks,
+    sections: buildMarkingSchemeSectionsFromAssessment(assessment)
+  };
+}
+
+export function generateLessonNotesDocumentContentFromScheme(args: {
+  scheme: SchemeDocumentContent;
+  textbook: string;
+}): LessonNotesDocumentContent {
+  const { scheme, textbook } = args;
+  const bookReference = textbook.trim();
+
+  return {
+    title: buildLessonNotesTitle(
+      scheme.classLabel,
+      scheme.subject,
+      scheme.term,
+      scheme.year
+    ),
+    subtitle:
+      scheme.language === "sw"
+        ? `Maelezo ya somo yaliyoandaliwa kutoka kwa scheme ya ${formatTerm(scheme.term, scheme.language)}${bookReference ? ` kwa kutumia ${bookReference}` : ""}.`
+        : `Teacher-ready lesson notes created from the ${formatTerm(scheme.term, scheme.language)} scheme${bookReference ? ` using ${bookReference}` : ""}.`,
+    language: scheme.language,
+    schoolName: scheme.schoolName,
+    teacherName: scheme.teacherName,
+    classLabel: scheme.classLabel,
+    subject: scheme.subject,
+    term: scheme.term,
+    year: scheme.year,
+    sections: scheme.rows
+      .slice(0, 8)
+      .map((row) => buildLessonNotesSection(row, scheme.language))
   };
 }

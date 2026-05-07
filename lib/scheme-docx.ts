@@ -16,7 +16,9 @@ import {
 } from "docx";
 import type {
   AssessmentDocumentContent,
+  LessonNotesDocumentContent,
   LessonPlanDocumentContent,
+  MarkingSchemeDocumentContent,
   SchemeDocumentContent,
   SchemeDocumentRow,
   SchemeLanguage
@@ -586,6 +588,420 @@ export async function buildAssessmentDocxBuffer(
                 ]
               })
             ])
+          ])
+        ]
+      }
+    ]
+  });
+
+  return Packer.toBuffer(doc);
+}
+
+export async function buildMarkingSchemeDocxBuffer(
+  content: MarkingSchemeDocumentContent
+) {
+  const isSwahili = content.language === "sw";
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 900,
+              bottom: 900,
+              left: 720,
+              right: 720
+            }
+          }
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Prepared with ELimuCore Scheme Bot",
+                    italics: true,
+                    color: "475569",
+                    size: 18
+                  })
+                ]
+              })
+            ]
+          })
+        },
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.title,
+                bold: true,
+                underline: {},
+                size: 28,
+                color: "166534"
+              })
+            ]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text:
+                  isSwahili
+                    ? `${content.classLabel} - ${content.subject} - Muhula ${content.term} - ${content.year}`
+                    : `${content.classLabel} - ${content.subject} - Term ${content.term} - ${content.year}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.subtitle,
+                size: 20,
+                color: "334155"
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 160
+            },
+            children: [
+              new TextRun({
+                text: isSwahili
+                  ? `Jumla ya Alama: ${content.totalMarks}`
+                  : `Total Marks: ${content.totalMarks}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          ...content.sections.flatMap((section) => [
+            new Paragraph({
+              spacing: {
+                before: 180,
+                after: 80
+              },
+              children: [
+                new TextRun({
+                  text: section.title,
+                  bold: true,
+                  size: 24,
+                  color: "166534"
+                })
+              ]
+            }),
+            new Paragraph({
+              spacing: {
+                after: 120
+              },
+              children: [
+                new TextRun({
+                  text: section.guidance,
+                  italics: true,
+                  size: 20,
+                  color: "475569"
+                })
+              ]
+            }),
+            ...section.items.flatMap((item) => [
+              new Paragraph({
+                spacing: {
+                  after: 60
+                },
+                children: [
+                  new TextRun({
+                    text: `${item.questionLabel} ${item.prompt} (${item.marks} ${
+                      isSwahili ? "alama" : "marks"
+                    })`,
+                    bold: true,
+                    size: 21
+                  })
+                ]
+              }),
+              ...item.answerPoints.map(
+                (point) =>
+                  new Paragraph({
+                    spacing: {
+                      after: 50
+                    },
+                    children: [
+                      new TextRun({
+                        text: `- ${point}`,
+                        size: 19,
+                        color: "334155"
+                      })
+                    ]
+                  })
+              ),
+              new Paragraph({
+                spacing: {
+                  after: 100
+                },
+                text: ""
+              })
+            ])
+          ])
+        ]
+      }
+    ]
+  });
+
+  return Packer.toBuffer(doc);
+}
+
+export async function buildLessonNotesDocxBuffer(
+  content: LessonNotesDocumentContent
+) {
+  const isSwahili = content.language === "sw";
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 900,
+              bottom: 900,
+              left: 720,
+              right: 720
+            }
+          }
+        },
+        footers: {
+          default: new Footer({
+            children: [
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [
+                  new TextRun({
+                    text: "Prepared with ELimuCore Scheme Bot",
+                    italics: true,
+                    color: "475569",
+                    size: 18
+                  })
+                ]
+              })
+            ]
+          })
+        },
+        children: [
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text: content.title,
+                bold: true,
+                underline: {},
+                size: 28,
+                color: "166534"
+              })
+            ]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: {
+              after: 120
+            },
+            children: [
+              new TextRun({
+                text:
+                  isSwahili
+                    ? `${content.classLabel} - ${content.subject} - Muhula ${content.term} - ${content.year}`
+                    : `${content.classLabel} - ${content.subject} - Term ${content.term} - ${content.year}`,
+                bold: true,
+                size: 22
+              })
+            ]
+          }),
+          new Paragraph({
+            spacing: {
+              after: 140
+            },
+            children: [
+              new TextRun({
+                text: content.subtitle,
+                size: 20,
+                color: "334155"
+              })
+            ]
+          }),
+          ...content.sections.flatMap((section) => [
+            new Paragraph({
+              spacing: {
+                before: 180,
+                after: 80
+              },
+              children: [
+                new TextRun({
+                  text: section.sectionLabel,
+                  bold: true,
+                  size: 24,
+                  color: "166534"
+                })
+              ]
+            }),
+            new Paragraph({
+              spacing: {
+                after: 100
+              },
+              children: [
+                new TextRun({
+                  text: section.focus,
+                  size: 20,
+                  color: "475569"
+                })
+              ]
+            }),
+            new Paragraph({
+              spacing: {
+                after: 60
+              },
+              children: [
+                new TextRun({
+                  text: isSwahili ? "Malengo" : "Objectives",
+                  bold: true,
+                  size: 21
+                })
+              ]
+            }),
+            ...section.objectives.map(
+              (item) =>
+                new Paragraph({
+                  spacing: {
+                    after: 50
+                  },
+                  children: [
+                    new TextRun({
+                      text: `- ${item}`,
+                      size: 19
+                    })
+                  ]
+                })
+            ),
+            new Paragraph({
+              spacing: {
+                before: 90,
+                after: 60
+              },
+              children: [
+                new TextRun({
+                  text: isSwahili ? "Maelezo ya Somo" : "Lesson Notes",
+                  bold: true,
+                  size: 21
+                })
+              ]
+            }),
+            ...section.explanation.map(
+              (item) =>
+                new Paragraph({
+                  spacing: {
+                    after: 50
+                  },
+                  children: [
+                    new TextRun({
+                      text: `- ${item}`,
+                      size: 19
+                    })
+                  ]
+                })
+            ),
+            new Paragraph({
+              spacing: {
+                before: 90,
+                after: 60
+              },
+              children: [
+                new TextRun({
+                  text: isSwahili ? "Mifano" : "Examples",
+                  bold: true,
+                  size: 21
+                })
+              ]
+            }),
+            ...section.examples.map(
+              (item) =>
+                new Paragraph({
+                  spacing: {
+                    after: 50
+                  },
+                  children: [
+                    new TextRun({
+                      text: `- ${item}`,
+                      size: 19
+                    })
+                  ]
+                })
+            ),
+            new Paragraph({
+              spacing: {
+                before: 90,
+                after: 60
+              },
+              children: [
+                new TextRun({
+                  text: isSwahili ? "Kazi ya Wanafunzi" : "Learner Tasks",
+                  bold: true,
+                  size: 21
+                })
+              ]
+            }),
+            ...section.learnerTasks.map(
+              (item) =>
+                new Paragraph({
+                  spacing: {
+                    after: 50
+                  },
+                  children: [
+                    new TextRun({
+                      text: `- ${item}`,
+                      size: 19
+                    })
+                  ]
+                })
+            ),
+            new Paragraph({
+              spacing: {
+                before: 90,
+                after: 60
+              },
+              children: [
+                new TextRun({
+                  text: isSwahili ? "Msaada wa Nyumbani" : "Home Support",
+                  bold: true,
+                  size: 21
+                })
+              ]
+            }),
+            ...section.homeSupport.map(
+              (item) =>
+                new Paragraph({
+                  spacing: {
+                    after: 50
+                  },
+                  children: [
+                    new TextRun({
+                      text: `- ${item}`,
+                      size: 19
+                    })
+                  ]
+                })
+            )
           ])
         ]
       }

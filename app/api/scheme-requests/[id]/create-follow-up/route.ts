@@ -29,7 +29,12 @@ function getSchemeBotDetailUrl(request: NextRequest, id: string, message?: strin
 function normalizeFollowUpKind(value: FormDataEntryValue | null) {
   const nextValue = String(value ?? "").trim();
 
-  if (nextValue === "lesson-plan" || nextValue === "assessment") {
+  if (
+    nextValue === "lesson-plan" ||
+    nextValue === "assessment" ||
+    nextValue === "marking-scheme" ||
+    nextValue === "lesson-notes"
+  ) {
     return nextValue as TeacherDocumentKind;
   }
 

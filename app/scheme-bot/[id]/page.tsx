@@ -11,7 +11,9 @@ import {
 import { getCurrentMemberContext, hasAdminAccess } from "@/lib/membership";
 import type {
   AssessmentDocumentContent,
+  LessonNotesDocumentContent,
   LessonPlanDocumentContent,
+  MarkingSchemeDocumentContent,
   SchemeDocumentContent,
   SchemeRequest
 } from "@/lib/types";
@@ -52,7 +54,50 @@ function isLessonPlanPreview(
 function isAssessmentPreview(
   content: SchemeRequest["generatedContent"]
 ): content is AssessmentDocumentContent {
-  return Boolean(content && "sections" in content);
+  return Boolean(
+    content &&
+      "sections" in content &&
+      Array.isArray(content.sections) &&
+      content.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "instructions" in section &&
+          "items" in section
+      )
+  );
+}
+
+function isMarkingSchemePreview(
+  content: SchemeRequest["generatedContent"]
+): content is MarkingSchemeDocumentContent {
+  return Boolean(
+    content &&
+      "sections" in content &&
+      Array.isArray(content.sections) &&
+      content.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "guidance" in section
+      )
+  );
+}
+
+function isLessonNotesPreview(
+  content: SchemeRequest["generatedContent"]
+): content is LessonNotesDocumentContent {
+  return Boolean(
+    content &&
+      "sections" in content &&
+      Array.isArray(content.sections) &&
+      content.sections.some(
+        (section) =>
+          typeof section === "object" &&
+          section !== null &&
+          "sectionLabel" in section
+      )
+  );
 }
 
 function getDocumentCountHeading(request: SchemeRequest) {
@@ -62,6 +107,14 @@ function getDocumentCountHeading(request: SchemeRequest) {
 
   if (request.outputKind === "lesson-plan") {
     return "Lessons";
+  }
+
+  if (request.outputKind === "marking-scheme") {
+    return "Answers";
+  }
+
+  if (request.outputKind === "lesson-notes") {
+    return "Notes";
   }
 
   return "Weeks";
@@ -278,6 +331,114 @@ function renderAssessmentPreview(content: AssessmentDocumentContent) {
   );
 }
 
+function renderMarkingSchemePreview(content: MarkingSchemeDocumentContent) {
+  return (
+    <div className="mt-6 space-y-5">
+      <div className="rounded-[1.5rem] border border-emerald-100 bg-emerald-50 p-5">
+        <p className="text-sm font-semibold text-emerald-900">
+          {`Total marks: ${content.totalMarks}`}
+        </p>
+      </div>
+
+      {content.sections.map((section) => (
+        <section
+          key={section.title}
+          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
+        >
+          <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
+          <p className="mt-2 text-sm italic leading-7 text-slate-600">
+            {section.guidance}
+          </p>
+          <div className="mt-4 space-y-4">
+            {section.items.slice(0, 4).map((item) => (
+              <article
+                key={`${section.title}-${item.questionLabel}`}
+                className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm"
+              >
+                <p className="text-sm font-bold text-slate-900">
+                  {`${item.questionLabel} ${item.prompt}`}
+                </p>
+                <div className="mt-2 space-y-2">
+                  {item.answerPoints.slice(0, 3).map((point) => (
+                    <p key={point} className="text-sm text-slate-600">
+                      - {point}
+                    </p>
+                  ))}
+                </div>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+                  {`${item.marks} marks`}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+function renderLessonNotesPreview(content: LessonNotesDocumentContent) {
+  return (
+    <div className="mt-6 grid gap-4">
+      {content.sections.slice(0, 5).map((section) => (
+        <article
+          key={section.sectionLabel}
+          className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5"
+        >
+          <h3 className="text-lg font-bold text-slate-900">
+            {section.sectionLabel}
+          </h3>
+          <p className="mt-2 text-sm font-semibold text-emerald-800">
+            {section.focus}
+          </p>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Objectives
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">
+                {section.objectives.join(" ")}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Notes
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">
+                {section.explanation.join(" ")}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Examples
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">
+                {section.examples.join(" ")}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Learner tasks
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">
+                {section.learnerTasks.join(" ")}
+              </p>
+            </div>
+            <div className="md:col-span-2">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
+                Home support
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-700">
+                {section.homeSupport.join(" ")}
+              </p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export default async function SchemeRequestDetailPage({
   params,
   searchParams
@@ -412,8 +573,8 @@ export default async function SchemeRequestDetailPage({
               Turn this scheme into the next teacher document
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Use this completed scheme as the base for a lesson plan or an
-              assessment. You do not need to fill the planning form again.
+              Use this completed scheme as the base for your next teacher
+              document. You do not need to fill the planning form again.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <form
@@ -444,6 +605,42 @@ export default async function SchemeRequestDetailPage({
                     : "Create assessment - KSh 20"}
                 </button>
               </form>
+              <form
+                action={`/api/scheme-requests/${request.id}/create-follow-up`}
+                method="post"
+              >
+                <input
+                  type="hidden"
+                  name="output_kind"
+                  value="marking-scheme"
+                />
+                <button
+                  type="submit"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                >
+                  {hasUnlimitedAccess
+                    ? "Create marking scheme"
+                    : "Create marking scheme - KSh 20"}
+                </button>
+              </form>
+              <form
+                action={`/api/scheme-requests/${request.id}/create-follow-up`}
+                method="post"
+              >
+                <input
+                  type="hidden"
+                  name="output_kind"
+                  value="lesson-notes"
+                />
+                <button
+                  type="submit"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                >
+                  {hasUnlimitedAccess
+                    ? "Create lesson notes"
+                    : "Create lesson notes - KSh 20"}
+                </button>
+              </form>
             </div>
           </section>
         ) : null}
@@ -464,6 +661,12 @@ export default async function SchemeRequestDetailPage({
               : null}
             {isAssessmentPreview(request.generatedContent)
               ? renderAssessmentPreview(request.generatedContent)
+              : null}
+            {isMarkingSchemePreview(request.generatedContent)
+              ? renderMarkingSchemePreview(request.generatedContent)
+              : null}
+            {isLessonNotesPreview(request.generatedContent)
+              ? renderLessonNotesPreview(request.generatedContent)
               : null}
           </section>
         ) : request.status === "failed" ? (

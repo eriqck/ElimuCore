@@ -33,8 +33,16 @@ function getDocumentCountLabel(outputKind: string) {
     return "questions";
   }
 
+  if (outputKind === "marking-scheme") {
+    return "answers";
+  }
+
   if (outputKind === "lesson-plan") {
     return "lessons";
+  }
+
+  if (outputKind === "lesson-notes") {
+    return "notes";
   }
 
   return "weeks";

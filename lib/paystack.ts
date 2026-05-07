@@ -149,7 +149,9 @@ function parseMetadata(value: unknown): PaystackInitializeMetadata | null {
         "output_kind" in parsed &&
         (parsed.output_kind === "scheme" ||
           parsed.output_kind === "lesson-plan" ||
-          parsed.output_kind === "assessment")
+          parsed.output_kind === "assessment" ||
+          parsed.output_kind === "marking-scheme" ||
+          parsed.output_kind === "lesson-notes")
           ? parsed.output_kind
           : undefined
     };
