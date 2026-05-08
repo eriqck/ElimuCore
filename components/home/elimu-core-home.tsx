@@ -64,7 +64,7 @@ function ActionButton({
   return (
     <Link
       href={href}
-      className="inline-flex w-full max-w-xs items-center justify-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:w-auto"
+      className="inline-flex w-full items-center justify-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:max-w-xs sm:w-auto"
     >
       <span className="px-5 py-3 text-sm font-bold sm:px-6 sm:py-4 sm:text-base">
         {label}
@@ -163,7 +163,7 @@ export function ElimuCoreHome() {
 
         <section
           id="package"
-          className="bg-[#f7fbff] px-4 py-16 text-slate-900 sm:px-6 lg:px-8"
+          className="bg-[#f7fbff] px-4 py-12 text-slate-900 sm:px-6 sm:py-16 lg:px-8"
         >
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm text-slate-400">
@@ -178,7 +178,7 @@ export function ElimuCoreHome() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 max-w-5xl px-0 py-4 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14">
+          <div className="mx-auto mt-8 max-w-5xl rounded-[2rem] bg-white px-5 py-6 shadow-[0_16px_42px_rgba(15,23,42,0.06)] sm:px-7 sm:py-8 lg:mt-10 lg:grid lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14 lg:px-8">
             <div>
               <h3 className="text-2xl font-semibold tracking-tight text-slate-900">
                 ELimuCore Complete Resource Library
@@ -203,8 +203,8 @@ export function ElimuCoreHome() {
               </div>
             </div>
 
-            <div className="relative mt-10 flex justify-center lg:mt-0">
-              <div className="relative h-[320px] w-full max-w-[620px] sm:h-[380px] lg:h-[440px]">
+            <div className="relative mt-8 flex justify-center lg:mt-0">
+              <div className="relative h-[260px] w-full max-w-[620px] sm:h-[340px] lg:h-[440px]">
                 <Image
                   src={numbersArtwork}
                   alt="Children learning numbers with ELimuCore"
@@ -225,9 +225,12 @@ export function ElimuCoreHome() {
             How to <span className="text-[#31b8a7]">use</span>
           </h2>
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+          <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-8 xl:grid-cols-4 xl:gap-5">
             {howToSteps.map((item, index) => (
-              <div key={item.step} className="text-left">
+              <div
+                key={item.step}
+                className="rounded-[1.75rem] border border-slate-200 bg-white p-5 text-left shadow-[0_10px_28px_rgba(15,23,42,0.05)]"
+              >
                 <div className="flex items-center gap-3">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#31b8a7] text-sm font-bold text-white">
                     {item.step}
@@ -235,7 +238,7 @@ export function ElimuCoreHome() {
                   <span className="h-[2px] flex-1 bg-[#31b8a7]" />
                 </div>
 
-                <h3 className="mt-6 text-2xl font-medium tracking-tight text-slate-900 sm:text-3xl">
+                <h3 className="mt-5 text-2xl font-medium tracking-tight text-slate-900 sm:text-3xl">
                   {item.title}
                   {index < howToSteps.length - 1 ? " ->" : ""}
                 </h3>
@@ -249,7 +252,7 @@ export function ElimuCoreHome() {
 
         <section
           id="plans"
-          className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8"
+          className="mx-auto max-w-5xl px-4 py-14 text-center sm:px-6 sm:py-16 lg:px-8"
         >
           <h2 className="text-4xl font-medium tracking-tight text-slate-900">
             ELimuCore <span className="text-[#31b8a7]">membership plans</span>
@@ -267,7 +270,7 @@ export function ElimuCoreHome() {
               return (
                 <article
                   key={plan.name}
-                  className="border border-[#efefef] bg-white px-8 py-10 shadow-[0_12px_30px_rgba(0,0,0,0.06)]"
+                  className="rounded-[1.75rem] border border-[#efefef] bg-white px-6 py-8 shadow-[0_12px_30px_rgba(0,0,0,0.06)] sm:px-8 sm:py-10"
                 >
                   <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#dff4ef] bg-[#fbfffe]">
                     <Icon />

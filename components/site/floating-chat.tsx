@@ -165,12 +165,12 @@ export function FloatingChat({
   }, [open]);
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[70] flex flex-col items-end gap-3">
+    <div className="pointer-events-none fixed bottom-4 left-4 right-4 z-[70] flex flex-col items-stretch gap-3 sm:bottom-5 sm:left-auto sm:right-5 sm:items-end">
       {open ? (
         <div
           id="floating-chat-panel"
           ref={panelRef}
-          className="pointer-events-auto w-[min(22rem,calc(100vw-2rem))] rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.18)]"
+          className="pointer-events-auto w-full rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.18)] sm:w-[min(22rem,calc(100vw-2rem))]"
         >
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
             Support
@@ -198,7 +198,7 @@ export function FloatingChat({
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="pointer-events-auto relative inline-flex items-center gap-3 rounded-full bg-sky-500 px-5 py-3 text-base font-bold text-white shadow-[0_16px_36px_rgba(14,165,233,0.35)] transition hover:-translate-y-0.5 hover:bg-sky-600"
+        className="pointer-events-auto relative inline-flex w-full items-center justify-center gap-3 rounded-full bg-sky-500 px-5 py-3 text-base font-bold text-white shadow-[0_16px_36px_rgba(14,165,233,0.35)] transition hover:-translate-y-0.5 hover:bg-sky-600 sm:w-auto"
         aria-expanded={open}
         aria-controls="floating-chat-panel"
       >

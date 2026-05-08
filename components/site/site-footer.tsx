@@ -141,14 +141,14 @@ export function SiteFooter() {
       className="border-t border-white/8 bg-[#151515] px-4 py-10 text-white sm:px-6 lg:px-8"
     >
       <div className="mx-auto max-w-[1360px]">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.9fr_1fr]">
+        <div className="grid gap-10 sm:gap-12 lg:grid-cols-[1.2fr_0.9fr_1fr]">
           <div>
             <Image
               src={logo}
               alt="ELimuCore"
               width={190}
               height={60}
-              className="h-12 w-auto rounded-md bg-white px-2 py-1"
+              className="h-11 w-auto rounded-md bg-white px-2 py-1 sm:h-12"
             />
             <h2 className="mt-5 text-3xl font-semibold tracking-tight text-white">
               Have a Question?

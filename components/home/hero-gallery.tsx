@@ -142,43 +142,47 @@ export function HeroGallery() {
   return (
     <section className={`overflow-hidden ${activeSlide.backgroundClass}`}>
       <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-8">
-        <div className="relative grid items-center gap-8 py-10 pb-20 sm:min-h-[620px] sm:gap-12 sm:py-12 sm:pb-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:py-0">
-          <div className="max-w-[560px] py-2 sm:py-4">
+        <div className="relative grid items-center gap-6 py-6 pb-10 sm:min-h-[620px] sm:gap-12 sm:py-10 sm:pb-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:py-0">
+          <div className="order-2 max-w-[560px] py-0 sm:py-4 lg:order-1">
             <h1
-              className={`whitespace-pre-line text-[clamp(2.25rem,10vw,4.5rem)] font-black leading-[1.02] tracking-tight ${activeSlide.titleClass}`}
+              className={`whitespace-pre-line text-[clamp(2rem,12vw,4.5rem)] font-black leading-[1.02] tracking-tight ${activeSlide.titleClass}`}
             >
               {activeSlide.title}
             </h1>
 
             <div
-              className={`mt-5 inline-flex px-4 py-2 text-xs font-black uppercase tracking-[0.18em] sm:text-sm sm:tracking-[0.2em] ${activeSlide.ribbonClass}`}
+              className={`mt-4 inline-flex max-w-full px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] sm:mt-5 sm:text-sm sm:tracking-[0.2em] ${activeSlide.ribbonClass}`}
             >
               {activeSlide.ribbon}
             </div>
 
-            <p className={`mt-5 max-w-xl text-base leading-7 sm:text-lg sm:leading-8 ${activeSlide.bodyClass}`}>
+            <p
+              className={`mt-4 max-w-xl text-[15px] leading-7 sm:mt-5 sm:text-lg sm:leading-8 ${activeSlide.bodyClass}`}
+            >
               {activeSlide.description}
             </p>
 
-            <p className={`mt-5 text-lg font-bold sm:text-xl ${activeSlide.noteClass}`}>
+            <p
+              className={`mt-4 text-base font-bold sm:mt-5 sm:text-xl ${activeSlide.noteClass}`}
+            >
               {activeSlide.note}
             </p>
 
             <Link
               href={activeSlide.href}
-              className="mt-9 inline-flex w-full max-w-xs items-center justify-center overflow-hidden rounded-md bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:w-auto"
+              className="mt-7 inline-flex w-full items-center justify-center overflow-hidden rounded-2xl bg-[#f4a621] text-white shadow-[0_12px_24px_rgba(244,166,33,0.28)] transition hover:-translate-y-0.5 hover:bg-[#df9317] sm:mt-9 sm:w-auto"
             >
-              <span className="px-6 py-4 text-lg font-bold">
+              <span className="px-6 py-4 text-base font-bold sm:text-lg">
                 {activeSlide.ctaLabel}
               </span>
-              <span className="border-l border-white/20 px-5 py-4 text-2xl font-black">
+              <span className="border-l border-white/20 px-5 py-4 text-xl font-black sm:text-2xl">
                 &gt;
               </span>
             </Link>
           </div>
 
-          <div className="flex min-h-[240px] items-center justify-center sm:min-h-[320px] lg:min-h-[620px]">
-            <div className="relative h-[240px] w-full max-w-[680px] sm:h-[410px] lg:h-[540px]">
+          <div className="order-1 flex min-h-[240px] items-center justify-center sm:min-h-[320px] lg:order-2 lg:min-h-[620px]">
+            <div className="relative h-[220px] w-full max-w-[680px] sm:h-[410px] lg:h-[540px]">
               <Image
                 key={activeSlide.alt}
                 src={activeSlide.image}
@@ -193,7 +197,7 @@ export function HeroGallery() {
             </div>
           </div>
 
-          <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3 sm:bottom-10">
+          <div className="order-3 mt-3 flex items-center justify-center gap-3 lg:absolute lg:bottom-10 lg:left-1/2 lg:mt-0 lg:-translate-x-1/2">
             {slides.map((slide, index) => (
               <button
                 key={`${slide.title}-${index}`}

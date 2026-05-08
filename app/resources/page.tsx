@@ -161,7 +161,7 @@ export default async function ResourcesPage({
   }
 
   return (
-    <main className="min-h-screen px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+    <main className="min-h-screen px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
       <MarketingEvent
         eventName="ViewContent"
         dedupeKey={`resources:view:${selectedLevel?.slug ?? "all"}:${category || "all"}:${query || "browse"}`}
@@ -184,7 +184,7 @@ export default async function ResourcesPage({
         />
       ) : null}
       <section className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 surface-card">
-        <div className="grid gap-10 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
+        <div className="grid gap-8 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
           <div>
             <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
               Member library
@@ -268,13 +268,13 @@ export default async function ResourcesPage({
               <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap">
                 <button
                   type="submit"
-                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 sm:w-auto"
                 >
                   Search resources
                 </button>
                 <Link
                   href="/resources"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-center text-sm font-semibold transition sm:w-auto"
                 >
                   Reset
                 </Link>
@@ -301,7 +301,7 @@ export default async function ResourcesPage({
           ) : null}
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-4">
           {levelCards.map((card, index) => {
             const active = card.slug === level;
             const accents = [
@@ -316,7 +316,7 @@ export default async function ResourcesPage({
               <Link
                 key={card.slug}
                 href={createLevelHref(card.slug)}
-                className={`group relative overflow-hidden rounded-[2rem] border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] ${
+                className={`group relative overflow-hidden rounded-[1.75rem] border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-[var(--shadow-soft)] sm:rounded-[2rem] sm:p-6 ${
                   active
                     ? "border-emerald-300 ring-2 ring-emerald-200"
                     : "border-stone-200"

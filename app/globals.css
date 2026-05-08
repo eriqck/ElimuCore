@@ -30,6 +30,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body), sans-serif;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -40,6 +41,18 @@ a:not([class]),
 a[class=""],
 a[class]:not([class*="text-"]) {
   color: inherit;
+}
+
+summary {
+  cursor: pointer;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.header-menu-summary {
+  list-style: none;
 }
 
 ::selection {
@@ -374,6 +387,13 @@ a[class]:not([class*="text-"]) {
   .brand-button-secondary:hover,
   .learning-green-button:hover,
   .learning-outline-button:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .brand-button-primary:hover,
+  .brand-button-secondary:hover {
     transform: translateY(-1px);
   }
 }

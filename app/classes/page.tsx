@@ -185,13 +185,13 @@ export default async function ClassesPage() {
           content_category: "junior_classes"
         }}
       />
-      <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
+      <section className="relative overflow-hidden px-4 pb-14 pt-6 sm:px-5 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-14">
         <Bubble className="left-8 top-20 h-28 w-28 bg-emerald-300/60" />
         <Bubble className="right-20 top-40 h-32 w-32 bg-amber-300/70" />
         <Bubble className="bottom-10 left-1/2 h-28 w-28 bg-fuchsia-300/50" />
 
-        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="relative z-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10">
+          <div className="relative order-2 z-10 lg:order-1">
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-black text-emerald-700 shadow-sm">
               <Icon name="sparkles" size={16} /> Junior learning hub
             </div>
@@ -210,7 +210,7 @@ export default async function ClassesPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href={primaryClass ? `/classes/${primaryClass.slug}` : "/classes"}
-                className="group rounded-full bg-emerald-500 px-7 py-4 text-center text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600"
+                className="group rounded-full bg-emerald-500 px-7 py-4 text-center text-base font-black text-white shadow-2xl shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-600 sm:w-auto"
               >
                 Open Grade 1 Math
                 <Icon
@@ -221,7 +221,7 @@ export default async function ClassesPage() {
               </Link>
               <Link
                 href={memberContext.user ? "/account" : "/signup"}
-                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-center text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-full border border-slate-200 bg-white px-7 py-4 text-center text-base font-black text-slate-900 shadow-sm transition hover:-translate-y-1 hover:shadow-lg sm:w-auto"
               >
                 {memberContext.user ? "View membership" : "Create account"}
               </Link>
@@ -246,22 +246,22 @@ export default async function ClassesPage() {
             </div>
           </div>
 
-          <div className="relative z-10">
-            <div className="relative overflow-hidden rounded-[3rem] bg-slate-950 p-5 shadow-2xl shadow-emerald-100">
+          <div className="relative order-1 z-10 lg:order-2">
+            <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 p-4 shadow-2xl shadow-emerald-100 sm:rounded-[3rem] sm:p-5">
               <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-emerald-400/40 blur-3xl" />
               <div className="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-amber-400/30 blur-3xl" />
 
-              <div className="relative rounded-[2.4rem] bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-600 p-6 text-white">
+              <div className="relative rounded-[1.6rem] bg-gradient-to-br from-emerald-400 via-emerald-500 to-green-600 p-5 text-white sm:rounded-[2.4rem] sm:p-6">
                 <div className="flex items-start justify-between gap-5">
                   <div>
                     <p className="text-sm font-black uppercase tracking-[0.28em] text-white/70">
                       Today&apos;s path
                     </p>
-                    <h2 className="mt-3 text-4xl font-black tracking-[-0.04em]">
+                    <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] sm:text-4xl">
                       Numbers 1-10
                     </h2>
                   </div>
-                  <div className="grid h-16 w-16 place-items-center rounded-3xl bg-white/20 backdrop-blur">
+                  <div className="grid h-14 w-14 place-items-center rounded-3xl bg-white/20 backdrop-blur sm:h-16 sm:w-16">
                     <Icon name="trophy" size={30} />
                   </div>
                 </div>
@@ -330,7 +330,7 @@ export default async function ClassesPage() {
             </span>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-4">
             {classCards.map((item, index) => {
               const content = (
                 <>
@@ -392,7 +392,7 @@ export default async function ClassesPage() {
                 </>
               );
 
-              const commonClassName = `group relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-200 ${
+              const commonClassName = `group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-200 sm:rounded-[2.5rem] sm:p-6 ${
                 index === 0 ? "ring-2 ring-emerald-200" : ""
               }`;
 

@@ -109,7 +109,7 @@ function PlanCard({
         ) : null}
       </div>
 
-      <div className="mt-5 flex items-end justify-between gap-4">
+      <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-3xl font-extrabold tracking-tight text-slate-950">
             {price}
@@ -119,7 +119,7 @@ function PlanCard({
           </p>
         </div>
 
-        <div className="shrink-0">{cta}</div>
+        <div className="w-full shrink-0 sm:w-auto">{cta}</div>
       </div>
     </article>
   );
@@ -138,7 +138,7 @@ function PlanAction({
   activePlanSlug: string | null;
   featured?: boolean;
 }) {
-  const buttonClassName = `rounded-full px-4 py-2 text-sm font-semibold transition ${
+  const buttonClassName = `inline-flex w-full justify-center rounded-full px-4 py-2.5 text-sm font-semibold transition sm:w-auto ${
     featured
       ? "bg-emerald-500 text-white hover:bg-emerald-600"
       : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -223,7 +223,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   }));
 
   return (
-    <main className="min-h-screen bg-[#f8f8f6] px-5 py-10 text-slate-950 lg:px-8 lg:py-14">
+    <main className="min-h-screen bg-[#f8f8f6] px-4 py-8 text-slate-950 sm:px-5 sm:py-10 lg:px-8 lg:py-14">
       <MarketingEvent
         eventName="ViewPricing"
         dedupeKey="account:view-pricing"
@@ -233,7 +233,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         }}
       />
       <section className="mx-auto max-w-7xl">
-        <div className="mb-10 max-w-3xl">
+        <div className="mb-8 max-w-3xl sm:mb-10">
           <SectionLabel>My Account</SectionLabel>
           <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
             Your ElimuCore account
@@ -251,7 +251,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
-            <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <SectionLabel>
                   {memberContext.user ? "Your Profile" : "Account Access"}
@@ -334,7 +334,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               </p>
               <Link
                 href="/scheme-bot"
-                className="mt-4 inline-flex rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600"
+                className="mt-4 inline-flex w-full justify-center rounded-full bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 sm:w-auto"
               >
                 Open Scheme Bot
               </Link>
@@ -342,7 +342,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
           </section>
 
           <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
-            <div className="mb-6 flex items-start justify-between gap-4">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <SectionLabel>Membership Plans</SectionLabel>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950">
