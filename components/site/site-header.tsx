@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/weblogo.png";
 import { getCurrentMemberContext } from "@/lib/membership";
+import { MobileHeaderMenu } from "@/components/site/mobile-header-menu";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -10,25 +11,6 @@ const navItems = [
   { label: "Support", href: "/support" },
   { label: "Scheme Bot", href: "/scheme-bot" }
 ] as const;
-
-function MenuIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-5 w-5"
-      aria-hidden="true"
-    >
-      <path d="M4 7h16" />
-      <path d="M4 12h16" />
-      <path d="M4 17h16" />
-    </svg>
-  );
-}
 
 export async function SiteHeader() {
   const memberContext = await getCurrentMemberContext();
@@ -58,68 +40,10 @@ export async function SiteHeader() {
             >
               Classes
             </Link>
-
-            <details className="group relative">
-              <summary className="header-menu-summary flex h-11 w-11 list-none items-center justify-center rounded-full border border-slate-200 bg-white text-slate-800 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700">
-                <MenuIcon />
-              </summary>
-
-              <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-[0_24px_48px_rgba(15,23,42,0.16)]">
-                <div className="space-y-2">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="block rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-700"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-
-                <div className="mt-4 grid gap-2 border-t border-slate-100 pt-4">
-                  {memberContext.user ? (
-                    <>
-                      <Link
-                        href="/account"
-                        className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
-                      >
-                        My Account
-                      </Link>
-                      <Link
-                        href="/classes"
-                        className="rounded-2xl bg-emerald-500 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
-                      >
-                        Self-Learning Junior Classes
-                      </Link>
-                      <form action="/auth/signout" method="post">
-                        <button
-                          type="submit"
-                          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                        >
-                          Logout
-                        </button>
-                      </form>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        href="/login"
-                        className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-center text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        href="/signup"
-                        className="rounded-2xl bg-emerald-500 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
-                      >
-                        Sign Up
-                      </Link>
-                    </>
-                  )}
-                </div>
-              </div>
-            </details>
+            <MobileHeaderMenu
+              navigation={navigation}
+              isAuthenticated={Boolean(memberContext.user)}
+            />
           </div>
         </div>
 
