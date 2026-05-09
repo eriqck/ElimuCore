@@ -185,7 +185,7 @@ export default async function ResourcesPage({
       ) : null}
       <section className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/60 surface-card">
         <div className="grid gap-8 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-14">
-          <div>
+          <div className="text-center lg:text-left">
             <p className="brand-kicker text-sm font-bold uppercase tracking-[0.24em]">
               Member library
             </p>
@@ -285,7 +285,7 @@ export default async function ResourcesPage({
       </section>
 
       <section className="mx-auto mt-10 max-w-7xl">
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col gap-3 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <div>
             <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
               Levels
@@ -352,7 +352,7 @@ export default async function ResourcesPage({
       </section>
 
       <section className="mx-auto mt-10 max-w-7xl">
-        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col gap-3 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <div>
             <p className="brand-kicker text-sm font-semibold uppercase tracking-[0.2em]">
               Results
@@ -367,7 +367,7 @@ export default async function ResourcesPage({
           </div>
           <Link
             href="/"
-            className="rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-rose-900 hover:text-white"
+            className="self-center rounded-full px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-rose-900 hover:text-white sm:self-auto"
           >
             Back to ELimuCore
           </Link>

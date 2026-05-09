@@ -141,8 +141,8 @@ export function SiteFooter() {
       className="border-t border-white/8 bg-[#151515] px-4 py-10 text-white sm:px-6 lg:px-8"
     >
       <div className="mx-auto max-w-[1360px]">
-        <div className="grid gap-10 sm:gap-12 lg:grid-cols-[1.2fr_0.9fr_1fr]">
-          <div>
+        <div className="grid gap-10 text-center sm:gap-12 lg:grid-cols-[1.2fr_0.9fr_1fr] lg:text-left">
+          <div className="flex flex-col items-center lg:items-start">
             <Image
               src={logo}
               alt="ELimuCore"
@@ -154,14 +154,14 @@ export function SiteFooter() {
               Have a Question?
             </h2>
             <div className="mt-6 space-y-4 text-sm text-white/80">
-              <div className="flex items-start gap-3">
-                <span className="mt-0.5 text-[#25b24a]">
+              <div className="flex items-start justify-center gap-3 text-left lg:justify-start">
+                <span className="mt-0.5 shrink-0 text-[#25b24a]">
                   <LocationIcon />
                 </span>
                 <p className="leading-7">Baazar&apos;s Plaza, Nairobi</p>
               </div>
-              <div className="flex items-start gap-3">
-                <span className="mt-0.5 text-[#25b24a]">
+              <div className="flex items-start justify-center gap-3 text-left lg:justify-start">
+                <span className="mt-0.5 shrink-0 text-[#25b24a]">
                   <PhoneIcon />
                 </span>
                 <a
@@ -174,7 +174,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center lg:items-start">
             <h2 className="text-3xl font-semibold tracking-tight text-white">
               Links
             </h2>
@@ -183,7 +183,7 @@ export function SiteFooter() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="flex w-fit items-center gap-2 text-sm font-medium text-white/80 transition hover:text-[#25b24a]"
+                  className="flex w-fit items-center justify-center gap-2 text-sm font-medium text-white/80 transition hover:text-[#25b24a] lg:justify-start"
                 >
                   <span className="text-[#25b24a]">
                     <ArrowIcon />
@@ -194,11 +194,11 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center lg:items-start">
             <h2 className="text-3xl font-semibold tracking-tight text-white">
               Connect with us on social media.
             </h2>
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-6 flex items-center justify-center gap-3 lg:justify-start">
               <SocialButton
                 href="https://www.facebook.com/elimucoreh"
                 label="ELimuCore on Facebook"
@@ -212,9 +212,9 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-5 text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col items-center gap-4 border-t border-white/10 pt-5 text-center text-sm text-white/55 sm:flex-row sm:justify-between sm:text-left">
           <p>Copyright ©2026 ELimuCore. All rights reserved.</p>
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:justify-end">
             <span>Privacy Policy</span>
             <span>Terms of use</span>
           </div>

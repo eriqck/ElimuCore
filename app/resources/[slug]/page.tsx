@@ -75,7 +75,7 @@ export default async function ResourceDetailPage({
   };
 
   return (
-    <main className="min-h-screen px-4 py-10 sm:px-6 lg:px-8">
+    <main className="min-h-screen px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       <MarketingEvent
         eventName="ViewContent"
         dedupeKey={`resource:${resource.slug}`}
@@ -87,8 +87,8 @@ export default async function ResourceDetailPage({
           access: resource.access.toLowerCase()
         }}
       />
-      <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/60 surface-card p-6 sm:p-8 lg:p-12">
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="mx-auto max-w-4xl rounded-[2rem] border border-white/60 surface-card p-5 sm:p-8 lg:p-12">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
           <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-rose-900">
             {resource.level}
           </span>
@@ -100,21 +100,21 @@ export default async function ResourceDetailPage({
           </span>
         </div>
 
-        <h1 className="font-display mt-6 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="font-display mt-6 text-center text-4xl font-black tracking-tight text-slate-900 sm:text-left sm:text-5xl">
           {resource.title}
         </h1>
-        <p className="mt-5 text-lg leading-8 text-slate-600">
+        <p className="mt-5 text-center text-lg leading-8 text-slate-600 sm:text-left">
           {resource.description}
         </p>
 
         <div className="brand-band mt-8 grid gap-4 rounded-[2rem] p-6 sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
               Subject
             </p>
             <p className="mt-2 text-lg font-bold">{resource.subject}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
               Year
             </p>
@@ -122,7 +122,7 @@ export default async function ResourceDetailPage({
               {resource.year ? resource.year : "Flexible"}
             </p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center sm:text-left">
             <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
               Format
             </p>
@@ -131,7 +131,7 @@ export default async function ResourceDetailPage({
         </div>
 
         <section className="mt-8 rounded-[2rem] border border-stone-200 bg-white/80 p-6 shadow-sm">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-3 text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
             <div>
               <h2 className="text-xl font-bold tracking-tight text-slate-900">
                 Available downloads
@@ -154,8 +154,8 @@ export default async function ResourceDetailPage({
                   className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-5 transition hover:border-rose-700 hover:bg-rose-900 hover:text-white"
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="text-center sm:text-left">
+                      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
                         <span className="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-rose-900">
                           {formatFileKind(file)}
                         </span>
@@ -172,7 +172,7 @@ export default async function ResourceDetailPage({
 
                     <a
                       href={`/api/resources/${resource.slug}/download?file=${encodeURIComponent(file.id)}`}
-                      className="brand-button-primary inline-flex rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                      className="brand-button-primary inline-flex w-full justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 sm:w-auto"
                     >
                       Download file
                     </a>
@@ -188,16 +188,16 @@ export default async function ResourceDetailPage({
               <p className="mt-3 text-sm leading-7 text-slate-700">
                 This page is for active members.
               </p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href={loginHref}
-                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  className="brand-button-primary rounded-2xl px-5 py-3 text-center text-sm font-semibold text-white transition hover:-translate-y-0.5"
                 >
                   Sign in to continue
                 </Link>
                 <Link
                   href="/signup"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-center text-sm font-semibold transition"
                 >
                   Create account
                 </Link>
@@ -211,16 +211,16 @@ export default async function ResourceDetailPage({
               <p className="mt-3 text-sm leading-7 text-slate-700">
                 Activate your membership to download this resource.
               </p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href="/account"
-                  className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+                  className="brand-button-primary rounded-2xl px-5 py-3 text-center text-sm font-semibold text-white transition hover:-translate-y-0.5"
                 >
                   Go to my account
                 </Link>
                 <Link
                   href="/#membership"
-                  className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+                  className="brand-button-secondary rounded-2xl px-5 py-3 text-center text-sm font-semibold transition"
                 >
                   View membership plans
                 </Link>
@@ -235,16 +235,16 @@ export default async function ResourceDetailPage({
           )}
         </section>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
             href="/resources"
-            className="brand-button-primary rounded-2xl px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5"
+            className="brand-button-primary rounded-2xl px-5 py-3 text-center text-sm font-semibold text-white transition hover:-translate-y-0.5"
           >
             Back to the library
           </Link>
           <Link
             href="/"
-            className="brand-button-secondary rounded-2xl px-5 py-3 text-sm font-semibold transition"
+            className="brand-button-secondary rounded-2xl px-5 py-3 text-center text-sm font-semibold transition"
           >
             Back to homepage
           </Link>
