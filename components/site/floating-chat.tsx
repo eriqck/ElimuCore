@@ -36,6 +36,25 @@ function ChatIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
 function PanelLink({
   href,
   label,
@@ -172,12 +191,24 @@ export function FloatingChat({
           ref={panelRef}
           className="pointer-events-auto w-full rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-[0_20px_50px_rgba(15,23,42,0.18)] sm:w-[min(22rem,calc(100vw-2rem))]"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
-            Support
-          </p>
-          <h2 className="mt-3 text-xl font-black tracking-tight text-slate-950">
-            How can we help?
-          </h2>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
+                Support
+              </p>
+              <h2 className="mt-3 text-xl font-black tracking-tight text-slate-950">
+                How can we help?
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+              aria-label="Close chat"
+            >
+              <CloseIcon />
+            </button>
+          </div>
           <p className="mt-2 text-sm leading-6 text-slate-600">
             Get quick help with membership, premium materials, and schemes.
           </p>
@@ -203,8 +234,8 @@ export function FloatingChat({
         aria-controls="floating-chat-panel"
       >
         <span className="absolute inset-0 -z-10 rounded-full bg-sky-400/30 blur-xl" />
-        <ChatIcon />
-        <span>Chat with us</span>
+        {open ? <CloseIcon /> : <ChatIcon />}
+        <span>{open ? "Minimize chat" : "Chat with us"}</span>
       </button>
     </div>
   );
